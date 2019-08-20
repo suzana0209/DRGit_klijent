@@ -1,0 +1,66 @@
+
+<div align="center" id="busImage">
+    <img src="assets/bg.jpg"/>
+</div>
+<nav class="navbar navbar-expand-lg navbar-light">
+    <a class="navbar-brand" href="#">
+        <img class="classForimg" src="assets/logo2.png"  width="90px" alt="LogoBus">
+      </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      
+      <ul class="navbar-nav mr-auto">
+        
+        <!-- <li><a class="nav-link" [routerLink]="['/home']">Home</a></li> -->
+        <li><a class="nav-link" [routerLink]="['/busLines']">Bus lines</a></li>
+        <li><a class="nav-link" [routerLink]="['/Timetable']">Timetable</a></li>
+        <li><a class="nav-link" [routerLink]="['/cvl']">Location bus</a></li>
+        <li><a class="nav-link" [routerLink]="['/priceList']">Price list</a></li>
+        <li><a class="nav-link" [routerLink]="['/station']" *ngIf="loggedIn() && getRoleAdmin()">Stations</a></li>
+        <li><a class="nav-link" [routerLink]="['/line']" *ngIf="loggedIn() && getRoleAdmin()">Lines</a></li>
+        <!-- <li><a class="nav-link" [routerLink]="['/vehicle']" *ngIf="loggedIn() && getRoleAdmin()">Vehicle</a></li> -->
+        <li><a class="nav-link" [routerLink]="['/buyTicket']" *ngIf="!getRoleController() && !getRoleAdmin()" >Buy ticket</a></li>
+      </ul>
+
+      <!-- <ul class="navbar-nav" *ngIf="loggedIn() && getRoleAdmin()"> 
+        <li><a class="nav-link" [routerLink]="['/request']" >Requests for authorization</a></li>
+        <li><a class="nav-link" [routerLink]="['/deniedUsers']" >Denied request</a></li>
+      </ul> -->
+
+      <ul class="navbar-nav" *ngIf="loggedIn() && getRoleAdmin()"> 
+          <li class="dropdown">
+              <a class="btn" data-toggle="dropdown" >Requests</a>
+              <div class="dropdown-menu">
+                  <a class="dropdown-content" [routerLink]="['/request']" >Requests for authorization</a>
+                  <a class="dropdown-content" [routerLink]="['/deniedUsers']" >Denied request</a>
+              </div>
+          </li>
+         
+      </ul>
+
+      <ul class="navbar-nav" *ngIf="getRoleController() && loggedIn()"> 
+        <li><a class="nav-link" [routerLink]="['/validetTicket']" >Validate Ticket</a></li>
+      </ul>
+
+
+    <ul class="navbar-nav" *ngIf="!loggedIn()">        
+        <li><a class="nav-link" [routerLink]="['/logIn']">Log In</a></li>
+        <li><a class="nav-link" [routerLink]="['/register']">Register</a></li>
+    </ul> 
+
+    <ul class="navbar-nav" *ngIf="loggedIn()">
+      <li><a class="nav-link" [routerLink]="['/profile']">{{loggedUser}}</a></li>      
+    </ul>
+
+    <ul class="navbar-nav" *ngIf="loggedIn()">
+      <li><a class="nav-link" [routerLink]="['/busLines']" (click) = "logout()">Log Out</a></li>      
+    </ul>
+  </div>
+</nav>
+
+<!-- <img src="assets/pozadina.jpg"> --> 
+<div id="glavna">
+</div>

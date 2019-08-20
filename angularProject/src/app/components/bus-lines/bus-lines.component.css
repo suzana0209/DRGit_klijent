@@ -1,0 +1,77 @@
+table#table1{
+    width: 100% !important;
+    height: auto !important;
+    border: 1px;
+    /* margin-left: 21% !important;
+    margin-right: 15% !important; */
+    align-content: left !important;
+}
+
+
+
+div#mapa{
+    width: 70%; 
+    /* height: 100%; */
+    
+    /* position: relative; */
+    /* text-align: center; */
+    margin-left: 5%;
+    /* background-color: lightgray; */
+    margin-bottom: 0px;
+    border: 5px solid #555555;
+
+     border-top-width: 0% !important;
+    border-bottom-width: 1% !important;
+
+    border-left-width: 5px !important;
+    border-right-width: 5px !important;
+    
+
+    height:370px !important;
+    width: 90% !important;
+    
+}
+
+div#wholePage{
+    width: 100%;
+    
+    margin-top: 245px !important;
+    padding: 11px !important;
+    
+    background-color:lightgray !important;
+    /* height: 800px !important; */
+    /* overflow-y: hidden; */
+    
+}
+th{
+    width: auto;
+    padding-right: 30px;
+}
+
+
+
+h4#infoh4{
+    text-align: left;
+    font-size: 15px;
+    width: 100%;
+    margin-top: 0px;
+    
+}
+
+p#busLineGrid{
+    font-size: 40px;
+    width: 100%;
+    text-align: center;
+    font-family: cursive;
+    
+    
+}
+
+p#busLineGrid:hover{
+    width: 100%;
+    background-color: gray;
+    color: white;
+    text-align: center;
+    border-color: white;
+    font-family: cursive;
+}

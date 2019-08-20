@@ -1,0 +1,143 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    
+
+}
+a{
+    text-decoration: none;
+    color: #eee;
+}
+
+nav{
+    padding-top: 0.1rem;
+    /* display: flex; */
+    justify-content: space-between;
+    align-items: center;
+    /* text-transform: lowercase */
+    font-size: 1.1rem;
+    background-color:#ffff66 !important;
+    vertical-align: center;
+    position: fixed;
+    top: 200px;
+    width: 100%;
+    /* overflow: hidden; */
+    z-index: 10;
+    height: 60px; /*47*/
+}
+
+div#busImage{
+  background-color: #e8f4f8 !important;
+  /* bcolor: red !important; */
+  position: fixed;
+  top: 0;
+  height: 230px !important;
+  /* width: 70%;*/
+
+   display: block;
+   /* margin-left: 12%; */
+   /* margin-right: 10% !important; */
+   width: 100%;
+   z-index: 10;   /*ovo je rijesilo problem da mapa ide iza slike i menija!*/
+
+   
+   
+}
+
+
+navbar-brand.classForimg{
+    width: 90px;
+}
+
+/* ul li a :hover {  
+    background-color:#ffff99;
+    color: black;
+    
+  } */
+
+/* nav ul{
+    display: flex;
+} */
+
+nav ul li{
+    list-style: none;
+}
+
+nav ul li a{
+    padding: 1.3rem 0;
+    margin: 0 2.1rem; 
+    position: relative;
+    letter-spacing: 0.5px;
+    /* margin: 0; */
+    text-align: center;
+    /* width: 10% !important; */
+    /* color: red; */
+    
+}
+
+#logo{
+    width: 10px !important;
+    height: 80px !important;
+    float: center;
+}
+
+
+.dropdown-menu {
+    position: relative;
+    display: inline-block; 
+    background-color: #ffff66;
+    border: 0px;
+  }
+  
+  .dropdown-content {
+    display: none;
+    /* position: absolute; */
+    background-color: #ffff66;
+    width: 100%;
+    
+    /* min-width: 160px; */
+    box-shadow: 0px 0px 0px 0px rgba(0,0,0,0.0);
+    /* padding: 16px 16px; */
+    z-index: 1;
+    color: gray !important ;
+    margin: 0 0rem;
+    letter-spacing: 0.5px;
+    
+    padding-top: 0.1rem;
+    justify-content: space-between !important;
+    align-items: center !important;
+    font-size: 1.1rem !important;
+    vertical-align: center !important;
+    position: fixed;
+
+    padding: 1.3rem 0 ;
+    margin: 0 2.1rem; 
+    position: relative;
+    letter-spacing: 0.5px !important;
+    /* margin: 0; */
+    text-align: center;
+
+    text-decoration: none !important;
+    color:lightgray;
+
+    }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+ 
+
+
+container{
+    max-width:120rem;
+    width: 90%;
+    margin: 0 auto;
+    /* background-color: lightgray !important; */
+}
+
+div#glavna{
+  background-color: lightgrey !important;
+  
+}
