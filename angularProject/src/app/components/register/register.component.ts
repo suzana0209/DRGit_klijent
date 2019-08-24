@@ -5,7 +5,7 @@ import { RegistrationModel } from 'src/app/models/registration.model';
 import { AuthenticationService } from 'src/app/services/authentication-service.service';
 import { TypesService } from 'src/app/services/types.service';
 import { UsersService } from 'src/app/services/users/users.service';
-import { RequestsService } from 'src/app/services/requestsService/requests.service';
+// import { RequestsService } from 'src/app/services/requestsService/requests.service';
 import { ValidForRegistrationModel } from 'src/app/models/modelsForValidation/validForRegistration.model';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
@@ -20,7 +20,8 @@ import { AccountService } from 'src/app/services/account/account.service';
   providers: [AuthenticationService]
 })
 
-export class RegisterComponent implements OnInit {
+// export class RegisterComponent implements OnInit {
+export class RegisterComponent {
 
   types: any =[];
   validations: ValidForRegistrationModel = new ValidForRegistrationModel();
@@ -42,35 +43,26 @@ export class RegisterComponent implements OnInit {
     birthday: new Date(),
     image: '',
     activated: '',
-    role: 'AppUser',
-    passengerType: ''
+    //role: 'AppUser',
+    passengerType: '',
+    userType: ''
   }
 
   constructor(private authService: AuthenticationService, 
     private typesService: TypesService,
     private userService: UsersService,
-    private notificationServ: RequestsService, 
+    //private notificationServ: RequestsService, 
     private router: Router, private accountService: AccountService) { 
 
       //node
       this.accountService.getPassengerTypes().subscribe(data => {
         this.types = data;
-        
         console.log("Tipovi putnika: ", this.types);
-  
       },
       err => {
         console.log(err);
       });
 
-
-
-
-
-
-    // typesService.getPassangerAll().subscribe(types =>{
-    //   this.types = types;
-    // });
     this.datePickerId = new Date().toISOString().split('T')[0];
   }
 
@@ -115,6 +107,25 @@ export class RegisterComponent implements OnInit {
 
   //node
   onSubmit(registrationData: RegistrationModel){
+
+    
+     if(this.validations.validate(registrationData)){
+       //alert("Register - ERROR! ");
+      console.log(registrationData);
+      return;
+     } 
+
+     if(this.confirmPassword(registrationData.Password, registrationData.ConfirmPassword) === false) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    this.userService.EmailAlreadyExists(registrationData).subscribe(a=>{},
+    err=>{
+     window.alert(err.error);
+     
+   })
+
     this.credentials.name = registrationData.Name;
     this.credentials.lastName = registrationData.LastName;
     this.credentials.email = registrationData.Email;
@@ -125,19 +136,42 @@ export class RegisterComponent implements OnInit {
     
     this.credentials.birthday = registrationData.Birthaday;
     this.credentials.passengerType = registrationData.PassangerType;
-    this.credentials.role = "AppUser"
+    this.credentials.userType = registrationData.UserType;
 
-    if (this.selectedImage == undefined || this.selectedImage == null){
-      this.credentials.activated  = "NOT ACTIVATED";
-      console.log("korisnik kog saljemo: ", this.credentials);
-    
-      this.register();  
+    if(this.credentials.userType == 'AppUser' && this.credentials.passengerType != 'Default'){
+      if (this.selectedImage == undefined || this.selectedImage == null){
+        this.credentials.activated  = "NOT ACTIVATED";
+        console.log("App user bez slike", this.credentials);
+        // this.register();
+      }
+      else{
+        this.credentials.activated  = "PENDING";
+        console.log("korisnik kog saljem: ", this.credentials);
+        // this.register(); 
+      }
     }
-    else{
-      this.credentials.activated  = "PENDING";
-      console.log("korisnik kog saljem: ", this.credentials);
-      this.register();
-  }
+    else if(this.credentials.userType != 'AppUser'){
+      this.credentials.activated = "NOT ACTIVATED";
+      // this.register();
+    }
+    else{}
+
+    
+
+
+    this.register();
+
+  //   if ((this.selectedImage == undefined || this.selectedImage == null) && (this.credentials.userType == 'AppUser')){
+  //     this.credentials.activated  = "NOT ACTIVATED";
+  //     console.log("korisnik kog saljemo: ", this.credentials);
+    
+  //     this.register();  
+  //   }
+  //   else{
+  //     this.credentials.activated  = "PENDING";
+  //     console.log("korisnik kog saljem: ", this.credentials);
+  //     this.register();
+  // }
 
   // onSubmit(registrationData: RegistrationModel, form: NgForm) {
   //    console.log(registrationData);

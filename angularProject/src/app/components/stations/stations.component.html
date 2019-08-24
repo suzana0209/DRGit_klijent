@@ -1,6 +1,6 @@
 <div id="wholePage">
-<h2 *ngIf="NonActiveAdmin()" id="info">You are not authorized for add/edit/delete stations! Your request is processed! </h2>
-<h2 *ngIf="DeniedAdmin()" id="info">You are not authorized for add/edit/delete stations! Your request is denied!</h2>
+<!-- <h2 *ngIf="NonActiveAdmin()" id="info">You are not authorized for add/edit/delete stations! Your request is processed! </h2>
+<h2 *ngIf="DeniedAdmin()" id="info">You are not authorized for add/edit/delete stations! Your request is denied!</h2> -->
 
 <div *ngIf="LoggedAdmin()" class="row1">   
   <!-- <div class="row1"> -->
@@ -8,24 +8,25 @@
 
       <div class="column70">
 
-        <!-- <div> -->
-
-            <!-- <div style="width:50%; height: 50%; margin: 5% 25%"> -->
-                <agm-map  [latitude]="markerInfo.location.latitude" [longitude]="markerInfo.location.longitude" [zoom]="18" 
-                (mapClick)="placeMarker1($event)">  
-                  <agm-marker *ngFor="let station of stations" [latitude]="station.Latitude" [longitude]="station.Longitude" [title]="station.Name"
-                  [label]="" [iconUrl]="iconUrl" [markerDraggable]="isSelectedEdit()" (dragEnd)="markerDragEnd($event, station.Name, station.Id, station.Version)"
-                  (markerClick) = "stationClick(station.Id)">
+          <agm-map [latitude]="markerInfo.location.latitude" [longitude]="markerInfo.location.longitude" [zoom]="18" (mapClick)="placeMarker1($event)">  
+              <agm-marker  *ngFor="let stat of stations" [latitude]="stat.latitude" [longitude]="stat.longitude" [title]="stat.name" [label]="" [iconUrl]="iconPath"
+              [markerDraggable]="isSelectedEdit()"
+                (dragEnd)="markerDragEnd($event,stat.name,stat._id)"
+                (markerClick) = "stationClick(stat._id)">
+                <agm-info-window [latitude]="stat.latitude" [longitude]="stat.longitude" >
+          
+               
+                  <span style="font-size: 16px;font-family:'Times New Roman'">Name station:{{stat.name}}</span>
+                  <br/>
+                  
+                  <span style="font-family:'Times New Roman'; color:gray;">Address station:{{stat.addressStation}}</span>
+                  
+                </agm-info-window>
               
-                    <!-- Svakom markeru dodajemo info-window (Nije obavezno!)-->
-                    <agm-info-window [latitude]="station.Latitude" [longitude]="station.Longitude" >
-                      <span style="font-family:'Times New Roman'; color:black;">Station name:<strong>{{station.Name}}</strong></span><br>
-                      <span style="font-family:'Times New Roman'; color:black;">Station address:<strong>{{station.AddressStation}}</strong></span>
-                      <!-- <span style="font-family:'Times New Roman'; color:gray;">Bulevar oslobođenja 131</span> -->
-                      <!-- <a [href]="markerInfo.link">See the site.</a> -->
-                    </agm-info-window>
-                </agm-marker>
-                </agm-map>
+              </agm-marker>
+            </agm-map>
+
+           
               </div>
 
               <div class="column30">

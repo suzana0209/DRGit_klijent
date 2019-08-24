@@ -9,6 +9,8 @@ import { MapComponent } from '../map/map.component';
 import { Router } from '@angular/router';
 import { ValidForAddStationModel } from 'src/app/models/modelsForValidation/validForStation.model';
 import { UsersService } from 'src/app/services/users/users.service';
+import { AuthenticationService } from 'src/app/services/authentication-service.service';
+import { RegistrationModel } from 'src/app/models/registration.model';
 
 @Component({
   selector: 'app-stations',
@@ -29,38 +31,46 @@ export class StationsComponent implements OnInit {
 
   public stations: any = [];
   markers: any = [];
-  iconUrl: any = {url: "assets/busicon.png", scaledSize: {width: 50, height:50}}
+  iconPath : any = {url: "assets/busicon.png", scaledSize: {width: 50, height:50}}
 
   newStation: StationModel
   public nameOfStation: string = "";
   id: number;
-  version: number;
+  //version: number;
 
   validationsForAdd: ValidForAddStationModel = new ValidForAddStationModel();
-  boolBezvezeZaPoruku: boolean = false;
+  boolBezvezeZaPoruku: string = "";
   boolBezvezeZaPorukuDenied: boolean = false;
   userPom: any;
   sakrijDugmice: boolean = true;
+  pomocniUser: RegistrationModel = new RegistrationModel("","","","","","","",new Date(),"","","","");
 
 
 
 
   constructor(private ngZone: NgZone, private route: Router, private mapsApiLoader: MapsAPILoader,
-    private stationService: StationService, private userService: UsersService) {
+    private stationService: StationService, private userService: UsersService, private authService: AuthenticationService) {
     this.sakrijDugmice = true;
-    this.userService.getUserData(localStorage.getItem('name')).subscribe(a=>{
-      console.log("Userrr: ", a);
-      if(a != null && a != undefined){
-        
-        this.userPom = a;
-        this.boolBezvezeZaPoruku = this.userPom.Activated;
-        this.boolBezvezeZaPorukuDenied = this.userPom.Deny;
-      }
+
+    
+
+    //Ne radi fja!!!
+    // this.userService.getUserData(localStorage.getItem('name')).subscribe(a=>{
+    //   console.log("Userrr: ", a);
+    //   if(a != null && a != undefined){
+    //     this.pomocniUser.Email = a.email
+    //     this.userPom = a;
+    //     this.boolBezvezeZaPoruku = this.userPom.activated;
+    //     this.boolBezvezeZaPorukuDenied = this.userPom.Deny;
+    //   }
       
-    })
+    // })
+    
+    //console.log("Pomocni: ", this.pomocniUser);
     
     this.stationService.getAllStations().subscribe(st =>{
       this.stations = st;
+      console.log("Podaci o stanicama: ", this.stations);
     });
   }
 
@@ -75,6 +85,50 @@ export class StationsComponent implements OnInit {
 
   }
 
+  // onSubmit(stationData: StationModel, form: NgForm){
+
+  //   stationData.Latitude = this.coordinates.latitude;
+  //   stationData.Longitude = this.coordinates.longitude;
+  //   stationData.AddressStation = this.address;
+
+  //   console.log(stationData);
+
+  //   if(this.validationsForAdd.validate(stationData)){
+  //     return;
+  //   }
+
+  //   this.stationService.AlredyExistStation(stationData).subscribe(a=>{
+  //     if(a == "Yes"){
+  //       alert("Station name "+ stationData.Name +" already exists! ");
+  //       //window.location.reload();
+  //     }
+  //     else if (a == "No"){
+  //       this.stationService.AlredyExistsStationForEdit(stationData).subscribe(a2=>{
+  //         if(a2 == "Yes"){
+  //           alert("On address: "+ stationData.AddressStation +" alredy exists station!");
+  //           //window.location.reload();
+  //         }
+  //         else{
+  //           this.stationService.addStation(stationData).subscribe(data => {
+  //             alert("Station: " +stationData.Name+ " is successfully added!");
+              
+  //             window.location.reload();
+  //           },
+  //           err => {
+  //             //alert("Station - error!");
+  //             window.alert(err.error);
+  //             //window.refresh();
+  //             window.location.reload();
+        
+  //           });
+  //         }
+  //       })
+        
+  //     }
+  //   })
+
+  // }
+
   onSubmit(stationData: StationModel, form: NgForm){
 
     stationData.Latitude = this.coordinates.latitude;
@@ -87,18 +141,18 @@ export class StationsComponent implements OnInit {
       return;
     }
 
-    this.stationService.AlredyExistStation(stationData).subscribe(a=>{
-      if(a == "Yes"){
-        alert("Station name "+ stationData.Name +" already exists! ");
-        //window.location.reload();
-      }
-      else if (a == "No"){
-        this.stationService.AlredyExistsStationForEdit(stationData).subscribe(a2=>{
-          if(a2 == "Yes"){
-            alert("On address: "+ stationData.AddressStation +" alredy exists station!");
-            //window.location.reload();
-          }
-          else{
+    // this.stationService.AlredyExistStation(stationData).subscribe(a=>{
+    //   if(a == "Yes"){
+    //     alert("Station name "+ stationData.Name +" already exists! ");
+    //     //window.location.reload();
+    //   }
+    //   else if (a == "No"){
+    //     this.stationService.AlredyExistsStationForEdit(stationData).subscribe(a2=>{
+    //       if(a2 == "Yes"){
+    //         alert("On address: "+ stationData.AddressStation +" alredy exists station!");
+    //         //window.location.reload();
+    //       }
+    //       else{
             this.stationService.addStation(stationData).subscribe(data => {
               alert("Station: " +stationData.Name+ " is successfully added!");
               
@@ -111,13 +165,52 @@ export class StationsComponent implements OnInit {
               window.location.reload();
         
             });
-          }
-        })
+    //       }
+    //     })
         
-      }
-    })
+    //   }
+    // })
 
   }
+
+ 
+  // onSubmitEdit(stationData: StationModel, form: NgForm){
+
+  //   stationData.Latitude = this.coordinates.latitude;
+  //   stationData.Longitude = this.coordinates.longitude;
+  //   stationData.AddressStation = this.address;
+  //   stationData.Name = this.nameOfStation;
+  //   stationData.Id = this.id;
+  //   stationData.Version = this.version;
+
+  //   console.log(stationData);
+
+  //   if(this.validationsForAdd.validate(stationData)){
+  //     return;
+  //   }
+
+  //   this.stationService.AlredyExistsStationForEdit(stationData).subscribe(aa=>{
+  //     if(aa == "Yes"){
+  //       alert("On address: "+ stationData.AddressStation +" alredy exists station!");
+  //       //window.location.reload();
+        
+  //     }
+  //     else if(aa == "No"){
+  //       this.stationService.editStation(stationData).subscribe(data => {
+  //         alert("Station with Name="+ stationData.Name +" changed successfully!");
+  //         //this.route.navigate(['/station']);
+  //         window.location.reload();
+  //       },
+  //       err => {
+  //         //alert("Station changed - error!");
+  //         window.alert(err.error);
+          
+  //         window.location.reload();
+  //       });
+  //     }
+  //   })
+      
+  // }
 
   onSubmitEdit(stationData: StationModel, form: NgForm){
 
@@ -126,7 +219,7 @@ export class StationsComponent implements OnInit {
     stationData.AddressStation = this.address;
     stationData.Name = this.nameOfStation;
     stationData.Id = this.id;
-    stationData.Version = this.version;
+    //stationData.Version = this.version;
 
     console.log(stationData);
 
@@ -134,14 +227,14 @@ export class StationsComponent implements OnInit {
       return;
     }
 
-    this.stationService.AlredyExistsStationForEdit(stationData).subscribe(aa=>{
-      if(aa == "Yes"){
-        alert("On address: "+ stationData.AddressStation +" alredy exists station!");
-        //window.location.reload();
+    // this.stationService.AlredyExistsStationForEdit(stationData).subscribe(aa=>{
+    //   if(aa == "Yes"){
+    //     alert("On address: "+ stationData.AddressStation +" alredy exists station!");
+    //     //window.location.reload();
         
-      }
-      else if(aa == "No"){
-        this.stationService.editStation(stationData).subscribe(data => {
+    //   }
+    //   else if(aa == "No"){
+        this.stationService.changeStation(stationData).subscribe(data => {
           alert("Station with Name="+ stationData.Name +" changed successfully!");
           //this.route.navigate(['/station']);
           window.location.reload();
@@ -152,12 +245,44 @@ export class StationsComponent implements OnInit {
           
           window.location.reload();
         });
-      }
-    })
+    //   }
+    // })
       
   }
 
+
+  // onSubmitDelete(stationData: StationModel, form:NgForm){
+
+  //   console.log("Stanicaaa: ", stationData);
+
+  //   if(this.id == null || this.id == undefined){
+  //     alert("please select the station that you want to delete!");
+      
+  //     window.location.reload();
+  //   }
+  //   else{
+  //     this.stationService.deleteStation(this.id).subscribe(x => {
+  //       alert("Station with ID="+ this.id +" is successful deleted! ")
+  //       window.location.reload();
+  //     },
+  //     err=>{
+  //       window.alert(err.error);
+        
+  //       window.location.reload();
+  //     });
+  //   }
+    
+  // }
+
+   
   onSubmitDelete(stationData: StationModel, form:NgForm){
+
+    //Dodato
+    this.stationService.getAllStations().subscribe(st =>{
+      this.stations = st;
+      console.log("Podaci o stanicama: ", this.stations);
+    });
+
 
     console.log("Stanicaaa: ", stationData);
 
@@ -167,7 +292,7 @@ export class StationsComponent implements OnInit {
       window.location.reload();
     }
     else{
-      this.stationService.deleteStation(this.id).subscribe(x => {
+      this.stationService.deleteStation(this.id.toString()).subscribe(x => {
         alert("Station with ID="+ this.id +" is successful deleted! ")
         window.location.reload();
       },
@@ -180,15 +305,18 @@ export class StationsComponent implements OnInit {
     
   }
 
+
+
   LoggedAdmin(): boolean{
-    if(localStorage.getItem('role') == "Admin" && this.boolBezvezeZaPoruku && !this.boolBezvezeZaPorukuDenied){
+    // if(localStorage.getItem('role') == "Admin" && this.boolBezvezeZaPoruku == "ACTIVATED" && !this.boolBezvezeZaPorukuDenied){
+      if(localStorage.getItem('role') == "Admin"){
       return true;
     }
     return false;
   }
 
   NonActiveAdmin(){
-    if(localStorage.getItem('role') == "Admin" && !this.boolBezvezeZaPoruku && !this.boolBezvezeZaPorukuDenied){
+    if(localStorage.getItem('role') == "Admin" && this.boolBezvezeZaPoruku != "ACTIVATED" && !this.boolBezvezeZaPorukuDenied){
       return true;
     }
     return false;
@@ -200,14 +328,14 @@ export class StationsComponent implements OnInit {
     }
   }
 
-  markerDragEnd($event: MouseEvent, nameOfStation:string, id: number, version:number) {
+  markerDragEnd($event: MouseEvent, nameOfStation:string, id: number) { //version:number
     console.log($event);
      this.coordinates.latitude = $event.coords.lat;
      this.coordinates.longitude = $event.coords.lng;
      this.getAddress(this.coordinates.latitude, this.coordinates.longitude);
      this.nameOfStation = nameOfStation;
      this.id = id;
-     this.version = version;
+     //this.version = version;
      console.log(id);
   }
 

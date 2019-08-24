@@ -11,13 +11,34 @@ export class UsersService{
     baseUrl = "http://localhost:52295"
     constructor(private http: Http, private httpClient: HttpClient) { }
     
-    getUserClaims() {
+
+    private token: string;
+    private request(method: 'post'|'get', type: 'getUserData', email?:String):Observable<any>{
+      let base;
+
+      if (method === 'post') {
+       // base = this.httpClient.post(`/api/${type}`, user);
+      // }else if(method === 'delete'){
+      //   base = this.httpClient.delete(`/api/${type}/`+ stid);
+       } 
+      else {
+        base = this.httpClient.get(`/api/${type}/` + email);
+      }
+
+      return base;
+    }
+
+    public getUserData(email:String){ 
+      return this.request('get', 'getUserData', email);
+    }
+
+    getUserClaims(){
          return this.httpClient.get('http://localhost:52295/api/Account/UserInfo')
     }
 
-    getUserData(email:string) {
-    return this.httpClient.get('http://localhost:52295/api/AppUser/GetUser?email='+email)
-    }
+    // getUserData(email:string) {
+    // return this.httpClient.get('http://localhost:52295/api/AppUser/GetUser?email='+email)
+    // }
 
     getAdressInfo(id:number){
       return this.httpClient.get('http://localhost:52295/api/AppUser/GetAddressInfo?id=' + id)

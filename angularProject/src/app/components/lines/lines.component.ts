@@ -39,7 +39,7 @@ export class LinesComponent implements OnInit {
   selectedForComboBox: string = '';
   selected: string = "";
   public polyline: Polyline;
-  id: number;
+  id: String;
   public zoom: number;
   stations: any = [];
   markerInfo: MarkerInfo;
@@ -96,13 +96,13 @@ export class LinesComponent implements OnInit {
   validationsForEdit: ValidForEditLineModel = new ValidForEditLineModel();
   showListOfStations: boolean = false;
 
-  boolBezvezeZaPoruku: boolean = false;
-  boolBezvezeZaPorukuDenied: boolean = false;
+  boolBezvezeZaPoruku: string = "";
+  boolBezvezeZaPorukuDenied: string = "";
   userPom: any;
   sakrijDugmice: boolean = true;
   
 
-  iconUrl: any = {url: "assets/busicon.png", scaledSize: {width: 50, height:50}}
+  iconPath: any = {url: "assets/busicon.png", scaledSize: {width: 50, height:50}}
 
   constructor(private ngZone: NgZone, private mapsApiLoader : MapsAPILoader , 
     private stationService: StationService, 
@@ -110,16 +110,16 @@ export class LinesComponent implements OnInit {
     private lineStationService: LineStationService, private userService: UsersService) { 
 
       this.sakrijDugmice = true;
-      this.userService.getUserData(localStorage.getItem('name')).subscribe(a=>{
-        console.log("Userrr: ", a);
-        if(a != null && a != undefined){
+      // this.userService.getUserData(localStorage.getItem('name')).subscribe(a=>{
+      //   console.log("Userrr: ", a);
+      //   if(a != null && a != undefined){
           
-          this.userPom = a;
-          this.boolBezvezeZaPoruku = this.userPom.Activated;
-          this.boolBezvezeZaPorukuDenied = this.userPom.Deny; 
-        }
+      //     this.userPom = a;
+      //     this.boolBezvezeZaPoruku = this.userPom.Activated;
+      //     // this.boolBezvezeZaPorukuDenied = this.userPom.Deny; 
+      //   }
         
-      })
+      // })
 
     this.stationService.getAllStations().subscribe(data => {
       this.stations = data;
@@ -127,17 +127,17 @@ export class LinesComponent implements OnInit {
       console.log(this.stations)
     });
 
-    this.stationService.getAll().subscribe(k=>{
-      //this.lines = k;   
-      this.pomModelList = k;     
+    // this.stationService.getAll().subscribe(k=>{
+    //   //this.lines = k;   
+    //   this.pomModelList = k;     
 
-    });
+    // });
 
     
 
-    this.stationService.getIdes().subscribe(ides => {
-      this.keys = ides;
-    });
+    // this.stationService.getIdes().subscribe(ides => {
+    //   this.keys = ides;
+    // });
 
 
       this.lineService.getAllLines().subscribe(s => {
@@ -157,12 +157,22 @@ export class LinesComponent implements OnInit {
 
   }
 
-  stationClick(id: number){
+  stationClick(id: string){
+    this.pomStat = new StationModel("",0,0,"",0);
+    let postojiStanica: boolean = false;
+
     this.stations.forEach(element => {
-      if(element.Id == id){
-        this.pomStat = element;
+      if(element._id == id){
+        //this.pomStat = element;
+        this.pomStat.Id = element._id;
+        this.pomStat.Name = element.name;
+        this.pomStat.Latitude = element.latitude;
+        this.pomStat.Longitude = element.longitude;
+
+        this.pomStat.AddressStation = element.addressStation;
       }
     });
+
     console.log(this.pomStat);
     this.selectedStations.push(this.pomStat);
   
@@ -172,6 +182,22 @@ export class LinesComponent implements OnInit {
 
   }
 
+
+  // stationClick(id: number){
+  //   this.stations.forEach(element => {
+  //     if(element._id == id){
+  //       this.pomStat = element;
+  //     }
+  //   });
+  //   console.log(this.pomStat);
+  //   this.selectedStations.push(this.pomStat);
+  
+    
+  //   this.polyline.addLocation(new GeoLocation(this.pomStat.Latitude, this.pomStat.Longitude));
+  //   this.id = id;
+
+  // }
+
   onSubmit(lineData: LineModel, form: NgForm){
     lineData.ListOfStations = this.selectedStations;
 
@@ -179,13 +205,13 @@ export class LinesComponent implements OnInit {
       return;
     }
 
-    this.lineService.AlredyExistRegularNumber(lineData).subscribe(a=>{
-      if(a == "Yes"){
-        alert("Line number: "+ lineData.RegularNumber +" alredy exists!");
-        //window.location.reload();
-      }
-      else if(a == "No"){
-        console.log(lineData);
+    // this.lineService.AlredyExistRegularNumber(lineData).subscribe(a=>{
+    //   if(a == "Yes"){
+    //     alert("Line number: "+ lineData.RegularNumber +" alredy exists!");
+    //     //window.location.reload();
+    //   }
+    //   else if(a == "No"){
+    //     console.log(lineData);
         this.lineService.addLine(lineData).subscribe(data => {
         alert("Line "+ lineData.RegularNumber +" successful added!");
         window.location.reload();
@@ -199,10 +225,42 @@ export class LinesComponent implements OnInit {
         window.location.reload();
         
         })
-      }
-    })
+    //   }
+    // })
 
   }
+
+  // onSubmit(lineData: LineModel, form: NgForm){
+  //   lineData.ListOfStations = this.selectedStations;
+
+  //   if(this.validationsForAdd.validate(lineData)){
+  //     return;
+  //   }
+
+  //   this.lineService.AlredyExistRegularNumber(lineData).subscribe(a=>{
+  //     if(a == "Yes"){
+  //       alert("Line number: "+ lineData.RegularNumber +" alredy exists!");
+  //       //window.location.reload();
+  //     }
+  //     else if(a == "No"){
+  //       console.log(lineData);
+  //       this.lineService.addLine(lineData).subscribe(data => {
+  //       alert("Line "+ lineData.RegularNumber +" successful added!");
+  //       window.location.reload();
+        
+
+  //     },
+  //     err => {
+  //       //alert("Add line - error - already exist!");
+  //       window.alert(err.error);
+
+  //       window.location.reload();
+        
+  //       })
+  //     }
+  //   })
+
+  // }
 
   onSubmitDelete(lineData: LineModel, form:NgForm){
     console.log("Line for delete: ", lineData);
@@ -211,7 +269,7 @@ export class LinesComponent implements OnInit {
       return;
     }
     
-      this.lineService.deleteLine(this.selectedLine.Id).subscribe(data => {
+      this.lineService.deleteLine(this.selectedLine.Id.toString()).subscribe(data => {
         alert("Line with Number="+ lineData.RegularNumber +" successful delted!");
         form.reset();
         window.location.reload();
@@ -232,7 +290,7 @@ export class LinesComponent implements OnInit {
     console.log("Nove linije za edit:", this.newLineEdit);
     console.log("pozicja: ", this.addStationPosition);
     
-    this.lineService.editLine(this.newLineEdit.Id, this.newLineEdit).subscribe(d=>{
+    this.lineService.changeLine(this.newLineEdit.Id, this.newLineEdit).subscribe(d=>{
       alert("Line with ID="+ this.newLineEdit.Id +" successful changed!")
 
       window.location.reload();
@@ -246,59 +304,59 @@ export class LinesComponent implements OnInit {
 
 
   // poziva se u delete-u  
-  showLines(event: any){
-    this.selectedForComboBox = event.target.value;
+  // showLines(event: any){
+  //   this.selectedForComboBox = event.target.value;
 
-    this.linesForComboBox.forEach(element => {
-      if(element.RegularNumber == this.selectedForComboBox){
-        this.selectedLine = element;     
-      }
-    });
+  //   this.linesForComboBox.forEach(element => {
+  //     if(element.RegularNumber == this.selectedForComboBox){
+  //       this.selectedLine = element;     
+  //     }
+  //   });
 
-     if(this.selectedLine != null){
-       this.stationService.getOrderedStations(this.selectedLine.Id).subscribe(d =>{
-         this.orderedStation = d;
+  //    if(this.selectedLine != null){
+  //      this.stationService.getOrderedStations(this.selectedLine.Id).subscribe(d =>{
+  //        this.orderedStation = d;
          
-         console.log(d);
-       });
-      }
-  }
+  //        console.log(d);
+  //      });
+  //     }
+  // }
 
-  showLinesForChange(event: any){
-    //this.showComboBoxForAddSt = true;
-    this.lineForEditString = event.target.value;
-    if(this.lineForEditString != null && this.lineForEditString != undefined){
-      this.showListOfStations = true;
-    }
-    this.allLinesForEditFromDb.forEach(element => {
-      if(element.RegularNumber == this.lineForEditString){
-        this.sLineForEdit = element;
+  // showLinesForChange(event: any){
+  //   //this.showComboBoxForAddSt = true;
+  //   this.lineForEditString = event.target.value;
+  //   if(this.lineForEditString != null && this.lineForEditString != undefined){
+  //     this.showListOfStations = true;
+  //   }
+  //   this.allLinesForEditFromDb.forEach(element => {
+  //     if(element.RegularNumber == this.lineForEditString){
+  //       this.sLineForEdit = element;
 
-      }
-    });
+  //     }
+  //   });
 
-    if(this.sLineForEdit != null){
-      this.stationService.getOrderedStations(this.sLineForEdit.Id).subscribe(d =>{
-        this.orderedStationEdit = d;
+  //   if(this.sLineForEdit != null){
+  //     this.stationService.getOrderedStations(this.sLineForEdit.Id).subscribe(d =>{
+  //       this.orderedStationEdit = d;
         
-        this.newLineEdit = this.sLineForEdit;
-        this.newLineEdit.ListOfStations = this.orderedStationEdit;
-        console.log("New line",this.newLineEdit);
+  //       this.newLineEdit = this.sLineForEdit;
+  //       this.newLineEdit.ListOfStations = this.orderedStationEdit;
+  //       console.log("New line",this.newLineEdit);
 
-        this.restStation = this.allStationFromDb.filter(o=> !this.newLineEdit.ListOfStations.find(o2=> o.Id === o2.Id));
+  //       this.restStation = this.allStationFromDb.filter(o=> !this.newLineEdit.ListOfStations.find(o2=> o.Id === o2.Id));
         
-        let countOfArray1 = this.newLineEdit.ListOfStations.length;
+  //       let countOfArray1 = this.newLineEdit.ListOfStations.length;
 
-      if(this.arrayIntForAddStation.length <= countOfArray1){
-        for (let i = 0; i < countOfArray1 + 1; i++) {
-          this.arrayIntForAddStation.push(i+1);
-        }
-      }
-    });
+  //     if(this.arrayIntForAddStation.length <= countOfArray1){
+  //       for (let i = 0; i < countOfArray1 + 1; i++) {
+  //         this.arrayIntForAddStation.push(i+1);
+  //       }
+  //     }
+  //   });
       
-     }
+  //    }
     
-  }
+  // }
 
 
   removeStationFromLine(id: number){
@@ -392,14 +450,14 @@ export class LinesComponent implements OnInit {
   }
 
   LoggedAdmin(): boolean{
-    if(localStorage.getItem('role') == "Admin" && this.boolBezvezeZaPoruku && !this.boolBezvezeZaPorukuDenied){
+    if(localStorage.getItem('role') == "Admin" && this.boolBezvezeZaPoruku == "ACTIVATED" && !this.boolBezvezeZaPorukuDenied){
       return true;
     }
     return false;
   }
 
   NonActiveAdmin(){
-    if(localStorage.getItem('role') == "Admin" && !this.boolBezvezeZaPoruku && !this.boolBezvezeZaPorukuDenied){
+    if(localStorage.getItem('role') == "Admin" && this.boolBezvezeZaPoruku != "ACTIVATED" && !this.boolBezvezeZaPorukuDenied){
       return true;
     }
     return false;

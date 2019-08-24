@@ -15,7 +15,7 @@ export class ValidForRegistrationModel {
 
     emailOk1: boolean = true;
 
-    validate(registrationData) {
+    validate(registrationData) { 
       let wrong = false;
       if (registrationData.Email == null || registrationData.Email == "") {
         this.emailOk = false;

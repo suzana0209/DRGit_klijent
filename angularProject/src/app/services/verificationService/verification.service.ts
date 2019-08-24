@@ -12,63 +12,63 @@ export class VerificationService {
   
 
   constructor(private http: Http, private httpClient: HttpClient) { }
-  getAwaitingAdmins(): Observable<any> {
-    return this.httpClient.get(this.baseUrl + "/api/Account/GetAwaitingAdmins");
-  }
+  // getAwaitingAdmins(): Observable<any> {
+  //   return this.httpClient.get(this.baseUrl + "/api/Account/GetAwaitingAdmins");
+  // }
 
-   authorizeAdmin(adminId): Observable<any> {
-    return this.httpClient.post(this.baseUrl + "/api/Account/AuthorizeAdmin", adminId);
-  }
+  //  authorizeAdmin(adminId): Observable<any> {
+  //   return this.httpClient.post(this.baseUrl + "/api/Account/AuthorizeAdmin", adminId);
+  // }
 
-   getAwaitingControllers(): Observable<any> {
-    return this.httpClient.get(this.baseUrl + "/api/Account/GetAwaitingAControllers");
-  }
+  //  getAwaitingControllers(): Observable<any> {
+  //   return this.httpClient.get(this.baseUrl + "/api/Account/GetAwaitingAControllers");
+  // }
 
-   authorizeController(controllerId): Observable<any> {
-  //  let data = `${controllerId}`;
-    let headers = new HttpHeaders();
-    headers = headers.append( "Content-type","application/json");
-    return this.httpClient.post(this.baseUrl + "/api/Account/AuthorizeController", controllerId);
-  }
+  //  authorizeController(controllerId): Observable<any> {
+  // //  let data = `${controllerId}`;
+  //   let headers = new HttpHeaders();
+  //   headers = headers.append( "Content-type","application/json");
+  //   return this.httpClient.post(this.baseUrl + "/api/Account/AuthorizeController", controllerId);
+  // }
 
-  getAwaitingAppUsers(): Observable<any> {
-    return this.httpClient.get(this.baseUrl + "/api/Account/GetAwaitingAppUsers");
-  }
+  // getAwaitingAppUsers(): Observable<any> {
+  //   return this.httpClient.get(this.baseUrl + "/api/Account/GetAwaitingAppUsers");
+  // }
 
-  authorizeAppUser(appUserId): Observable<any> {
-      let headers = new HttpHeaders();
-      headers = headers.append( "Content-type","application/json");
-      return this.httpClient.post(this.baseUrl + "/api/Account/AuthorizeAppUser", appUserId);
-    }
+  // authorizeAppUser(appUserId): Observable<any> {
+  //     let headers = new HttpHeaders();
+  //     headers = headers.append( "Content-type","application/json");
+  //     return this.httpClient.post(this.baseUrl + "/api/Account/AuthorizeAppUser", appUserId);
+  //   }
 
-    denyAppUser(appUserId): Observable<any> {
-      let headers = new HttpHeaders();
-      headers = headers.append( "Content-type","application/json");
-      return this.httpClient.post(this.baseUrl + "/api/Account/DenyAppUser", appUserId);
-    }
+  //   denyAppUser(appUserId): Observable<any> {
+  //     let headers = new HttpHeaders();
+  //     headers = headers.append( "Content-type","application/json");
+  //     return this.httpClient.post(this.baseUrl + "/api/Account/DenyAppUser", appUserId);
+  //   }
   
-    denyAdmin(adminId): Observable<any> {
-      let headers = new HttpHeaders();
-      headers = headers.append( "Content-type","application/json");
-      return this.httpClient.post(this.baseUrl + "/api/Account/DenyAdmin", adminId);
-    }
+  //   denyAdmin(adminId): Observable<any> {
+  //     let headers = new HttpHeaders();
+  //     headers = headers.append( "Content-type","application/json");
+  //     return this.httpClient.post(this.baseUrl + "/api/Account/DenyAdmin", adminId);
+  //   }
 
-    denyControll(conttrollerId): Observable<any> {
-      let headers = new HttpHeaders();
-      headers = headers.append( "Content-type","application/json");
-      return this.httpClient.post(this.baseUrl + "/api/Account/DenyControll", conttrollerId);
-    }
+  //   denyControll(conttrollerId): Observable<any> {
+  //     let headers = new HttpHeaders();
+  //     headers = headers.append( "Content-type","application/json");
+  //     return this.httpClient.post(this.baseUrl + "/api/Account/DenyControll", conttrollerId);
+  //   }
 
-    getDeniedUsers(): Observable<any> {
-      return this.httpClient.get(this.baseUrl + "/api/Account/GetDenyUsers");
-    }
+  //   getDeniedUsers(): Observable<any> {
+  //     return this.httpClient.get(this.baseUrl + "/api/Account/GetDenyUsers");
+  //   }
 
-    //
-    authorizeDeniedUser(userId): Observable<any> {
-        let headers = new HttpHeaders();
-        headers = headers.append( "Content-type","application/json");
-        return this.httpClient.post(this.baseUrl + "/api/Account/AuthorizeDeniedUser", userId);
-      }
+  //   //
+  //   authorizeDeniedUser(userId): Observable<any> {
+  //       let headers = new HttpHeaders();
+  //       headers = headers.append( "Content-type","application/json");
+  //       return this.httpClient.post(this.baseUrl + "/api/Account/AuthorizeDeniedUser", userId);
+  //     }
 
 
 

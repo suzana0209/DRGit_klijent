@@ -1,17 +1,17 @@
 <div id="wholePage">
-<h2 *ngIf="NonActiveAdmin()" id="info">You are not authorized for add/edit/delete lines! Your request is processed! </h2>
-<h2 *ngIf="DeniedAdmin()" id="info">You are not authorized for add/edit/delete lines! Your request is denied!</h2>
+<!-- <h2 *ngIf="NonActiveAdmin()" id="info">You are not authorized for add/edit/delete lines! Your request is processed! </h2>
+<h2 *ngIf="DeniedAdmin()" id="info">You are not authorized for add/edit/delete lines! Your request is denied!</h2> -->
 
 
-<div *ngIf="LoggedAdmin()" class="row1" class="backk">
-
+<!-- <div *ngIf="LoggedAdmin()" class="row1" class="backk"> -->
+<div class="row1" class="backk">
   <div class="column70">
     <agm-map  [latitude]="markerInfo.location.latitude" [longitude]="markerInfo.location.longitude" [zoom]="18">
-        <agm-marker *ngFor="let station of stations" [latitude]="station.Latitude" [longitude]="station.Longitude" [title]="station.Name"
-        [label]="" [iconUrl]="iconUrl" (markerClick) = "stationClick(station.Id)">
+        <agm-marker *ngFor="let station of stations" [latitude]="station.latitude" [longitude]="station.longitude" [title]="station.name"
+        [label]="" [iconUrl]="iconPath" (markerClick) = "stationClick(station._id)">
 
           <!-- Svakom markeru dodajemo info-window (Nije obavezno!) -->
-          <agm-info-window [latitude]="station.Latitude" [longitude]="station.Longitude" >
+          <agm-info-window [latitude]="station.latitude" [longitude]="station.longitude" >
             <span style="font-family:'Times New Roman'; color:gray;"><strong>Station name:{{station.Name}}</strong></span><br>
             <span style="font-family:'Times New Roman'; color:gray;"><strong>Station address:{{station.AddressStation}}</strong></span>
             <!-- <span style="font-family:'Times New Roman'; color:gray;">Bulevar oslobođenja 131</span> -->
@@ -35,18 +35,32 @@
           
       </div> -->
 
+      <!--Dodato-->
+      <div *ngIf="isSelectedAdd()">
+          <div  *ngFor="let dire of polyline.path, let j = index">
+            <agm-direction 
+            [renderOptions] = "{polylineOptions: {strokeColor: polyline.color}, suppressMarkers: true,  preserveViewport: true}"
+             *ngIf="polyline.path[j+1]"  
+            [origin]="{ lat: polyline.path[j].latitude, lng: polyline.path[j].longitude }" 
+            [destination]="{ lat: polyline.path[j+1].latitude, lng: polyline.path[j+1].longitude }">
+              
+              </agm-direction>
+        </div>
+        </div>
 
-      <div *ngFor="let ls of pomModelList, let i = index">
+
+
+      <!-- <div *ngFor="let ls of pomModelList, let i = index">
           <div *ngFor="let dir of ls.List, let j= index">
           <agm-direction  *ngIf = "ls.List[j+1]"
             [renderOptions] = "{polylineOptions: {strokeColor: listOfColors[i]}, suppressMarkers: true}"
             [origin] = "{lat: ls.List[j].Latitude, lng: ls.List[j].Longitude}"
             [destination] = "{lat: ls.List[j+1].Latitude, lng: ls.List[j+1].Longitude}">
-            <!-- <agm-polyline-point *ngFor="let station of ls.List" [latitude]="station.Latitude" [longitude]="station.Longitude">
+             <agm-polyline-point *ngFor="let station of ls.List" [latitude]="station.Latitude" [longitude]="station.Longitude">
             </agm-polyline-point> -->
-          </agm-direction>
+          <!-- </agm-direction>
         </div>
-    </div>
+    </div>  -->
 
 
 

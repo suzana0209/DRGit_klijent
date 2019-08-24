@@ -4,14 +4,14 @@ export class StationModel{
     Longitude: number;
     Latitude: number;
     AddressStation: string;
-    Checked: boolean = false;
-    Version: number;
+    Checked?: boolean = false;
+    Version?: number;
 
 
 
     constructor(nameStation:string, 
         longitude:number, latitude:number, 
-        address:string, id:number, c:boolean,
+        address:string, id:number, c?:boolean,
         version? : number){
         this.Id = id;
         this.Name = nameStation;

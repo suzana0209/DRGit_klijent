@@ -18,13 +18,14 @@ export class ValidForLineModel{
             wrong = true;
         }
         else{
-            if(lineModel.RegularNumber == 0){
+            if(lineModel.RegularNumber == ""){
                 this.regularLineOk0 = false;
                 this.regularLineOk = true;
                 this.regularLineOkMinus = true;
                 wrong = true;
             }
-            else if(lineModel.RegularNumber < 0){
+            // parseInt(event.target.value, 10)
+            else if(parseInt(lineModel.RegularNumber) < 0){
                 this.regularLineOkMinus = false;
                 this.regularLineOk = true;
                 this.regularLineOk0 = true;
@@ -56,13 +57,13 @@ export class ValidForLineModel{
             wrong1 = true;
         }
         else{
-            if(lineModel.RegularNumber == 0){
+            if(parseInt(lineModel.RegularNumber) == 0){
                 this.regularLineOk0 = false;
                 this.regularLineOk = true;
                 this.regularLineOkMinus = true;
                 wrong1 = true;
             }
-            else if(lineModel.RegularNumber < 0){
+            else if(parseInt(lineModel.RegularNumber) < 0){
                 this.regularLineOkMinus = false;
                 this.regularLineOk = true;
                 this.regularLineOk0 = true;
