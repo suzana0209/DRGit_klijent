@@ -25,11 +25,12 @@ export class LineService {
   private request(method: 'post'|'get'|'delete', type: 'addLine'|'getAllLines'|'changeLine'|'deleteLine', line?:LineModel, lineId?:String): Observable<any>{
     let base;
     if(method === 'post'){
-      base = this.httpClient.post(`/api/${type}`, line);
-
       if(type === 'changeLine'){
         base = this.httpClient.post(`/api/${type}/` + lineId, line);
       }
+      else{
+        base = this.httpClient.post(`/api/${type}`, line);
+      }   
     }
     else if(method === 'get'){
       base = this.httpClient.get(`/api/${type}`, { headers: { Authorization: `Bearer ${this.getToken()}` }});

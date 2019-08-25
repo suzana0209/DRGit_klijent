@@ -23,18 +23,6 @@ import { UsersService } from 'src/app/services/users/users.service';
   styles: ['agm-map {height: 400px; width: 100%;}']
 })
 export class LinesComponent implements OnInit {
-  listOfColors: any = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
-  '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
-  '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', 
-  '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
-  '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', 
-  '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
-  '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680', 
-  '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
-  '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', 
-  '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
-
-
 
   selectedForComboBox: string = '';
   selected: string = "";
@@ -62,6 +50,7 @@ export class LinesComponent implements OnInit {
   counterForStation: number = 0
   orderedStation: any = [];
   linesWithOrderedStations: any = [];
+  linesWithStations: LineModel[] = []
   
   pomLine: any;
 
@@ -77,6 +66,7 @@ export class LinesComponent implements OnInit {
   orderedStationEdit: any = []
 
   newLineEdit: any;
+  //newLineEdit = new LineModel(0,"",[],)
 
   allStationFromDb: any = []
 
@@ -90,7 +80,7 @@ export class LinesComponent implements OnInit {
   showAddButtonBool: boolean = false;
   addStation: StationModel;
   addStationPosition: number;
-  idAdded: number;
+  idAdded: string;
 
   validationsForAdd: ValidForLineModel = new ValidForLineModel();
   validationsForEdit: ValidForEditLineModel = new ValidForEditLineModel();
@@ -125,7 +115,23 @@ export class LinesComponent implements OnInit {
       this.stations = data;
       this.allStationFromDb = data
       console.log(this.stations)
+
+      
+
+      // this.restStation = this.allStationFromDb.filter(o=> !this.newLineEdit.ListOfStations.find(o2=> o._id === o2.Id));
+        
+      // let countOfArray1 = this.newLineEdit.ListOfStations.length;
+
+      // if(this.arrayIntForAddStation.length <= countOfArray1){
+      //   for (let i = 0; i < countOfArray1 + 1; i++) {
+      //     this.arrayIntForAddStation.push(i+1);
+      //   }
+      // }
+
     });
+
+     
+
 
     // this.stationService.getAll().subscribe(k=>{
     //   //this.lines = k;   
@@ -157,53 +163,12 @@ export class LinesComponent implements OnInit {
 
   }
 
-  stationClick(id: string){
-    this.pomStat = new StationModel("",0,0,"",0);
-    let postojiStanica: boolean = false;
-
-    this.stations.forEach(element => {
-      if(element._id == id){
-        //this.pomStat = element;
-        this.pomStat.Id = element._id;
-        this.pomStat.Name = element.name;
-        this.pomStat.Latitude = element.latitude;
-        this.pomStat.Longitude = element.longitude;
-
-        this.pomStat.AddressStation = element.addressStation;
-      }
-    });
-
-    console.log(this.pomStat);
-    this.selectedStations.push(this.pomStat);
-  
-    
-    this.polyline.addLocation(new GeoLocation(this.pomStat.Latitude, this.pomStat.Longitude));
-    this.id = id;
-
-  }
-
-
-  // stationClick(id: number){
-  //   this.stations.forEach(element => {
-  //     if(element._id == id){
-  //       this.pomStat = element;
-  //     }
-  //   });
-  //   console.log(this.pomStat);
-  //   this.selectedStations.push(this.pomStat);
-  
-    
-  //   this.polyline.addLocation(new GeoLocation(this.pomStat.Latitude, this.pomStat.Longitude));
-  //   this.id = id;
-
-  // }
-
   onSubmit(lineData: LineModel, form: NgForm){
     lineData.ListOfStations = this.selectedStations;
 
-    if(this.validationsForAdd.validate(lineData)){
-      return;
-    }
+    // if(this.validationsForAdd.validate(lineData)){
+    //   return;
+    // }
 
     // this.lineService.AlredyExistRegularNumber(lineData).subscribe(a=>{
     //   if(a == "Yes"){
@@ -215,63 +180,48 @@ export class LinesComponent implements OnInit {
         this.lineService.addLine(lineData).subscribe(data => {
         alert("Line "+ lineData.RegularNumber +" successful added!");
         window.location.reload();
-        
-
       },
       err => {
-        //alert("Add line - error - already exist!");
-        window.alert(err.error);
-
+        window.alert(err.error.message);
         window.location.reload();
-        
+         
         })
-    //   }
-    // })
 
   }
 
-  // onSubmit(lineData: LineModel, form: NgForm){
-  //   lineData.ListOfStations = this.selectedStations;
 
-  //   if(this.validationsForAdd.validate(lineData)){
-  //     return;
-  //   }
+  removeStationFromLine(id: string){
+    var counter = 0;
+    this.newLineEdit = this.sLineForEdit;
+    this.newLineEdit.ListOfStations.forEach(element => {      
+      if(element.Id == id){
+        this.newLineEdit.ListOfStations.splice(counter, 1);
+        console.log("Izbrisana: ", this.newLineEdit);
 
-  //   this.lineService.AlredyExistRegularNumber(lineData).subscribe(a=>{
-  //     if(a == "Yes"){
-  //       alert("Line number: "+ lineData.RegularNumber +" alredy exists!");
-  //       //window.location.reload();
-  //     }
-  //     else if(a == "No"){
-  //       console.log(lineData);
-  //       this.lineService.addLine(lineData).subscribe(data => {
-  //       alert("Line "+ lineData.RegularNumber +" successful added!");
-  //       window.location.reload();
-        
+        //moze da doda element samo ako vec ne postoji u rest-u
+        if(this.alreadyExists(this.restStation, element._id)){    
+          this.restStation.push(element);
+        }
 
-  //     },
-  //     err => {
-  //       //alert("Add line - error - already exist!");
-  //       window.alert(err.error);
-
-  //       window.location.reload();
-        
-  //       })
-  //     }
-  //   })
-
-  // }
+        console.log("Probaj rest: ", this.restStation);
+        if(this.arrayIntForAddStation.length > 0){       
+          this.arrayIntForAddStation.pop();
+        }
+      }
+      counter++;
+    });
+  }
 
   onSubmitDelete(lineData: LineModel, form:NgForm){
     console.log("Line for delete: ", lineData);
 
-    if(this.validationsForAdd.validateForDelete(lineData)){
-      return;
-    }
+    // if(this.validationsForAdd.validateForDelete(lineData)){
+    //   return;
+    // }
     
-      this.lineService.deleteLine(this.selectedLine.Id.toString()).subscribe(data => {
+      this.lineService.deleteLine(this.selectedLine._id.toString()).subscribe(data => {
         alert("Line with Number="+ lineData.RegularNumber +" successful delted!");
-        form.reset();
+        //form.reset();
         window.location.reload();
   
       },
@@ -303,112 +253,77 @@ export class LinesComponent implements OnInit {
   }
 
 
-  // poziva se u delete-u  
-  // showLines(event: any){
-  //   this.selectedForComboBox = event.target.value;
+  showLinesForChange(event: any){
+    //this.showComboBoxForAddSt = true;
+    this.lineForEditString = event.target.value;
+    if(this.lineForEditString != null && this.lineForEditString != undefined){
+      this.showListOfStations = true;
+    }
+    this.allLinesForEditFromDb.forEach(element => {
+      if(element.regularNumber == this.lineForEditString){
+        this.sLineForEdit = element;
+        this.sLineForEdit.ListOfStations = this.getNamee(element.stations)
 
-  //   this.linesForComboBox.forEach(element => {
-  //     if(element.RegularNumber == this.selectedForComboBox){
-  //       this.selectedLine = element;     
-  //     }
-  //   });
-
-  //    if(this.selectedLine != null){
-  //      this.stationService.getOrderedStations(this.selectedLine.Id).subscribe(d =>{
-  //        this.orderedStation = d;
-         
-  //        console.log(d);
-  //      });
-  //     }
-  // }
-
-  // showLinesForChange(event: any){
-  //   //this.showComboBoxForAddSt = true;
-  //   this.lineForEditString = event.target.value;
-  //   if(this.lineForEditString != null && this.lineForEditString != undefined){
-  //     this.showListOfStations = true;
-  //   }
-  //   this.allLinesForEditFromDb.forEach(element => {
-  //     if(element.RegularNumber == this.lineForEditString){
-  //       this.sLineForEdit = element;
-
-  //     }
-  //   });
-
-  //   if(this.sLineForEdit != null){
-  //     this.stationService.getOrderedStations(this.sLineForEdit.Id).subscribe(d =>{
-  //       this.orderedStationEdit = d;
-        
-  //       this.newLineEdit = this.sLineForEdit;
-  //       this.newLineEdit.ListOfStations = this.orderedStationEdit;
-  //       console.log("New line",this.newLineEdit);
-
-  //       this.restStation = this.allStationFromDb.filter(o=> !this.newLineEdit.ListOfStations.find(o2=> o.Id === o2.Id));
-        
-  //       let countOfArray1 = this.newLineEdit.ListOfStations.length;
-
-  //     if(this.arrayIntForAddStation.length <= countOfArray1){
-  //       for (let i = 0; i < countOfArray1 + 1; i++) {
-  //         this.arrayIntForAddStation.push(i+1);
-  //       }
-  //     }
-  //   });
-      
-  //    }
-    
-  // }
-
-
-  removeStationFromLine(id: number){
-    var counter = 0;
-    this.newLineEdit.ListOfStations.forEach(element => {      
-      if(element.Id == id){
-        this.newLineEdit.ListOfStations.splice(counter, 1);
-        console.log("Izbrisana: ", this.newLineEdit);
-
-        //moze da doda element samo ako vec ne postoji u rest-u
-        if(this.alreadyExists(this.restStation, element.Id)){    
-          this.restStation.push(element);
-        }
-
-        console.log("Probaj rest: ", this.restStation);
-        if(this.arrayIntForAddStation.length > 0){       
-          this.arrayIntForAddStation.pop();
-        }
       }
-      counter++;
     });
   }
 
-  sendIdOfStation(event){
-    console.log("Target vale", event.target.value);
-    if(event.target.value != ""){
-      this.showComboBoxForAddSt2 = true;
-      
-      this.idAdded = parseInt(event.target.value, 10)
-      this.restStation.forEach(element => {
-        if(element.Id == this.idAdded){
-          //this.restStation.splice(this.idAdded, 1);
-          
-        }
-      });
-      
-      
+  getNamee(stations: StationModel[]){
+    var retValue:StationModel[] = [];
+    
+    let ime;
+
+
+    stations.forEach(element => {
+      this.stationService.getAllStations().subscribe(dd=>{
+        ime = dd.find(x=> x._id == element);
+        let pom:StationModel = new StationModel("",0,0,"",0);
+        pom.Name = ime.name;
+        pom.Latitude = ime.latitude;
+        pom.Longitude = ime.longitude;
+        pom.Id = ime._id;
+        pom.AddressStation = ime.addressStation;
+
+        retValue.push(pom);
+      })
+    });
+
+    return retValue;
+    
+  }
+
+  //list:StationModel[]
+  alreadyExists(list: any, id: string): boolean{
+    list.forEach(d=>{
+      if(d._id == id){
+        return false;
+      }
+    })
+    return true;
+  }
+
+  showAddButton(event){
+    if(event.target.value != "" && parseInt(event.target.value, 10) > 0){
+      this.showAddButtonBool = true;
+      this.addStationPosition = parseInt(event.target.value, 10)      
     }
   }
 
   finallyAdd(){
     //validacija za stanicu i poziciju
-    if(this.validationsForEdit.validate(this.idAdded, this.addStationPosition)){
-      return;
-    }
+    // if(this.validationsForEdit.validate(this.idAdded, this.addStationPosition)){
+    //   return;
+    // }
 
     console.log("Prije dodaavanja", this.newLineEdit);
       this.restStation.forEach(ee => {
-        if(ee.Id == this.idAdded ){
+        if(ee._id == this.idAdded ){
           if(this.alreadyExists(this.newLineEdit.ListOfStations, this.idAdded)){
             this.newLineEdit.ListOfStations.splice(this.addStationPosition-1, 0, ee);
-                   
+               
+            
+            
+
           }
           
         }
@@ -423,7 +338,7 @@ export class LinesComponent implements OnInit {
         counterForDel = counterForDel + 1;
       });
 
-      if(this.idAdded != 0){
+      if(this.idAdded != ""){
         this.arrayIntForAddStation.push(this.arrayIntForAddStation.length+1);
       }
       
@@ -431,47 +346,77 @@ export class LinesComponent implements OnInit {
       this.showComboBoxForAddSt =  false;
       this.showComboBoxForAddSt2 = false;
 
+     
+
   }
 
-  alreadyExists(list: StationModel[], id: number): boolean{
-    list.forEach(d=>{
-      if(d.Id == id){
-        return false;
+  sendIdOfStation(event){
+    console.log("Target vale", event.target.value);
+    if(event.target.value != ""){
+      this.showComboBoxForAddSt2 = true;
+      
+      this.idAdded = event.target.value.toString();
+      // this.idAdded = parseInt(event.target.value, 10);
+      this.restStation.forEach(element => {
+        if(element.Id == this.idAdded){
+          //this.restStation.splice(this.idAdded, 1);
+          
+        }
+      });      
+    }
+  }
+
+ //poziva se u delete-u  
+ showLines(event: any){
+    this.selectedForComboBox = event.target.value;
+
+    this.linesForComboBox.forEach(element => {
+      if(element.regularNumber == this.selectedForComboBox){
+        this.selectedLine = element;
+        this.selectedLine.ListOfStations = this.getNamee(element.stations) 
+        
       }
-    })
-    return true;
+    });
+
+     if(this.selectedLine != null){
+      //  this.stationService.getOrderedStations(this.selectedLine.Id).subscribe(d =>{
+      //    this.orderedStation = d;
+         
+      //    console.log(d);
+      //  });
+      }
   }
 
-  showAddButton(event){
-    if(event.target.value != "" && parseInt(event.target.value, 10) > 0){
-      this.showAddButtonBool = true;
-      this.addStationPosition = parseInt(event.target.value, 10)      
-    }
-  }
+  // showLinesForChange(event: any){
+  //   //this.showComboBoxForAddSt = true;
+  //   this.lineForEditString = event.target.value;
+  //   if(this.lineForEditString != null && this.lineForEditString != undefined){
+  //     this.showListOfStations = true;
+  //   }
+  //   this.allLinesForEditFromDb.forEach(element => {
+  //     if(element.regularNumber == this.lineForEditString){
+  //       this.sLineForEdit = element;
+  //       this.sLineForEdit.ListOfStations = this.getNamee(element.stations)
 
-  LoggedAdmin(): boolean{
-    if(localStorage.getItem('role') == "Admin" && this.boolBezvezeZaPoruku == "ACTIVATED" && !this.boolBezvezeZaPorukuDenied){
-      return true;
-    }
-    return false;
-  }
-
-  NonActiveAdmin(){
-    if(localStorage.getItem('role') == "Admin" && this.boolBezvezeZaPoruku != "ACTIVATED" && !this.boolBezvezeZaPorukuDenied){
-      return true;
-    }
-    return false;
-  }
-
-  DeniedAdmin(){
-    if(localStorage.getItem('role') == "Admin" && this.boolBezvezeZaPorukuDenied){
-      return true;
-    }
-  }
+  //     }
+  //   });
+  // }
 
 
   showComboBox(){
+    this.newLineEdit = this.sLineForEdit;
     this.showComboBoxForAddSt = true;
+
+    this.restStation = this.allStationFromDb.filter(o=> !this.newLineEdit.ListOfStations.find(o2=> o._id === o2.Id));
+        
+      let countOfArray1 = this.newLineEdit.ListOfStations.length;
+
+      if(this.arrayIntForAddStation.length <= countOfArray1){
+        for (let i = 0; i < countOfArray1 + 1; i++) {
+          this.arrayIntForAddStation.push(i+1);
+        }
+      }
+
   }
   
 
@@ -520,10 +465,6 @@ export class LinesComponent implements OnInit {
       });
     }
     return false;
-  }
-
-  refresh(){
-   window.location.reload();
   }
 
 }

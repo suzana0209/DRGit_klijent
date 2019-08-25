@@ -14,7 +14,7 @@ export class LineModel{
         version? : number, id1?: string, colorLine?:string){
         this.Id = id;
         this.RegularNumber = regularNumber;
-        this.ListOfStations = listOfStatios;
+        this.ListOfStations = listOfStatios; 
         this.Version = version;
         this._id = id1;
         this.ColorLine = colorLine;

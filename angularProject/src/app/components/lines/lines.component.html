@@ -12,17 +12,17 @@
 
           <!-- Svakom markeru dodajemo info-window (Nije obavezno!) -->
           <agm-info-window [latitude]="station.latitude" [longitude]="station.longitude" >
-            <span style="font-family:'Times New Roman'; color:gray;"><strong>Station name:{{station.Name}}</strong></span><br>
-            <span style="font-family:'Times New Roman'; color:gray;"><strong>Station address:{{station.AddressStation}}</strong></span>
+            <span style="font-family:'Times New Roman'; color:gray;"><strong>Station name:{{station.name}}</strong></span><br>
+            <span style="font-family:'Times New Roman'; color:gray;"><strong>Station address:{{station.address}}</strong></span>
             <!-- <span style="font-family:'Times New Roman'; color:gray;">Bulevar oslobođenja 131</span> -->
             <!-- <a [href]="markerInfo.link">See the site.</a> -->
           </agm-info-window>
       </agm-marker>
 
-      <agm-polyline [strokeColor]="polyline.color">
+      <!-- <agm-polyline [strokeColor]="polyline.color">
           <agm-polyline-point *ngFor="let point of polyline.path" [latitude]="point.latitude" [longitude]="point.longitude">
           </agm-polyline-point>
-      </agm-polyline>
+      </agm-polyline> -->
 
       <!-- crta sve stanice i linije -->
       <div *ngIf="!isSelectedDelete() && !isSelectedEdit()">
@@ -75,13 +75,27 @@
         <div > 
             <div *ngFor="let ls of orderedStation, let j= index">
             <agm-direction *ngIf="orderedStation[j+1]" 
-              [renderOptions] = "{polylineOptions: {strokeColor: listOfColors[j]}, suppressMarkers: true}"
-              [origin] = "{lat: ls.Latitude, lng: ls.Longitude}"
-              [destination] = "{lat: orderedStation[j + 1].Latitude, lng: orderedStation[ j + 1].Longitude}">
+              [renderOptions] = "{polylineOptions: {strokeColor: ls.colorLine}, suppressMarkers: true, preserveViewport: true}"
+              [origin] = "{lat: ls.latitude, lng: ls.longitude}"
+              [destination] = "{lat: orderedStation[j + 1].latitude, lng: orderedStation[ j + 1].longitude}">
 
             </agm-direction>
           </div>
       </div>  
+
+
+      <!-- <div *ngIf="!isSelected('Add')">
+        <div  *ngFor="let point of sl.Stations, let j = index">
+          <agm-direction 
+          [renderOptions] = "{polylineOptions: {strokeColor: sl.colorLine}, suppressMarkers: true, preserveViewport: true}"
+           *ngIf="sl.Stations[j+1]"  
+          [origin]="{ lat: sl.Stations[j].latitude, lng: sl.Stations[j].longitude }" 
+          [destination]="{ lat: sl.Stations[j+1].latitude, lng:sl.Stations[j+1].longitude }">
+          
+            </agm-direction>
+      </div>
+      </div> -->
+      
 
 
       </div>
@@ -126,17 +140,23 @@
       <!-- <h3>Add line</h3> -->
       <form #lineForm="ngForm" (ngSubmit)="onSubmit(lineForm.value, lineForm)">
           <div class="form-group">
-              <div *ngIf="!validationsForAdd.listOfStationsOk" style="color:red">please select at least two stations, otherwise you will not be able to add a line</div>
+              <!-- <div *ngIf="!validationsForAdd.listOfStationsOk" style="color:red">please select at least two stations, otherwise you will not be able to add a line</div> -->
               <br><br>  
 
-            <label for="RegularNumber">Regular Number</label>
-            <input required type="number" class="form-control" name="RegularNumber" value="{{regularNumber}}" ngModel>
-            <div *ngIf="!validationsForAdd.regularLineOk" style="color:red">Line number can't be empty.</div>
-            <div *ngIf="!validationsForAdd.regularLineOk0" style="color:red">Line number  must not be zero.</div>
-            <div *ngIf="!validationsForAdd.regularLineOkMinus" style="color:red">Line number must not be less than zero.</div>
-        
+            <label for="RegularNumber">Line number</label>
+            <input required type="text" class="form-control" name="RegularNumber" value="{{regularNumber}}" ngModel>
 
-          </div> <br>
+            <div *ngIf="!validationsForAdd.regularLineOk" style="color:red">Line number can't be empty.</div> 
+            <div *ngIf="!validationsForAdd.regularLineOk0" style="color:red">Line number  must not be zero.</div>
+           <div *ngIf="!validationsForAdd.regularLineOkMinus" style="color:red">Line number must not be less than zero.</div>
+            
+          </div> 
+          <div class="form-group">
+            <label>Color: </label><br>
+            <input  type="color" name="ColorLine" value="#ff0000" ngModel>
+          </div>
+            
+         
           <div align="center">
               <button type="submit" class="button" class="btn" id="designBtnForAction">Add line</button>
           </div>
@@ -157,7 +177,7 @@
               <label for="RegularNumber">Select line: </label>
               <select name="RegularNumber" (click)='showLinesForChange($event)' class="form-control" ngModel>
                 <option disabled>Please select...</option>
-                <option *ngFor="let line of allLinesForEditFromDb" value={{line.RegularNumber}}>{{line.RegularNumber}}</option>
+                <option *ngFor="let line of allLinesForEditFromDb" value={{line.regularNumber}}>{{line.regularNumber}}</option>
               </select>
               <br>
               <!-- <label *ngIf="showListOfStations">ListOfStations</label> -->
@@ -184,7 +204,7 @@
               
             <div align="center" *ngIf="showListOfStations">
               <button type="submit" class="button" class="btn btn-primary"  (click)="showComboBox()" id="designBtn2">Add new station</button> <br/><br>
-            </div>
+            </div> <!--u showCombobox() se samo promjenjiva showComboBoxForAddSt = true-->
             
 
             <div *ngIf = "showComboBoxForAddSt" class="form-group">
@@ -192,14 +212,14 @@
               <label for="Name">Select station for adding: </label>
                 <select name="Name"  class="form-control" (click)='sendIdOfStation($event)'  ngModel>
                   <option disabled>Please select...</option>
-                  <option *ngFor="let station of restStation" value={{station.Id}}>{{station.Name}}</option>
+                  <option *ngFor="let station of restStation" value={{station._id}}>{{station.name}}</option>
                 </select>
                 <!--validationsForEdit-->
                 <div *ngIf="!validationsForEdit.idAddedOk" style="color:red">Station can't be empty.</div>
             
             </div>
             <br>
-            <div *ngIf = "showComboBoxForAddSt2" class="form-group">
+            <div  class="form-group"> <!--*ngIf = "showComboBoxForAddSt2"-->
                 <label for="NumberStation">Select positon for new station </label>
                 <select name="NumberStation" class="form-control" (click)='showAddButton($event)' ngModel>
                   <option disabled>Please select...</option>
@@ -229,7 +249,7 @@
               <label for="RegularNumber">Select line: </label>
               <select name="RegularNumber" (click)='showLines($event)' class="form-control" ngModel>
                 <option disabled>Please select...</option>
-                <option *ngFor="let line of linesForComboBox" value={{line.RegularNumber}}>{{line.RegularNumber}}</option>
+                <option *ngFor="let line of linesForComboBox" value={{line.regularNumber}}>{{line.regularNumber}}</option>
                 <!-- <option value="Controller" >Controller</option>
                 <option value="AppUser" >Passanger</option> -->
               </select>
