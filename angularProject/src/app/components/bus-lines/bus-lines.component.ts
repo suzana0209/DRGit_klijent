@@ -56,9 +56,9 @@ export class BusLinesComponent implements OnInit {
       this.lines = b;
     })
 
-    this.stationService.getAll().subscribe(c =>{
-      this.pomModel = c;
-    });  
+    // this.stationService.getAll().subscribe(c =>{
+    //   this.pomModel = c;
+    // });  
 
    }
 

@@ -9,7 +9,7 @@ import { StationModel } from 'src/app/models/station.model';
 })
 export class StationService {
 
-  baseUrl = "http://localhost:52295";
+  //baseUrl = "http://localhost:52295";
 
   constructor(private http:Http, private httpClient:HttpClient) { }
 
@@ -92,24 +92,24 @@ export class StationService {
 
 
 
-  getOrderedStations(id: number){
-    return this.httpClient.get(this.baseUrl + "/api/Stations/GetOrderedAll?id=" + id);
-  }
+  // getOrderedStations(id: number){
+  //   return this.httpClient.get(this.baseUrl + "/api/Stations/GetOrderedAll?id=" + id);
+  // }
 
-  getAll(){
-    return this.httpClient.get(this.baseUrl + "/api/Stations/GetOrderedAllLines");
-  }
+  // getAll(){
+  //   return this.httpClient.get(this.baseUrl + "/api/Stations/GetOrderedAllLines");
+  // }
 
-  getIdes(){
-    return this.httpClient.get(this.baseUrl + "/api/Stations/GetIdes");
+  // getIdes(){
+  //   return this.httpClient.get(this.baseUrl + "/api/Stations/GetIdes");
 
-  }
+  // }
 
-  AlredyExistStation(station){
-    return this.httpClient.post(this.baseUrl + "/api/Stations/AlredyExistStation", station);
-  }
+  // AlredyExistStation(station){
+  //   return this.httpClient.post(this.baseUrl + "/api/Stations/AlredyExistStation", station);
+  // }
 
-  AlredyExistsStationForEdit(station){
-    return this.httpClient.post(this.baseUrl + "/api/Stations/AlredyExistsStationForEdit", station);
-  }
+  // AlredyExistsStationForEdit(station){
+  //   return this.httpClient.post(this.baseUrl + "/api/Stations/AlredyExistsStationForEdit", station);
+  // }
 }

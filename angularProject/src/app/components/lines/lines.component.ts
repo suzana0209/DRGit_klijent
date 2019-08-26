@@ -27,6 +27,7 @@ export class LinesComponent implements OnInit {
   selectedForComboBox: string = '';
   selected: string = "";
   public polyline: Polyline;
+  
   id: String;
   public zoom: number;
   stations: any = [];
@@ -90,6 +91,11 @@ export class LinesComponent implements OnInit {
   boolBezvezeZaPorukuDenied: string = "";
   userPom: any;
   sakrijDugmice: boolean = true;
+
+  selLine: Polyline
+  directionsService :any ;
+  directionsDisplay : any ;
+  sl: LineModel = new LineModel(0,"",[],0,"","");
   
 
   iconPath: any = {url: "assets/busicon.png", scaledSize: {width: 50, height:50}}
@@ -115,18 +121,6 @@ export class LinesComponent implements OnInit {
       this.stations = data;
       this.allStationFromDb = data
       console.log(this.stations)
-
-      
-
-      // this.restStation = this.allStationFromDb.filter(o=> !this.newLineEdit.ListOfStations.find(o2=> o._id === o2.Id));
-        
-      // let countOfArray1 = this.newLineEdit.ListOfStations.length;
-
-      // if(this.arrayIntForAddStation.length <= countOfArray1){
-      //   for (let i = 0; i < countOfArray1 + 1; i++) {
-      //     this.arrayIntForAddStation.push(i+1);
-      //   }
-      // }
 
     });
 
@@ -160,6 +154,21 @@ export class LinesComponent implements OnInit {
     "assets/ftn.png",
     "Jugodrvo" , "" , "http://ftn.uns.ac.rs/691618389/fakultet-tehnickih-nauka");
     this.polyline = new Polyline([], 'blue', { url:"assets/busicon.png", scaledSize: {width: 50, height: 50}});
+
+    this.selLine = new Polyline([], 'red', { url:"assets/busicon.png", scaledSize: {width: 50, height: 50}});
+
+
+
+    this.mapsApiLoader.load().then(() =>{
+      google.maps.event.addListener(this.sl, 'positionChanged', (function(selLine, i) {
+        return function(event) {
+          console.log(event.LatLngLiteral);
+          alert("WTF");
+        }
+      }));
+      this.directionsService  = new google.maps.DirectionsService();
+    this.directionsDisplay = new google.maps.DirectionsRenderer();
+    });
 
   }
 
@@ -199,7 +208,7 @@ export class LinesComponent implements OnInit {
         console.log("Izbrisana: ", this.newLineEdit);
 
         //moze da doda element samo ako vec ne postoji u rest-u
-        if(this.alreadyExists(this.restStation, element._id)){    
+        if(this.alreadyExists(this.restStation, element.Id)){    
           this.restStation.push(element);
         }
 
@@ -239,13 +248,21 @@ export class LinesComponent implements OnInit {
 
     console.log("Nove linije za edit:", this.newLineEdit);
     console.log("pozicja: ", this.addStationPosition);
-    
-    this.lineService.changeLine(this.newLineEdit.Id, this.newLineEdit).subscribe(d=>{
-      alert("Line with ID="+ this.newLineEdit.Id +" successful changed!")
 
+    let lineData: LineModel = new LineModel(0,"",[]);
+    lineData.RegularNumber = this.newLineEdit.regularNumber;
+    lineData.Id = this.newLineEdit._id;
+    lineData.ColorLine = this.newLineEdit.colorLine;
+    this.newLineEdit.ListOfStations.forEach(element => {
+      lineData.ListOfStations.push(element.Id);
+    });
+    
+    this.lineService.changeLine( lineData, this.newLineEdit._id).subscribe(d=>{
+      alert("Line with ID="+ this.newLineEdit._id +" successful changed!")
+ 
       window.location.reload();
     },
-    err=>{
+    err=>{ 
       window.alert(err.error);
       window.location.reload();
     })
@@ -256,19 +273,30 @@ export class LinesComponent implements OnInit {
   showLinesForChange(event: any){
     //this.showComboBoxForAddSt = true;
     this.lineForEditString = event.target.value;
+    if(this.lineForEditString == "" || this.lineForEditString == undefined){
+      this.sl = new LineModel(0,"",[],0,"","")
+    }
     if(this.lineForEditString != null && this.lineForEditString != undefined){
       this.showListOfStations = true;
     }
     this.allLinesForEditFromDb.forEach(element => {
       if(element.regularNumber == this.lineForEditString){
+        
         this.sLineForEdit = element;
         this.sLineForEdit.ListOfStations = this.getNamee(element.stations)
+        console.log("sLineForEdit: ", this.sLineForEdit)
+        //dodato
+        this.sl = element;
+        element.ListOfStations.forEach(element1 => {
+          this.selLine.addLocation(new GeoLocation(element1.Longitude, element1.Latitude));
+        });
+
 
       }
     });
   }
 
-  getNamee(stations: StationModel[]){
+  getNamee(stations: any[]){
     var retValue:StationModel[] = [];
     
     let ime;
@@ -315,16 +343,46 @@ export class LinesComponent implements OnInit {
     //   return;
     // }
 
+    console.log("sLineForEdit: ", this.sLineForEdit);
+    console.log("newLineEdit", this.newLineEdit);
+    console.log("Pozicija: ", this.arrayIntForAddStation.length);
+    console.log("Rest station: ", this.restStation);
+
+
     console.log("Prije dodaavanja", this.newLineEdit);
+    let retValue = []
       this.restStation.forEach(ee => {
         if(ee._id == this.idAdded ){
-          if(this.alreadyExists(this.newLineEdit.ListOfStations, this.idAdded)){
-            this.newLineEdit.ListOfStations.splice(this.addStationPosition-1, 0, ee);
-               
-            
-            
+          let pomocna = [];
+          //pomocna.push(ee._id);
+          
 
-          }
+          this.stationService.getAllStations().subscribe(dd=>{
+            let ime = dd.find(x=> x._id == ee._id);
+            let pom:StationModel = new StationModel("",0,0,"",0);
+            pom.Name = ime.name;
+            pom.Latitude = ime.latitude;
+            pom.Longitude = ime.longitude;
+            pom.Id = ime._id;
+            pom.AddressStation = ime.addressStation;
+    
+            retValue.push(pom);
+            let pom1: StationModel = new StationModel(pom.Name, pom.Longitude,
+              pom.Latitude, pom.AddressStation,pom.Id);
+            //this.newLineEdit.ListOfStations.push(pom);
+            
+            this.newLineEdit.ListOfStations.splice(this.addStationPosition-1, 0, pom1);
+
+            console.log(this.newLineEdit);
+
+          })
+
+
+          
+
+          // if(this.alreadyExists(this.newLineEdit.ListOfStations, this.idAdded)){
+          //   this.newLineEdit.ListOfStations.splice(this.addStationPosition-1, 0, ee);
+          // }
           
         }
       });
@@ -366,17 +424,69 @@ export class LinesComponent implements OnInit {
     }
   }
 
+  /*
+  showLinesForChange(event: any){
+    //this.showComboBoxForAddSt = true;
+    this.lineForEditString = event.target.value;
+    if(this.lineForEditString == "" || this.lineForEditString == undefined){
+      this.sl = new LineModel(0,"",[],0,"","")
+    }
+    if(this.lineForEditString != null && this.lineForEditString != undefined){
+      this.showListOfStations = true;
+    }
+    this.allLinesForEditFromDb.forEach(element => {
+      if(element.regularNumber == this.lineForEditString){
+        
+        this.sLineForEdit = element;
+        this.sLineForEdit.ListOfStations = this.getNamee(element.stations)
+        console.log("sLineForEdit: ", this.sLineForEdit)
+        //dodato
+        this.sl = element;
+        element.ListOfStations.forEach(element1 => {
+          this.selLine.addLocation(new GeoLocation(element1.Longitude, element1.Latitude));
+        });
+      }
+
+  */
+
  //poziva se u delete-u  
  showLines(event: any){
     this.selectedForComboBox = event.target.value;
+    if(this.selectedForComboBox == "" || this.selectedForComboBox == undefined){
+      this.sl = new LineModel(0,"",[],0,"","")
+    }
 
-    this.linesForComboBox.forEach(element => {
+
+    this.allLinesForEditFromDb.forEach(element => {
       if(element.regularNumber == this.selectedForComboBox){
         this.selectedLine = element;
-        this.selectedLine.ListOfStations = this.getNamee(element.stations) 
-        
+        this.sLineForEdit = element;
+        let pomLista = this.getNamee(element.stations);
+        this.sLineForEdit.ListOfStations =  pomLista;
+        console.log("sLineForEdit: ", this.sLineForEdit)
+        //dodato
+        this.sl = element;
+        element.ListOfStations.forEach(element1 => {
+          this.selLine.addLocation(new GeoLocation(element1.Longitude, element1.Latitude));
+        });
       }
-    });
+    })
+
+
+    // this.linesForComboBox.forEach(element => {
+    //   if(element.regularNumber == this.selectedForComboBox){
+    //     this.selectedLine = element;
+    //     this.selectedLine.ListOfStations = this.selectedLine.ListOfStations
+    //     this.selectedLine.ListOfStations = this.getNamee(element.stations) 
+
+    //     //dodato za crtanje
+    //     this.sl = element;
+    //     this.selectedLine.ListOfStations.forEach(element1 => {
+    //       this.selLine.addLocation(new GeoLocation(element1.Longitude, element1.Latitude))
+    //     });
+        
+    //   }
+    // });
 
      if(this.selectedLine != null){
       //  this.stationService.getOrderedStations(this.selectedLine.Id).subscribe(d =>{
@@ -387,21 +497,7 @@ export class LinesComponent implements OnInit {
       }
   }
 
-  // showLinesForChange(event: any){
-  //   //this.showComboBoxForAddSt = true;
-  //   this.lineForEditString = event.target.value;
-  //   if(this.lineForEditString != null && this.lineForEditString != undefined){
-  //     this.showListOfStations = true;
-  //   }
-  //   this.allLinesForEditFromDb.forEach(element => {
-  //     if(element.regularNumber == this.lineForEditString){
-  //       this.sLineForEdit = element;
-  //       this.sLineForEdit.ListOfStations = this.getNamee(element.stations)
-
-  //     }
-  //   });
-  // }
-
+  
 
   showComboBox(){
     this.newLineEdit = this.sLineForEdit;
@@ -411,7 +507,7 @@ export class LinesComponent implements OnInit {
         
       let countOfArray1 = this.newLineEdit.ListOfStations.length;
 
-      if(this.arrayIntForAddStation.length <= countOfArray1){
+      if(this.arrayIntForAddStation.length <= countOfArray1){ 
         for (let i = 0; i < countOfArray1 + 1; i++) {
           this.arrayIntForAddStation.push(i+1);
         }

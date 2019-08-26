@@ -73,14 +73,24 @@
         </agm-polyline> -->
 
         <div > 
-            <div *ngFor="let ls of orderedStation, let j= index">
+
+            <div *ngFor="let ls of sl.ListOfStations, let j= index">
+                <agm-direction *ngIf="sl.ListOfStations[j+1]" 
+                  [renderOptions] = "{polylineOptions: {strokeColor: sLineForEdit.ColorLine}, suppressMarkers: true}"
+                  [origin] = "{lat: ls.Latitude, lng: ls.Longitude}"
+                  [destination] = "{lat:  sl.ListOfStations[j + 1].Latitude, lng:  sl.ListOfStations[ j + 1].Longitude}">
+    
+                </agm-direction> 
+              </div>
+
+            <!-- <div *ngFor="let ls of orderedStation.ListOfStations, let j= index">
             <agm-direction *ngIf="orderedStation[j+1]" 
               [renderOptions] = "{polylineOptions: {strokeColor: ls.colorLine}, suppressMarkers: true, preserveViewport: true}"
               [origin] = "{lat: ls.latitude, lng: ls.longitude}"
               [destination] = "{lat: orderedStation[j + 1].latitude, lng: orderedStation[ j + 1].longitude}">
 
             </agm-direction>
-          </div>
+          </div> -->
       </div>  
 
 
@@ -106,13 +116,13 @@
           <agm-polyline-point *ngFor="let station of orderedStationEdit" [latitude]="station.Latitude" [longitude]="station.Longitude">
           </agm-polyline-point>
         </agm-polyline> -->
-        <div *ngFor="let ls of orderedStationEdit, let j= index">
-            <agm-direction *ngIf="orderedStationEdit[j+1]" 
-              [renderOptions] = "{polylineOptions: {strokeColor: listOfColors[j]}, suppressMarkers: true}"
+        <div *ngFor="let ls of sl.ListOfStations, let j= index">
+            <agm-direction *ngIf="sl.ListOfStations[j+1]" 
+              [renderOptions] = "{polylineOptions: {strokeColor: sLineForEdit.ColorLine}, suppressMarkers: true}"
               [origin] = "{lat: ls.Latitude, lng: ls.Longitude}"
-              [destination] = "{lat: orderedStationEdit[j + 1].Latitude, lng: orderedStationEdit[ j + 1].Longitude}">
+              [destination] = "{lat:  sl.ListOfStations[j + 1].Latitude, lng:  sl.ListOfStations[ j + 1].Longitude}">
 
-            </agm-direction>
+            </agm-direction> 
           </div>
 
 
