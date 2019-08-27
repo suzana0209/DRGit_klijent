@@ -1,10 +1,10 @@
 <div id="wholePage">
-  <h2 *ngIf="NonActiveAdmin()" id="info">You are not authorized for edit price list! Your request is processed! You can only look at the currently active pricelist!</h2>
+  <!-- <h2 *ngIf="NonActiveAdmin()" id="info">You are not authorized for edit price list! Your request is processed! You can only look at the currently active pricelist!</h2>
   <h2 *ngIf="DeniedAdmin()" id="info">You are not authorized for edit price list! Your request is denied! You can only look at the currently active pricelist!</h2>
-  <br>
+  <br> -->
 <div *ngIf="LoggedAdmin()" align="center">
      <h2 id="info">Currently active pricelist</h2>   <!--Poruka ako ne postoji cjenovnik! --><br>
-     <h2 *ngIf="!showPriceInInput" id="notExistPL">{{messageNoExistPricelist}}</h2>
+     <!-- <h2 *ngIf="!showPriceInInput" id="notExistPL">{{messageNoExistPricelist}}</h2> -->
 
     <h4 *ngIf="priceList" id="designWithHover">
       {{priceList.FromTime.split('T')[0].split('-')[2]}}/{{priceList.FromTime.split('T')[0].split('-')[1]}}/{{priceList.FromTime.split('T')[0].split('-')[0]}}
@@ -16,8 +16,8 @@
       <table>
         <tr>
           <h4 id="info">
-          <td id = "tdName">TimeLimited ticket</td>
-          <td id = "tdPrice">{{validPricesForShow.TimeLimited}}</td>
+          <td id = "tdName">Hourly ticket</td>
+          <td id = "tdPrice">{{validPricesForShow.Hourly}}</td>
           <td id="tdPrice">din</td>
         </h4>
         </tr>
@@ -39,8 +39,8 @@
         </tr> 
         <tr>
             <h4 id="info">
-            <td id="tdName">Annual ticket</td>
-            <td id="tdPrice">{{validPricesForShow.Annual}}</td>
+            <td id="tdName">Yearly ticket</td>
+            <td id="tdPrice">{{validPricesForShow.Yearly}}</td>
             <td id="tdPrice">din</td>
           </h4>
         </tr>
@@ -67,10 +67,10 @@
               <label for="TypeOfTicket">Select type of ticket</label>
               <select name="TypeOfTicket" (click)="getSelectedTicket($event)"  class="form-group"  class="form-control" >
                 <option disabled>Please select...</option>
-                <option value="TimeLimited">TimeLimited</option>
+                <option value="Hourly">Hourly</option>
                 <option value="Daily">Daily</option>
                 <option value="Monthly">Monthly</option>
-                <option value="Annual">Annual</option>
+                <option value="Yearly">Yearly</option>
               </select>
               <div *ngIf="!validations.typeOfTicketOk" style="color:red">Please select ticket type!</div>
             </div> <br>
@@ -95,7 +95,7 @@
       </div>
     </div>
     </div>
-
+<!--Ovaj di oje za dodavanje cjenovnika pa sve do kraja-->
 <div class="form1">
 <div *ngIf="LoggedAdmin() && showPriceInInput" class="designForFormTickets">
   <div class="row1">
@@ -103,12 +103,12 @@
     <div *ngIf="validPrices"> 
       <div class="column1">
       <div class="form-group">
-      <label>TimeLimited ticket:</label>
-      <input type="number" name="TimeLimited"  class="form-control"   [(ngModel)] = "validPrices.TimeLimited">
+      <label>Hourly ticket:</label>
+      <input type="number" name="Hourly"  class="form-control"   [(ngModel)] = "validPrices.Hourly">
       <!---->
-      <div *ngIf="!validationsForPrice.timeLimitedOk" style="color:red">The price of time limited ticket can't be empty.</div>      
-      <div *ngIf="!validationsForPrice.timeLimitedOk0" style="color:red">The price of time limited ticket must not be zero.</div>
-      <div *ngIf="!validationsForPrice.timeLimitedOkMinus" style="color:red">The price of time limited ticket must not be less than zero.</div>
+      <div *ngIf="!validationsForPrice.HourlyOk" style="color:red">The price of time limited ticket can't be empty.</div>      
+      <div *ngIf="!validationsForPrice.HourlyOk0" style="color:red">The price of time limited ticket must not be zero.</div>
+      <div *ngIf="!validationsForPrice.HourlyOkMinus" style="color:red">The price of time limited ticket must not be less than zero.</div>
     </div>
 
     <div class="form-group">
@@ -130,11 +130,11 @@
      </div>
      
      <div class="form-group">
-      <label>Annual ticket:</label>
-      <input type="number" name="Annual"  class="form-group"  class="form-control" [(ngModel)] = "validPrices.Annual">
-      <div *ngIf="!validationsForPrice.annualOk" style="color:red">The price of annual ticket can't be empty.</div>      
-      <div *ngIf="!validationsForPrice.annualOk0" style="color:red">The price of annual ticket must not be zero.</div>
-      <div *ngIf="!validationsForPrice.annualOkMinus" style="color:red">The price of annual ticket must not be less than zero.</div>
+      <label>Yearly ticket:</label>
+      <input type="number" name="Yearly"  class="form-group"  class="form-control" [(ngModel)] = "validPrices.Yearly">
+      <div *ngIf="!validationsForPrice.YearlyOk" style="color:red">The price of Yearly ticket can't be empty.</div>      
+      <div *ngIf="!validationsForPrice.YearlyOk0" style="color:red">The price of Yearly ticket must not be zero.</div>
+      <div *ngIf="!validationsForPrice.YearlyOkMinus" style="color:red">The price of Yearly ticket must not be less than zero.</div>
      </div>   
     </div>
       <button *ngIf="!datumVazenjaBool"  class="btn" type="submit" class="button" class="marginForButton" id="btnForAddPL">Add new prices</button>

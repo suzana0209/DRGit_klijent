@@ -1,18 +1,18 @@
 import { PriceListModel } from './priceList.model';
 
 export class TicketPricesPomModel{
-    TimeLimited: number;
+    Hourly: number;
     Daily: number;
     Monthly: number;
-    Annual: number;
+    Yearly: number;
     IdPriceList: number;
     PriceList: PriceListModel;
     
     constructor( h: number, d: number,m: number,y: number, idp: number, prl: PriceListModel ){
-        this.TimeLimited = h;
+        this.Hourly = h;
         this.Daily = d;
         this.Monthly = m;
-        this.Annual = y;
+        this.Yearly = y;
         this.IdPriceList = idp;
         this.PriceList = prl;
     }

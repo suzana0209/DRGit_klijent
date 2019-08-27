@@ -1,9 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 import { StationModel } from 'src/app/models/station.model';
 
+import 'rxjs/Rx';
+import { handleError } from 'src/app/models/modelForException/handle-error';
+import { catchError, map } from 'rxjs/operators';
+import { authenticationErrorCodeMap } from 'src/app/models/modelForException/authentication-error-code-map';
+
+
+ 
 @Injectable({
   providedIn: 'root'
 })
@@ -52,9 +59,31 @@ export class StationService {
     return base;
   }
 
+  // public addStation(stat: StationModel): Observable<any> {
+  //   return this.request('post', 'addStation', stat).pipe(  
+  //     map(res => res),  
+  //     catchError((error: HttpErrorResponse) => {  
+  //       if(error.status === 400)  
+  //         return throwError(new BadRequest(error));  
+          
+  //       return throwError(new AppError(error));  
+  //     })  
+  //   )  
+  // }
+  
+
+  // public addStation(stat: StationModel): Observable<any> {
+  //   return this.request('post', 'addStation', stat).catch((error: any)=>{
+  //     if(error.status === 400){
+  //       return Observable.throw(new Error(error.status));           
+  //     }
+  //   })
+  // }
+
   public addStation(stat: StationModel): Observable<any> {
     return this.request('post', 'addStation', stat);
   }
+ 
 
   public getAllStations(): Observable<any> {
     return this.request('get', 'getAllStations');

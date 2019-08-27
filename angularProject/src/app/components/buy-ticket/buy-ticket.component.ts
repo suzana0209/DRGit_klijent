@@ -71,10 +71,10 @@ export class BuyTicketComponent implements OnInit {
         console.log("Buying ticket: ", this.listOfBuyingTicket);
         
         this.tipKarte.push("");
-        this.tipKarte.push("TimeLimited");
+        this.tipKarte.push("Hourly");
         this.tipKarte.push("Daily");
         this.tipKarte.push("Monthly");
-        this.tipKarte.push("Annual");
+        this.tipKarte.push("Yearly");
         
         this.ticketForPrint();
       
@@ -124,7 +124,7 @@ export class BuyTicketComponent implements OnInit {
         }
         this.buyTicketForm1 = buyTicketForm;
         this.buyTicketForm1.PurchaseDate = new Date();
-        this.buyTicketForm1.TypeOfTicket = "TimeLimited";
+        this.buyTicketForm1.TypeOfTicket = "Hourly";
 
         this.initConfig();
         

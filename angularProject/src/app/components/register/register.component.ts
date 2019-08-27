@@ -120,11 +120,11 @@ export class RegisterComponent {
       return;
     }
 
-    this.userService.EmailAlreadyExists(registrationData).subscribe(a=>{},
-    err=>{
-     window.alert(err.error);
+  //   this.userService.EmailAlreadyExists(registrationData).subscribe(a=>{},
+  //   err=>{
+  //    window.alert(err.error);
      
-   })
+  //  })
 
     this.credentials.name = registrationData.Name;
     this.credentials.lastName = registrationData.LastName;
@@ -142,7 +142,7 @@ export class RegisterComponent {
       if (this.selectedImage == undefined || this.selectedImage == null){
         this.credentials.activated  = "NOT ACTIVATED";
         console.log("App user bez slike", this.credentials);
-        // this.register();
+        this.register();
       }
       else{
         this.credentials.activated  = "PENDING";

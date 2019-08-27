@@ -33,26 +33,26 @@ export class AccountService {
     return this.token;
   }
 
-  private request(method: 'get', type: 'getPassengerTypes'): Observable<any> {
+  private request(method: 'get'|'post', type: 'getPassengerTypes'|'getUserData', param?:any): Observable<any> {
     let base;
-
+    if(method === 'get'){
+      if(type === 'getPassengerTypes'){
+        base = this.http.get(`/api/${type}`).pipe();
+      }
+      else if(type === 'getUserData'){
+        base = this.http.get(`/api/${type}`,  { headers: { Authorization: `Bearer ${this.getToken()}` }, params: {parami : param}});
+      }  
+    }
     
-     return base = this.http.get(`/api/${type}`).pipe();
-    
-
-    // const request = base.pipe(
-    //   map((data: TokenResponse) => {
-    //     if (data.token) {
-    //       this.saveToken(data.token);
-    //     }
-    //     return data;
-    //   })
-    // );
-
-    // return request;
+     return base;
+  
   }
 
   public getPassengerTypes(): Observable<any> {
     return this.request('get', 'getPassengerTypes');
+  }
+
+  public getUserData(parameter: any): Observable<any>{
+    return this.request('get', 'getUserData', parameter);
   }
 }

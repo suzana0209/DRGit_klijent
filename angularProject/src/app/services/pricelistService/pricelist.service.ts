@@ -2,14 +2,45 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { PriceListModel } from 'src/app/models/priceList.model';
+import { TicketPricesPomModel } from 'src/app/models/ticketPrice.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PricelistService {
   base_url = "http://localhost:52295"
+  private token: string;
 
   constructor(private http: Http, private httpClient:HttpClient) { }
+
+  private getToken(): string{
+    if(!this.token){
+      this.token = localStorage.getItem('mean-token');
+    }
+    return this.token;
+  }
+
+  private request(method: 'post'|'get', type: 'addPricelist', pricelist?:TicketPricesPomModel): Observable<any>{
+    let base;
+   
+    if(method ==='get'){
+
+    }
+    else{
+      base = this.httpClient.post(`/api/${type}`, pricelist);
+    }
+
+    return base;
+    
+  }  
+
+  public addPricelist(pricelist:TicketPricesPomModel):Observable<any>{
+    return this.request('post', 'addPricelist', pricelist);
+  }
+
+
+
 
 
   addTicketPrices(ticketprices): any{
@@ -19,9 +50,9 @@ export class PricelistService {
     return this.httpClient.get(this.base_url+"/api/TicketPrices/GetValidPrices?id=" + id);
   }
 
-  addPricelist(pricelist): any{
-    return this.httpClient.post(this.base_url+"/api/Pricelist/Add",pricelist);
-  }  
+  // addPricelist(pricelist): any{
+  //   return this.httpClient.post(this.base_url+"/api/Pricelist/Add",pricelist);
+  // }  
 
   getAllPricelists() {
     return this.httpClient.get(this.base_url+"/api/Pricelist/GetPricelists");

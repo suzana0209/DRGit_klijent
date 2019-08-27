@@ -11,6 +11,9 @@ import { ValidForAddStationModel } from 'src/app/models/modelsForValidation/vali
 import { UsersService } from 'src/app/services/users/users.service';
 import { AuthenticationService } from 'src/app/services/authentication-service.service';
 import { RegistrationModel } from 'src/app/models/registration.model';
+import { throwError } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-stations',
@@ -52,22 +55,6 @@ export class StationsComponent implements OnInit {
     private stationService: StationService, private userService: UsersService, private authService: AuthenticationService) {
     this.sakrijDugmice = true;
 
-    
-
-    //Ne radi fja!!!
-    // this.userService.getUserData(localStorage.getItem('name')).subscribe(a=>{
-    //   console.log("Userrr: ", a);
-    //   if(a != null && a != undefined){
-    //     this.pomocniUser.Email = a.email
-    //     this.userPom = a;
-    //     this.boolBezvezeZaPoruku = this.userPom.activated;
-    //     this.boolBezvezeZaPorukuDenied = this.userPom.Deny;
-    //   }
-      
-    // })
-    
-    //console.log("Pomocni: ", this.pomocniUser);
-    
     this.stationService.getAllStations().subscribe(st =>{
       this.stations = st;
       console.log("Podaci o stanicama: ", this.stations);
@@ -85,50 +72,6 @@ export class StationsComponent implements OnInit {
 
   }
 
-  // onSubmit(stationData: StationModel, form: NgForm){
-
-  //   stationData.Latitude = this.coordinates.latitude;
-  //   stationData.Longitude = this.coordinates.longitude;
-  //   stationData.AddressStation = this.address;
-
-  //   console.log(stationData);
-
-  //   if(this.validationsForAdd.validate(stationData)){
-  //     return;
-  //   }
-
-  //   this.stationService.AlredyExistStation(stationData).subscribe(a=>{
-  //     if(a == "Yes"){
-  //       alert("Station name "+ stationData.Name +" already exists! ");
-  //       //window.location.reload();
-  //     }
-  //     else if (a == "No"){
-  //       this.stationService.AlredyExistsStationForEdit(stationData).subscribe(a2=>{
-  //         if(a2 == "Yes"){
-  //           alert("On address: "+ stationData.AddressStation +" alredy exists station!");
-  //           //window.location.reload();
-  //         }
-  //         else{
-  //           this.stationService.addStation(stationData).subscribe(data => {
-  //             alert("Station: " +stationData.Name+ " is successfully added!");
-              
-  //             window.location.reload();
-  //           },
-  //           err => {
-  //             //alert("Station - error!");
-  //             window.alert(err.error);
-  //             //window.refresh();
-  //             window.location.reload();
-        
-  //           });
-  //         }
-  //       })
-        
-  //     }
-  //   })
-
-  // }
-
   onSubmit(stationData: StationModel, form: NgForm){
 
     stationData.Latitude = this.coordinates.latitude;
@@ -137,41 +80,46 @@ export class StationsComponent implements OnInit {
 
     console.log(stationData);
 
-    if(this.validationsForAdd.validate(stationData)){
-      return;
-    }
+    // if(this.validationsForAdd.validate(stationData)){
+    //   return;
+    // }
 
-    // this.stationService.AlredyExistStation(stationData).subscribe(a=>{
-    //   if(a == "Yes"){
-    //     alert("Station name "+ stationData.Name +" already exists! ");
-    //     //window.location.reload();
-    //   }
-    //   else if (a == "No"){
-    //     this.stationService.AlredyExistsStationForEdit(stationData).subscribe(a2=>{
-    //       if(a2 == "Yes"){
-    //         alert("On address: "+ stationData.AddressStation +" alredy exists station!");
-    //         //window.location.reload();
-    //       }
-    //       else{
-            this.stationService.addStation(stationData).subscribe(data => {
-              alert("Station: " +stationData.Name+ " is successfully added!");
-              
-              window.location.reload();
-            },
-            err => {
-              //alert("Station - error!");
-              window.alert(err.error);
-              //window.refresh();
-              window.location.reload();
-        
-            });
-    //       }
-    //     })
-        
-    //   }
-    // })
+    this.stationService.addStation(stationData).subscribe(data => {
+      alert("Station: " +stationData.Name+ " successfully added!");
+      form.reset();
+      this.refreshPage();
+      //window.location.reload(); 
+    },
+    err => {
+      //alert("Station - error!");
+      window.alert(err.error.message);  
+      this.refreshPage();
+      //window.location.reload();
+
+    });
+
+    // this.stationService.addStation(stationData)
+    // .pipe(map((res: Response) => res.json()))
+    // .subscribe(data => {
+    //   alert("Station: " +stationData.Name+ " successfully added!");
+    //   form.reset();
+    //   this.refreshPage();
+    //   //window.location.reload(); 
+    // },
+    // (error: HttpErrorResponse) => {
+    //   //alert("Station - error!");
+    //   window.alert(error.error.message); 
+    //   this.refreshPage();
+    //   //window.location.reload();
+
+    // });
+
+   
+   
 
   }
+
+  
 
  
   // onSubmitEdit(stationData: StationModel, form: NgForm){
@@ -398,5 +346,16 @@ export class StationsComponent implements OnInit {
     if(this.selected == 'Delete'){
       return true;
     }
+  }
+
+  refreshPage(){
+    this.coordinates = new GeoLocation(0,0);
+    this.stations = [];
+    this.address = "";
+
+    this.stationService.getAllStations().subscribe(data=>{
+      this.stations = data;
+    })
+
   }
 }

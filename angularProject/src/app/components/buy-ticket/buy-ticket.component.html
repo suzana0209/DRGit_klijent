@@ -24,10 +24,10 @@
           <label for="TypeOfTicket" id="info">Select type of ticket</label>
           <select name="TypeOfTicket"  class="form-group"  class="form-control" ngModel>
             <option disabled>Please select...</option>
-            <option value="TimeLimited">TimeLimited</option>
+            <option value="Hourly">Hourly</option>
             <option value="Daily">Daily</option>
             <option value="Monthly">Monthly</option>
-            <option value="Annual">Annual</option> 
+            <option value="Yearly">Yearly</option> 
           </select>
           
           <div *ngIf="!validations.typeOfTicketOk" style="color:red">Please select type ticket.</div>

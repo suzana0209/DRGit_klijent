@@ -25,9 +25,9 @@ export class ValidForPriceListModel{
 }
 
 export class ValidForPriceModel{
-    timeLimitedOk: boolean = true;
-    timeLimitedOk0: boolean = true;
-    timeLimitedOkMinus: boolean = true;
+    HourlyOk: boolean = true;
+    HourlyOk0: boolean = true;
+    HourlyOkMinus: boolean = true;
 
     dailyOk: boolean = true;
     dailyOk0: boolean = true;
@@ -37,36 +37,36 @@ export class ValidForPriceModel{
     monthlyOk0: boolean = true;
     mohtlyOkMinus: boolean = true;
 
-    annualOk: boolean = true;
-    annualOk0: boolean = true;
-    annualOkMinus: boolean = true;
+    YearlyOk: boolean = true;
+    YearlyOk0: boolean = true;
+    YearlyOkMinus: boolean = true;
 
     validate(pom: TicketPricesPomModel){
         let wrong = false;
 
-        if(pom.TimeLimited == null || pom.TimeLimited.toString() == ""){
-            this.timeLimitedOk = false;
-            this.timeLimitedOk0 = true;  //ovo mora zbog ispisa poruka
-            this.timeLimitedOkMinus = true;
+        if(pom.Hourly == null || pom.Hourly.toString() == ""){
+            this.HourlyOk = false;
+            this.HourlyOk0 = true;  //ovo mora zbog ispisa poruka
+            this.HourlyOkMinus = true;
             wrong = true;
         }
         else{
-            if(pom.TimeLimited == 0){
-                this.timeLimitedOk0 = false;
-                this.timeLimitedOk = true;
-                this.timeLimitedOkMinus = true;
+            if(pom.Hourly == 0){
+                this.HourlyOk0 = false;
+                this.HourlyOk = true;
+                this.HourlyOkMinus = true;
                 wrong = true;
             }
-            else if(pom.TimeLimited < 0){
-                this.timeLimitedOkMinus = false;
-                this.timeLimitedOk = true;
-                this.timeLimitedOk0 = true;
+            else if(pom.Hourly < 0){
+                this.HourlyOkMinus = false;
+                this.HourlyOk = true;
+                this.HourlyOk0 = true;
                 wrong = true;
             }
             else{
-                this.timeLimitedOk = true;
-                this.timeLimitedOk0 = true;
-                this.timeLimitedOkMinus = true;
+                this.HourlyOk = true;
+                this.HourlyOk0 = true;
+                this.HourlyOkMinus = true;
             }
         }
 
@@ -122,29 +122,29 @@ export class ValidForPriceModel{
             }
         }
 
-        if(pom.Annual == null || pom.Annual.toString() == ""){
-            this.annualOk = false;
-            this.annualOk0 = true;  //ovo mora zbog ispisa poruka
-            this.annualOkMinus = true;
+        if(pom.Yearly == null || pom.Yearly.toString() == ""){
+            this.YearlyOk = false;
+            this.YearlyOk0 = true;  //ovo mora zbog ispisa poruka
+            this.YearlyOkMinus = true;
             wrong = true;
         }
         else{
-            if(pom.Annual == 0){
-                this.annualOk0 = false;
-                this.annualOk = true;
-                this.annualOkMinus = true;
+            if(pom.Yearly == 0){
+                this.YearlyOk0 = false;
+                this.YearlyOk = true;
+                this.YearlyOkMinus = true;
                 wrong = true;
             }
-            else if(pom.Annual < 0){
-                this.annualOkMinus = false;
-                this.annualOk = true;
-                this.annualOk0 = true;
+            else if(pom.Yearly < 0){
+                this.YearlyOkMinus = false;
+                this.YearlyOk = true;
+                this.YearlyOk0 = true;
                 wrong = true;
             }
             else{
-                this.annualOk = true;
-                this.annualOk0 = true;  //ovo mora zbog ispisa poruka
-                this.annualOkMinus = true;
+                this.YearlyOk = true;
+                this.YearlyOk0 = true;  //ovo mora zbog ispisa poruka
+                this.YearlyOkMinus = true;
             }
         }
         return wrong;

@@ -3,8 +3,7 @@ import { LineService } from 'src/app/services/lineService/line.service';
 import { TimetableModel, TimetableModel2, TimetableModel3, TimetableModel4 } from 'src/app/models/timetable.model';
 import { NgForm } from '@angular/forms';
 import { TimetableService } from 'src/app/services/timetableService/timetable.service';
-import { parse } from 'querystring';
-import { element } from 'protractor';
+
 import { DayService } from 'src/app/services/dayService/day.service';
 import { Router } from '@angular/router';
 import { ValidTimetableModel } from 'src/app/models/validTimetable.model';

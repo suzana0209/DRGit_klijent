@@ -4,7 +4,7 @@ import { VerificationService } from 'src/app/services/verificationService/verifi
 import { PomModelForAuthorization } from 'src/app/models/pomModelForAuth.model';
 import { AuthenticationService } from 'src/app/services/authentication-service.service';
 import { UsersService } from 'src/app/services/users/users.service';
-import { error } from 'console';
+
 import { BuyTicketService } from 'src/app/services/buyTicketService/buy-ticket.service';
 import { ValidForValidateTicketModel } from 'src/app/models/modelsForValidation/validForValidateTicket.model';
 
@@ -133,7 +133,7 @@ export class ValidateTicketComponent implements OnInit {
     if(n == this.ticketForV.AppUserId)
     {
 
-      if(TT == "TimeLimited")
+      if(TT == "Hourly")
       {
         d.setHours(d.getHours() + 1);
         if(d < new Date())
@@ -187,7 +187,7 @@ export class ValidateTicketComponent implements OnInit {
         }
       }
 
-      if(TT == "Annual")
+      if(TT == "Yearly")
       {
         if(d.getFullYear() == new Date().getFullYear())
         {
