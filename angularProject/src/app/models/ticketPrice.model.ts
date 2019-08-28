@@ -8,7 +8,7 @@ export class TicketPricesPomModel{
     IdPriceList: number;
     PriceList: PriceListModel;
     
-    constructor( h: number, d: number,m: number,y: number, idp: number, prl: PriceListModel ){
+    constructor( h: number, d: number,m: number,y: number, idp?: number, prl?: PriceListModel ){
         this.Hourly = h;
         this.Daily = d;
         this.Monthly = m;

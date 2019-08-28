@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { VehicleModel } from 'src/app/models/vehicle.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +12,41 @@ export class VehicleService {
   baseUrl = "http://localhost:52295"
   constructor(private http: Http, private httpClient:HttpClient) { }
 
-  addVehicle(vehicle): Observable<any>{
-    return this.httpClient.post(this.baseUrl+"/api/Vehicles/Add",vehicle);
+
+  
+  private token: string;
+
+  private getToken(): string { 
+    if (!this.token) {
+      this.token = localStorage.getItem('mean-token');
+    }
+    return this.token;
   }
+
+  private request(method: 'post'|'get'|'delete', type: 'addVehicle', vehicle?: VehicleModel, stid?:String): Observable<any> {
+    let base;
+
+    if (method === 'post') {
+      base = this.httpClient.post(`/api/${type}`, vehicle);
+    }else if(method === 'delete'){
+      base = this.httpClient.delete(`/api/${type}/`+ stid);
+    } 
+    else {
+      base = this.httpClient.get(`/api/${type}`, { headers: { Authorization: `Bearer ${this.getToken()}` }});
+   
+      //base = this.httpClient.get(`/api/${type}`, { headers: { Authorization: `Bearer ${this.getToken()}` }}); 
+    }
+
+    return base;
+  }
+
+  public addVehicle(vehicle): Observable<any>{
+    return this.request('post', 'addVehicle', vehicle); 
+  }
+
+  // addVehicle(vehicle): Observable<any>{
+  //   return this.httpClient.post(this.baseUrl+"/api/Vehicles/Add",vehicle);
+  // }
 
   getAllVehicles(){
     return this.httpClient.get(this.baseUrl + "/api/Vehicles/GetAll");

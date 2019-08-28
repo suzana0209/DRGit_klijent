@@ -25,13 +25,14 @@ export class VehicleComponent implements OnInit {
 
 
   constructor(private vehicleService: VehicleService, private lineService: LineService) {     
-    vehicleService.getLinesForVehicle().subscribe(xx =>{
-      this.linesWithoutVehicle = xx;
-      vehicleService.getTimetablesForVehicle().subscribe(x =>{
-        this.timetables = x;
-        console.log("Timetables:" ,x);
-      })
-    })
+    // vehicleService.getLinesForVehicle().subscribe(xx =>{
+    //   this.linesWithoutVehicle = xx;
+    //   vehicleService.getTimetablesForVehicle().subscribe(x =>{
+    //     this.timetables = x;
+    //     console.log("Timetables:" ,x);
+    //   })
+    // })
+
     this.vehicleService.getAllVehicles().subscribe(d=>{
       this.vehicles = d;
       console.log("All vehicels: ", this.vehicles);
@@ -52,42 +53,43 @@ export class VehicleComponent implements OnInit {
 
 
   
-  onSubmitEdit(vehicleData: VehicleModel, form:NgForm){
-    this.vehicles.forEach(element => {
+  // onSubmitEdit(vehicleData: VehicleModel, form:NgForm){
+  //   this.vehicles.forEach(element => {
 
-      if(element.Id == vehicleData.RegistrationNumber){
-        vehicleData.TypeOfVehicle = element.TypeOfVehicle;
-        vehicleData.Id = element.Id
-      }
-    });
-    this.vehicleService.editVehicle(vehicleData).subscribe();
+  //     if(element.Id == vehicleData.RegistrationNumber){
+  //       vehicleData.TypeOfVehicle = element.TypeOfVehicle;
+  //       vehicleData.Id = element.Id
+  //     }
+  //   });
+  //   this.vehicleService.editVehicle(vehicleData).subscribe();
 
-  }
+  // }
 
 
-  getRegistrationNumber(event){
-    this.idVehicleForDelete = event.target.value;
+  // getRegistrationNumber(event){
+  //   this.idVehicleForDelete = event.target.value;
     
-  }
+  // }
 
+  //Samo one koji nemaju timetable u sebi
   deleteVehicle(){
     console.log("Reg number: ", this.idVehicleForDelete);
     this.vehicleService.deleteVehicle(this.idVehicleForDelete).subscribe(d=>{
-      alert("Vehicle delete successful! ");
+      alert("Vehicle delete successfull! ");
       window.location.reload();
     })
   }
 
 
-  getIdVehiclee(event){
-    this.idVehicleForEdit = event.target.value;
-    if(this.idVehicleForEdit != null && event.target.value != ""){
-    this.vehicleService.getVehicle(this.idVehicleForEdit).subscribe(c=>{
-      this.vehicleForEdit = c;
-      console.log("Vehicle for edit: ", this.vehicleForEdit);
-    })
-  }
-  }
+  // getIdVehiclee(event){
+  //   this.idVehicleForEdit = event.target.value;
+  //   if(this.idVehicleForEdit != null && event.target.value != ""){
+  //   this.vehicleService.getVehicle(this.idVehicleForEdit).subscribe(c=>{
+  //     this.vehicleForEdit = c;
+  //     console.log("Vehicle for edit: ", this.vehicleForEdit);
+  //   })
+  // }
+  // }
 
 
 

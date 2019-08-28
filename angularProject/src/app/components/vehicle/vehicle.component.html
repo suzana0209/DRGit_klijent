@@ -1,17 +1,12 @@
-<div>
+<div id=wholePage>
     <div align="center">
-        <button type="submit" class="button" class="btn" (click)='showAdd()' >Add vehicle</button>  
-        <button type="submit" class="button" class="btn" (click)='showEdit()' >Edit vehicle</button>  
-        <button type="submit" class="button" class="btn" (click)='showDelete()'>Delete vehicle</button>  
+        <button type="submit" class="button" class="btn"  id="designBtn" (click)='showAdd()' >Add vehicle</button>  
+        <!-- <button type="submit" class="button" class="btn"  id="designBtn" (click)='showEdit()' >Edit vehicle</button>   -->
+        <button type="submit" class="button" class="btn"  id="designBtn" (click)='showDelete()'>Delete vehicle</button>  
     </div>
 
     <div *ngIf="isSelectedAdd()">
-        <!-- <h3>Add line</h3> -->
-        <form #vehicleForm="ngForm" (ngSubmit)="onSubmit(vehicleForm.value, vehicleForm)">
-            <div class="form-group">
-              <label for="RegistrationNumber">Registration  Number</label>
-              <input required type="text" class="form-control" name="RegistrationNumber" ngModel>
-            </div>
+        <form #vehicleForm="ngForm" (ngSubmit)="onSubmit(vehicleForm.value, vehicleForm)" id="designForFormAdd">
 
             <div class="form-group" >
                 <label for="TypeOfVehicle">Vehicle Type</label>
@@ -23,59 +18,28 @@
                 </select>
               </div>
 
-              <div class="form-group">
-                <label for="LineId">Select Line</label>
-                <select *ngFor="let line of linesWithoutVehicle" name="LineId" class="form-group"  class="form-control" ngModel>
-                  <option disabled>Please select...</option>
-                  <option value="{{line.Id}}">{{line.RegularNumber}}</option>
-                </select>
-              </div>
-        
             <div align="center">
-                <button type="submit" class="button" class="btn">Add vehicle</button>  
+                <button type="submit" class="button" class="btn" id="designBtnForAction">Add vehicle</button>  
             </div>
         </form>
 
     </div>
 
     <div *ngIf="isSelectedDelete()">
-        
-        <select name="RegistrationNumber"  class="form-group" (click)="getRegistrationNumber($event)">
-            <option disabled>Please select...</option>
-            <option *ngFor="let vehicle of vehicles" value={{vehicle.Id}}>{{vehicle.RegistrationNumber}}</option>            
-          </select>
-          
+
+      <div class="form-group">
+        <label style="color:#000000; font-size: 20px; padding-right: 8px; "  for="Type">Available vehicles:</label>
+        <select class="form-control" name="Id" [value] = 0  [(ngModel)] = 'idVozila'>
+            <option value =0 >None</option>
+        <option *ngFor="let ln of availableVehicles" value={{ln._id}}  >{{ln._id}} | {{ln.vehicleType}}</option>
+        </select>
+      </div>
+      
+     
           <div align="center">
-            <button type="button" class="button" class="btn" (click)="deleteVehicle()">Delete vehicle</button>  
+            <button type="button" class="button" class="btn" id = "designBtnForAction" (click)="deleteVehicle()">Delete vehicle</button>  
         </div>
     </div>
 
-    <div *ngIf="isSelectedEdit()">
-        <form #vehicleForm="ngForm" (ngSubmit)="onSubmitEdit(vehicleForm.value, vehicleForm)">
-
-        <select name="RegistrationNumber"  class="form-group" (click)="getIdVehiclee($event)" ngModel>
-            <option disabled>Please select...</option>
-            <option *ngFor="let vehicle of vehicles" value={{vehicle.Id}}>{{vehicle.RegistrationNumber}}</option>            
-          </select>
-          
-          <div  class="form-group">
-              <label for="LineId">Select Line</label>
-              <select *ngFor="let line of linesWithoutVehicle" name="LineId" class="form-group"  class="form-control" ngModel>
-                <option disabled>Please select...</option>
-                <option value="{{line.Id}}">{{line.RegularNumber}}</option>
-              </select>
-            </div>
-
-          <div align="center">
-            <button type="submit" class="button" class="btn">Edit vehicle</button>  
-        </div>
-        </form>
-
-    </div>
-
-
-
-   
 
 </div>
-

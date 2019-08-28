@@ -1,15 +1,9 @@
-export class VehicleModel{
+export class VehicleModel {
     Id: number;
-    RegistrationNumber: string;
-    TypeOfVehicle: string
-    LineId: number
-
-    constructor(id: number, registrationNumber: string, typeOfVehicle: string, line: number){
+    Type: string;
+  
+    constructor(id: number,type?: string) {
         this.Id = id;
-        this.RegistrationNumber = registrationNumber;
-        this.TypeOfVehicle = typeOfVehicle
-        this.LineId = line;
+        this.Type = type;
     }
-
-}
-
+  }

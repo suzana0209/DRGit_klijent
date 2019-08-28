@@ -21,11 +21,17 @@ export class PricelistService {
     return this.token;
   }
 
-  private request(method: 'post'|'get', type: 'addPricelist', pricelist?:TicketPricesPomModel): Observable<any>{
+  private request(method: 'post'|'get', type: 'addPricelist'|'getPricelist'|'getTicketPrices', pricelist?:TicketPricesPomModel, param?:any): Observable<any>{
     let base;
    
     if(method ==='get'){
-
+      if(type === 'getTicketPrices'){
+        //base = this.httpClient.get(`/api/${type}/` + idPL);
+        base = this.httpClient.get(`/api/${type}`,  { headers: { Authorization: `Bearer ${this.getToken()}` }, params: {parami : param}});
+      }else{
+        base = this.httpClient.get(`/api/${type}`, { headers: { Authorization: `Bearer ${this.getToken()}` }});
+      }
+      
     }
     else{
       base = this.httpClient.post(`/api/${type}`, pricelist);
@@ -39,6 +45,13 @@ export class PricelistService {
     return this.request('post', 'addPricelist', pricelist);
   }
 
+  public getPricelist(): Observable<any>{
+    return this.request('get','getPricelist');
+  }
+
+  public getTicketPrices(idPL:any): Observable<any>{
+    return this.request('get', 'getTicketPrices', null,idPL);
+  }
 
 
 
@@ -58,9 +71,9 @@ export class PricelistService {
     return this.httpClient.get(this.base_url+"/api/Pricelist/GetPricelists");
   }
 
-  getPricelist(){
-    return this.httpClient.get(this.base_url+"/api/Pricelist/GetPricelist");
-  }
+  // getPricelist(){
+  //   return this.httpClient.get(this.base_url+"/api/Pricelist/GetPricelist");
+  // }
 
   getPricelistLast(){
     return this.httpClient.get(this.base_url+"/api/Pricelist/GetPricelistLast");
