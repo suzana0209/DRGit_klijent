@@ -71,7 +71,7 @@ const Routes = [
   {
     path: "profile",
     component: ProfileComponent,
-    canActivate: [UserLoggedInGuard]
+    // canActivate: [UserLoggedInGuard]
   },
   {
     path: "station",

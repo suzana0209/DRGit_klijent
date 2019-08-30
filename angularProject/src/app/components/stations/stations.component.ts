@@ -46,7 +46,7 @@ export class StationsComponent implements OnInit {
   boolBezvezeZaPorukuDenied: boolean = false;
   userPom: any;
   sakrijDugmice: boolean = true;
-  pomocniUser: RegistrationModel = new RegistrationModel("","","","","","","",new Date(),"","","","");
+  pomocniUser: RegistrationModel = new RegistrationModel("","","","","","","","",new Date(),"","","","");
 
 
 

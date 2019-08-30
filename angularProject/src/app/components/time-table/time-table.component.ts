@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { ValidTimetableModel } from 'src/app/models/validTimetable.model';
 import { ValidForTimetableModel, ValidForTimetableDeleteModel, ValidForTimetableEditModel, ValidForNewDepModel } from 'src/app/models/modelsForValidation/validForTimetable.model';
 import { UsersService } from 'src/app/services/users/users.service';
+import { VehicleService } from 'src/app/services/vehicleService/vehicle.service';
 
 @Component({
   selector: 'app-time-table',
@@ -81,13 +82,17 @@ export class TimeTableComponent implements OnInit {
   userPom: any;
 
   messageForEmptyLine: string = ""
+  arrayForShowDepartures: any = []
+  timeForAddTTString: string = "";
+  allVehicleFromDb: any = []
   
 
 
   constructor(private lineService: LineService, 
               private timetableService: TimetableService, 
               private daysService: DayService, private router:Router,
-              private userService: UsersService) { 
+              private userService: UsersService,
+              private vehicleService: VehicleService) { 
 
     this.userService.getUserData(localStorage.getItem('name')).subscribe(a=>{
       
@@ -104,14 +109,24 @@ export class TimeTableComponent implements OnInit {
       this.allLinesFromDb = d;
     });
 
-    this.timetableService.getAll().subscribe(e =>{
-      this.allTimetablesFromDb = e; 
-      
+    this.daysService.getAllDayTypes().subscribe(dt=>{
+      this.allDaysFromDb = dt;
+      console.log("Danii", this.allDaysFromDb);
     })
 
-    this.daysService.getAll().subscribe(d1=>{
-        this.allDaysFromDb = d1;
-    }) 
+    this.vehicleService.getAllVehicle().subscribe(dd=>{
+      this.allVehicleFromDb = dd;
+      console.log("Vehicle: ", this.allVehicleFromDb);
+    })
+
+    // this.timetableService.getAll().subscribe(e =>{
+    //   this.allTimetablesFromDb = e; 
+      
+    // })
+
+    // this.daysService.getAll().subscribe(d1=>{
+    //     this.allDaysFromDb = d1;
+    // }) 
 
     this.clickedDeleteTime = false;
     
@@ -120,36 +135,70 @@ export class TimeTableComponent implements OnInit {
   ngOnInit() {
   }
 
+  // onSubmit(timetableData: TimetableModel, form:NgForm){
+  //     console.log("TimeTable:", timetableData);
+      
+
+  //     var kk: string = "";
+  //     kk = timetableData.Departures.toString()
+  //     var tt = new TimetableModel2(timetableData.LineId, timetableData.DayId, kk, timetableData.VehicleId);
+      
+
+  //     // if(this.validationsForAdd.validate(tt)){
+  //     //   return;
+  //     // }
+
+  //     this.timetableService.AlredyExistTimetable(tt).subscribe(a=>{
+  //       console.log(a);
+  //       if(a == "No"){
+  //         this.timetableService.addTimeTable(tt).subscribe(rez=>{
+  //           alert("Timetable successful added!");
+  //           window.location.reload();
+  //         })
+  //       }
+  //       else if(a == "Yes"){
+  //         alert("Timetable aleredy exists!");
+  //         //window.location.reload();
+  //       }
+  //     })
+
+  //     // this.timetableService.addTimeTable(tt).subscribe();   
+      
+  // }
+
   onSubmit(timetableData: TimetableModel, form:NgForm){
-      console.log("TimeTable:", timetableData);
-      
+    console.log("TimeTable:", timetableData);
+    
 
-      var kk: string = "";
-      kk = timetableData.Departures.toString()
-      var tt = new TimetableModel2(timetableData.LineId, timetableData.DayId, kk);
-      
+    var kk: string = "";
+    kk = timetableData.Departures.toString()
+    var tt = new TimetableModel2(timetableData.LineId, timetableData.DayId, kk, timetableData.VehicleId);
+    
 
-      if(this.validationsForAdd.validate(tt)){
-        return;
-      }
+    // if(this.validationsForAdd.validate(tt)){ 
+    //   return;
+    // }
 
-      this.timetableService.AlredyExistTimetable(tt).subscribe(a=>{
-        console.log(a);
-        if(a == "No"){
-          this.timetableService.addTimeTable(tt).subscribe(rez=>{
-            alert("Timetable successful added!");
-            window.location.reload();
-          })
-        }
-        else if(a == "Yes"){
-          alert("Timetable aleredy exists!");
-          //window.location.reload();
-        }
-      })
+    // this.timetableService.AlredyExistTimetable(tt).subscribe(a=>{
+    //   console.log(a);
+    //   if(a == "No"){
+        this.timetableService.addTimetable(tt).subscribe(rez=>{
+          alert("Timetable successful added!");
+          window.location.reload();
+        },
+        err=>{ 
+          window.alert(err.error.message);
+        })
+    //   }
+    //   else if(a == "Yes"){  
+    //     alert("Timetable aleredy exists!");
+    //     //window.location.reload();
+    //   }
+    // })
 
-      // this.timetableService.addTimeTable(tt).subscribe();   
-      
-  }
+    // this.timetableService.addTimeTable(tt).subscribe();   
+    
+}
 
   onSubmitDelete(timetableData: TimetableModel3, form:NgForm){
 
@@ -178,14 +227,14 @@ export class TimeTableComponent implements OnInit {
         }
     });
 
-    this.timetableService.deleteTimetable(this.timetableId).subscribe(data => {
-      alert("Timetable deleted successful!");
-      window.location.reload();
-    },
-    error => {
-      alert("Timetable delete - error Don't exist!");
-      window.location.reload();
-    });
+    // this.timetableService.deleteTimetable(this.timetableId).subscribe(data => {
+    //   alert("Timetable deleted successful!");
+    //   window.location.reload();
+    // },
+    // error => {
+    //   alert("Timetable delete - error Don't exist!");
+    //   window.location.reload();
+    // });
 
   }
 
@@ -383,8 +432,9 @@ showTimetableForUser(){
     }
   }
 
+  //&& this.boolBezvezeZaPoruku && !this.boolBezvezeZaPorukuDenied
   LoggedAdmin(): boolean{
-    if(localStorage.getItem('role') == "Admin" && this.boolBezvezeZaPoruku && !this.boolBezvezeZaPorukuDenied){
+    if(localStorage.getItem('role') == "Admin" ){
       return true;
     }
     return false;
@@ -401,5 +451,19 @@ showTimetableForUser(){
     if(localStorage.getItem('role') == "Admin" && this.boolBezvezeZaPorukuDenied){
       return true;
     }
-  }  
+  }
+  //dodato
+  addTimeToDepartures(event:any){
+    this.timeForAddTTString = event.target.value;
+    console.log('dep', this.timeForAddTTString);
+    //this.arrayForShowDepartures = [];
+  }
+
+  addToArray(){
+    let kk = this.arrayForShowDepartures.find(x=> x == this.timeForAddTTString);
+    if(kk == undefined){
+      this.arrayForShowDepartures.push(this.timeForAddTTString);
+    }
+    console.log("KK", kk);
+  }
 }

@@ -29,9 +29,9 @@
 
       <div class="form-group">
         <label style="color:#000000; font-size: 20px; padding-right: 8px; "  for="Type">Available vehicles:</label>
-        <select class="form-control" name="Id" [value] = 0  [(ngModel)] = 'idVozila'>
+        <select class="form-control" name="Id" [value] = 0  [(ngModel)] = 'idVehicleForDelete'>
             <option value =0 >None</option>
-        <option *ngFor="let ln of availableVehicles" value={{ln._id}}  >{{ln._id}} | {{ln.vehicleType}}</option>
+        <option *ngFor="let ln of availableVehicles" value={{ln._id}}  > License plate:{{ln._id.substring(2,8)}} - {{ln.vehicleType}} </option>
         </select>
       </div>
       

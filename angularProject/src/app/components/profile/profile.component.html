@@ -8,7 +8,7 @@
     <div id="infoAboutUser">
     <h3 class="row">
         <h3 id="forPrint" class="col-20">Full name:</h3>
-        <h3 class="col-25">{{user?.Name}} {{user?.LastName}}</h3>
+        <h3 class="col-25">{{user1.Name}} {{user1.LastName}}</h3>
     </h3>
     <!-- <h3 class="row">
         <h3 class="col-20">Last Name:</h3>
@@ -16,18 +16,18 @@
     </h3> -->
     <h3 class="row">
         <h3 class="col-20">Email: </h3>
-        <h3 class="col-25">{{user?.Email}}</h3>
+        <h3 class="col-25">{{user1?.Email}}</h3>
     </h3>
 
     <h3 class="row">
         <h3 class="col-20">Birthday: </h3>
         <!--{{valueDate | date: 'dd/MM/yyyy'}}-->
         <!-- <h3 class="col-25">{{user?.Birthaday}}</h3> -->
-        <h3 class="col-25">{{user?.Birthaday.split('-')[2] }}-{{user?.Birthaday.split('-')[1] }}-{{user?.Birthaday.split('-')[0] }}</h3>
+        <h3 class="col-25">{{rodjendan.split('-')[2] }}-{{rodjendan.split('-')[1] }}-{{rodjendan.split('-')[0] }}</h3>
     </h3>
     <h3 class="row">
         <h3 class="col-20">Address: </h3>
-        <h3 class="col-25">{{user?.Street}} {{user?.Number}}, {{user?.City}}</h3>
+        <h3 class="col-25">{{user1?.Street}} {{user1?.Number}}, {{user1?.City}}</h3>
     </h3>
     </div>
     </div>
@@ -87,7 +87,7 @@
         </div>
         <div class="form-group">
                 <label for="Birthaday">Birthaday</label>
-                <input required type="date" class="form-control" name="Birthaday" placeholder="dd/mm/yyyy" [(ngModel)]="userForEdit.Birthaday">
+                <input required type="date" class="form-control" name="Birthaday" placeholder="dd/mm/yyyy" value="kk" [(ngModel)]="userForEdit.BirthdayForEdit">
                 <div *ngIf="!validations.birthadayOk" style="color:red">Birthaday can't be empty.</div>
          
         </div>

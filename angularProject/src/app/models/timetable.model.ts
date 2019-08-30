@@ -2,26 +2,30 @@ import { Time } from '@angular/common';
 
 export class TimetableModel{
     //Id: number;
-    LineId: number;
+    LineId: string;
     DayId: string;
     Departures: Time
+    VehicleId?:string
 
 
-    constructor(lineId: number, dayId: string, departures: Time){
+    constructor(lineId: string, dayId: string, departures: Time, vId?:string){
         this.LineId = lineId;
         this.DayId = dayId;
         this.Departures = departures;
+        this.VehicleId = vId;
     }
 }
 export class TimetableModel2{
-    LineId: number;
+    LineId: string;
     DayId: string;
-    Departures: string
+    Departures: string;
+    VehicleId: string;
 
-    constructor(lineId: number, dayId: string, departures: string){
+    constructor(lineId: string, dayId: string, departures: string, vId:string){
         this.LineId = lineId;
         this.DayId = dayId;
         this.Departures = departures;
+        this.VehicleId = vId;
     }
 }
 

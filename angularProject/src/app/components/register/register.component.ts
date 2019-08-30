@@ -26,27 +26,28 @@ export class RegisterComponent {
   types: any =[];
   validations: ValidForRegistrationModel = new ValidForRegistrationModel();
 
-  selectedImage: any;
+  selectedImage: any = null;
   userBytesImage: any;
 
   typeAppUser: string  = ""
   datePickerId: any;
+  formd: FormData = new FormData();
 
-  credentials: TokenPayload = {
-    email: '',
-    name: '',
-    password: '',
-    lastName: '',
-    street: '',
-    number: '',
-    city: '',
-    birthday: new Date(),
-    image: '',
-    activated: '',
-    //role: 'AppUser',
-    passengerType: '',
-    userType: ''
-  }
+  // credentials: TokenPayload = {
+  //   email: '',
+  //   name: '',
+  //   password: '',
+  //   lastName: '',
+  //   street: '',
+  //   number: '',
+  //   city: '',
+  //   birthday: new Date(),
+  //   image: '',
+  //   activated: '',
+  //   //role: 'AppUser',
+  //   passengerType: '',
+  //   userType: ''
+  // }
 
   constructor(private authService: AuthenticationService, 
     private typesService: TypesService,
@@ -71,11 +72,11 @@ export class RegisterComponent {
 
 
   //node
-  register() {
-    this.authService.register(this.credentials).subscribe(() => {
+  register(foormData : FormData) {
+    this.authService.register(foormData).subscribe(() => {
       this.router.navigateByUrl('/logIn');
     }, (err) => {
-      console.error(err);
+      window.alert(err.error.message);
     });
   }
 
@@ -108,58 +109,52 @@ export class RegisterComponent {
   //node
   onSubmit(registrationData: RegistrationModel){
 
-    
-     if(this.validations.validate(registrationData)){
-       //alert("Register - ERROR! ");
-      console.log(registrationData);
-      return;
-     } 
 
-     if(this.confirmPassword(registrationData.Password, registrationData.ConfirmPassword) === false) {
-      alert("Passwords do not match!");
-      return;
+  
+
+  this.formd.append("name", registrationData.Name);
+  this.formd.append("surname",registrationData.LastName);
+  this.formd.append('city',  registrationData.City);
+  this.formd.append('number', registrationData.Number)
+  this.formd.append('street', registrationData.Street)
+  this.formd.append('email', registrationData.Email);
+  this.formd.append('userType', registrationData.UserType);
+
+  this.formd.append('birthday', registrationData.Birthaday.toString());
+  this.formd.append('password', registrationData.Password);
+  this.formd.append('passengerType', registrationData.PassangerType);
+
+
+   if(registrationData.UserType != 'AppUser'){
+      //this.credentials.activated = "NOT ACTIVATED";
+      this.formd.append('activated', "PENDING");
+        
+      this.register(this.formd);
     }
-
-  //   this.userService.EmailAlreadyExists(registrationData).subscribe(a=>{},
-  //   err=>{
-  //    window.alert(err.error);
-     
-  //  })
-
-    this.credentials.name = registrationData.Name;
-    this.credentials.lastName = registrationData.LastName;
-    this.credentials.email = registrationData.Email;
-    this.credentials.password = registrationData.Password;
-    this.credentials.street = registrationData.Street;
-    this.credentials.number = registrationData.Number;
-    this.credentials.city = registrationData.City;
-    
-    this.credentials.birthday = registrationData.Birthaday;
-    this.credentials.passengerType = registrationData.PassangerType;
-    this.credentials.userType = registrationData.UserType;
-
-    if(this.credentials.userType == 'AppUser' && this.credentials.passengerType != 'Default'){
+    else if(registrationData.UserType == 'AppUser' && registrationData.PassangerType != 'Default'){  //moze imati sliku
       if (this.selectedImage == undefined || this.selectedImage == null){
-        this.credentials.activated  = "NOT ACTIVATED";
-        console.log("App user bez slike", this.credentials);
-        this.register();
+        //this.credentials.activated  = "NOT ACTIVATED";
+        this.formd.append('activated', "NOT ACTIVATED");
+        console.log("App user bez slike", this.formd);
+        this.register(this.formd);
       }
       else{
-        this.credentials.activated  = "PENDING";
-        console.log("korisnik kog saljem: ", this.credentials);
+        this.formd.append('file',this.selectedImage, this.selectedImage.name); 
+        this.formd.append('activated', "PENDING");
+        
+        console.log("korisnik kog saljem sa slikom: ", this.formd);
+        this.register(this.formd);
         // this.register(); 
       }
+      // this.register(this.formd);
     }
-    else if(this.credentials.userType != 'AppUser'){
-      this.credentials.activated = "NOT ACTIVATED";
-      // this.register();
+    else{
+      this.formd.append('activated', "ACTIVATED");
+      this.register(this.formd);
     }
-    else{}
 
+    //this.register(this.formd);
     
-
-
-    this.register();
 
   //   if ((this.selectedImage == undefined || this.selectedImage == null) && (this.credentials.userType == 'AppUser')){
   //     this.credentials.activated  = "NOT ACTIVATED";
@@ -228,7 +223,7 @@ export class RegisterComponent {
   // }
   }
   onFileSelected(event){
-    this.selectedImage = event.target.files;
+    this.selectedImage = event.target.files[0];
   }
 
   confirmPassword(password1: string, password2: string) {

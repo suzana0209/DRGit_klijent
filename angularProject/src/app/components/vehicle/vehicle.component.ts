@@ -18,10 +18,11 @@ export class VehicleComponent implements OnInit {
   linesWithoutVehicle: any = [];
   vehicles: any = [];
   timetables: any = [];
-  idVehicleForDelete: number;
+  idVehicleForDelete: string = "";
   idVehicleForEdit: number;
 
   vehicleForEdit: any;
+  availableVehicles: any = []
 
 
   constructor(private vehicleService: VehicleService, private lineService: LineService) {     
@@ -33,9 +34,16 @@ export class VehicleComponent implements OnInit {
     //   })
     // })
 
-    this.vehicleService.getAllVehicles().subscribe(d=>{
-      this.vehicles = d;
+    this.vehicleService.getAllVehicle().subscribe(d=>{
+      this.vehicles = d; 
       console.log("All vehicels: ", this.vehicles);
+      
+      this.vehicles.forEach(element => {
+        if(element.timetable == null || element.timetable == undefined){
+          this.availableVehicles.push(element);
+        }
+      });
+
     })
   }
 
@@ -47,38 +55,30 @@ export class VehicleComponent implements OnInit {
     this.vehicleService.addVehicle(vehicleData).subscribe(data => {     
       console.log(data); 
       alert("Successfully added vehicle")
-      window.location.reload();
+      //window.location.reload();
+      this.refresh();
+    },
+    err=>{
+      window.alert(err.error.message);
+      this.refresh();
     });     
   }
 
 
-  
-  // onSubmitEdit(vehicleData: VehicleModel, form:NgForm){
-  //   this.vehicles.forEach(element => {
-
-  //     if(element.Id == vehicleData.RegistrationNumber){
-  //       vehicleData.TypeOfVehicle = element.TypeOfVehicle;
-  //       vehicleData.Id = element.Id
-  //     }
-  //   });
-  //   this.vehicleService.editVehicle(vehicleData).subscribe();
-
-  // }
-
-
-  // getRegistrationNumber(event){
-  //   this.idVehicleForDelete = event.target.value;
-    
-  // }
 
   //Samo one koji nemaju timetable u sebi
   deleteVehicle(){
     console.log("Reg number: ", this.idVehicleForDelete);
     this.vehicleService.deleteVehicle(this.idVehicleForDelete).subscribe(d=>{
       alert("Vehicle delete successfull! ");
-      window.location.reload();
+      //window.location.reload();
+      this.refresh();
+    },
+    err=>{
+      window.alert(err.error.message);
+      this.refresh();
     })
-  }
+  } 
 
 
   // getIdVehiclee(event){
@@ -123,6 +123,25 @@ export class VehicleComponent implements OnInit {
     if(this.selected == 'Delete'){
       return true;
     }
+  }
+
+
+
+  refresh(){
+    this.selected = "";
+    this.idVehicleForDelete = "";
+
+    this.availableVehicles = [];
+
+    this.vehicleService.getAllVehicle().subscribe(data=>{
+      this.vehicles = data;
+
+      this.vehicles.forEach(element => {
+        if(element.timetable == null || element.timetable == undefined){
+          this.availableVehicles.push(element);
+        }
+      });
+    })
   }
 
 }

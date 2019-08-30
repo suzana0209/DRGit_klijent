@@ -8,6 +8,7 @@ import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { TokenPayload } from '../models/modelsForNode/tokenPayload';
 import { map } from 'rxjs/operators';
+import { RegistrationModel } from '../models/registration.model';
 
 
 export interface UserDetails {
@@ -72,11 +73,17 @@ export class AuthenticationService {
       }
     }
 
-    private request(method: 'post'|'get', type: 'logIn'|'register'|'profile'|'getUserData', user?: TokenPayload): Observable<any> {
+    private request(method: 'post'|'get', type: 'logIn'|'register'|'profile'|'getUserData'|'edit'|'editPassword', user?: FormData, usForEdit?:RegistrationModel): Observable<any> {
       let base;
   
       if (method === 'post') {
-        base = this.http.post(`/api/${type}`, user);
+        if(type === 'edit'){
+          base = this.http.post(`/api/${type}`, user);
+        }
+        else{
+          base = this.http.post(`/api/${type}`, user );
+        //base = this.http.post(`/api/${type}`, user);
+        }
       } else {
         base = this.http.get(`/api/${type}`, { headers: { Authorization: `Bearer ${this.getToken()}` }});
       }
@@ -96,12 +103,20 @@ export class AuthenticationService {
   
       return request;
     }
-  
-    public register(user: TokenPayload): Observable<any> {
-      return this.request('post', 'register', user);
+
+    public edit(userr: FormData) : Observable<any>{
+      return this.request('post', 'edit', userr);
+    }
+
+    public editPassword(userr: FormData): Observable<any>{
+      return this.request('post', 'editPassword', userr);
     }
   
-    public logIn(user: TokenPayload): Observable<any> {
+    public register(user: FormData): Observable<any> {
+      return this.request('post', 'register', user);
+    }
+   
+    public logIn(user: FormData): Observable<any> {
       return this.request('post', 'logIn', user);
     }
   
@@ -118,9 +133,9 @@ export class AuthenticationService {
       this.router.navigateByUrl('/');
     }
 
-    public getUserData():Observable<any>{
-      return this.request('get','getUserData');
-    }
+    // public getUserData():Observable<any>{
+    //   return this.request('get','getUserData');
+    // }
 
 
   }

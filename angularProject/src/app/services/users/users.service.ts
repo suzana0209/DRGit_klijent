@@ -13,7 +13,7 @@ export class UsersService{
     
 
     private token: string;
-    private request(method: 'post'|'get', type: 'getUserData', email?:String):Observable<any>{
+    private request(method: 'post'|'get', type: 'getUserData',  email?:String):Observable<any>{
       let base;
 
       if (method === 'post') {
@@ -27,6 +27,8 @@ export class UsersService{
 
       return base;
     }
+
+
 
     public getUserData(email:String){ 
       return this.request('get', 'getUserData', email);

@@ -114,6 +114,11 @@ button#designBtn:focus{
       margin-left: 22% !important;
   }
 
+  .marginForAddButton1{
+    margin-left: 22% !important;
+    margin-bottom: 20% !important;
+}
+
   .marginForEditButton{
     margin-left: 25% !important;
   }

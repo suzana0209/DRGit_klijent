@@ -23,7 +23,7 @@ export class VehicleService {
     return this.token;
   }
 
-  private request(method: 'post'|'get'|'delete', type: 'addVehicle', vehicle?: VehicleModel, stid?:String): Observable<any> {
+  private request(method: 'post'|'get'|'delete', type: 'addVehicle'|'getAllVehicle'|'deleteVehicle', vehicle?: VehicleModel, stid?:String): Observable<any> {
     let base;
 
     if (method === 'post') {
@@ -44,33 +44,43 @@ export class VehicleService {
     return this.request('post', 'addVehicle', vehicle); 
   }
 
+  public getAllVehicle(): Observable<any>{
+    return this.request('get', 'getAllVehicle');
+  }
+
+  public deleteVehicle(stid: String):Observable<any>{
+    return this.request('delete', 'deleteVehicle', null,stid);
+  }
+
+
+
   // addVehicle(vehicle): Observable<any>{
   //   return this.httpClient.post(this.baseUrl+"/api/Vehicles/Add",vehicle);
   // }
 
-  getAllVehicles(){
-    return this.httpClient.get(this.baseUrl + "/api/Vehicles/GetAll");
-  }
+  // getAllVehicles(){
+  //   return this.httpClient.get(this.baseUrl + "/api/Vehicles/GetAll");
+  // }
 
-  getLinesForVehicle(){
-    return this.httpClient.get(this.baseUrl + "/api/Vehicles/GetLinesForVehicle"); 
-  }
+  // getLinesForVehicle(){
+  //   return this.httpClient.get(this.baseUrl + "/api/Vehicles/GetLinesForVehicle"); 
+  // }
 
-  getTimetablesForVehicle(){
-    return this.httpClient.get(this.baseUrl + "/api/Vehicles/TimetablesForVehicle"); 
-  }
+  // getTimetablesForVehicle(){
+  //   return this.httpClient.get(this.baseUrl + "/api/Vehicles/TimetablesForVehicle"); 
+  // }
 
-  deleteVehicle(id){
-    return this.httpClient.delete(this.baseUrl + "/api/Vehicles/Delete?id=" + id);
-  }
-  //
+  // deleteVehicle(id){
+  //   return this.httpClient.delete(this.baseUrl + "/api/Vehicles/Delete?id=" + id);
+  // }
+  // //
 
-  getVehicle(id: number){
-    return this.httpClient.get(this.baseUrl + "/api/Vehicles/GetVehicle?id=" + id);
-  }
+  // getVehicle(id: number){
+  //   return this.httpClient.get(this.baseUrl + "/api/Vehicles/GetVehicle?id=" + id);
+  // }
 
-  editVehicle(vehicle):Observable<any>{
-    return this.httpClient.post(this.baseUrl + "/api/Vehicles/Edit", vehicle);
-  }
+  // editVehicle(vehicle):Observable<any>{
+  //   return this.httpClient.post(this.baseUrl + "/api/Vehicles/Edit", vehicle);
+  // }
 
 }

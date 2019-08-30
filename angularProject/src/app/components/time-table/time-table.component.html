@@ -1,6 +1,6 @@
 <div id="wholePage">
-<h2 *ngIf="NonActiveAdmin()" id="info">You are not authorized for add/edit/delete lines! Your request is processed!  You can only see the departures for the selected day!</h2>
-<h2 *ngIf="DeniedAdmin()" id="info">You are not authorized for add/edit/delete lines! Your request is denied! You can only see the departures for the selected day</h2>
+<!-- <h2 *ngIf="NonActiveAdmin()" id="info">You are not authorized for add/edit/delete lines! Your request is processed!  You can only see the departures for the selected day!</h2>
+<h2 *ngIf="DeniedAdmin()" id="info">You are not authorized for add/edit/delete lines! Your request is denied! You can only see the departures for the selected day</h2> -->
 
 
 <div *ngIf = "LoggedAdmin()">    
@@ -18,11 +18,10 @@
         <div class="column1">
         <div class="form-group" >
           <label for="DayId">Day type</label>
-          <select name="DayId" class="form-group"  class="form-control" ngModel>
-            <option disabled>Please select...</option>
-            <option value="Workday">Workday</option>
-            <option value="Saturday">Saturday</option>
-            <option value="Sunday">Sunday</option>
+          <select  name="DayId" class="form-group"   class="form-control" ngModel>
+            <option disabled >Please select...</option>
+            <option *ngFor="let day of allDaysFromDb" value="{{day._id}}">{{day.name}}</option>
+            
           </select>
           <div *ngIf="!validationsForAdd.dayIdOk" style="color:red">Please select day type.</div>
         
@@ -31,16 +30,32 @@
         <label for="LineId">Select line </label>
         <select name="LineId"  class="form-control" ngModel>
         <option disabled>Please select...</option>
-        <option *ngFor="let line of allLinesFromDb" value={{line.RegularNumber}}>{{line.RegularNumber}}</option>
+        <option *ngFor="let line of allLinesFromDb" value={{line._id}}>{{line.regularNumber}}</option>
         </select>
         <div *ngIf="!validationsForAdd.lineIdOk" style="color:red">Please select line number.</div>
         </div>
         <div class="form-group" >
-        <label for="Departures" >Select time</label>
-        <input type="time" name="Departures" class="form-control" ngModel>    
-        <div *ngIf="!validationsForAdd.departuresOk" style="color:red">Departure can't be empty!</div>
-      </div>
-  
+          <label for="Departures" >Select time</label>
+          <input type="time" name="Departures" class="form-control" (click)='addTimeToDepartures($event)'  ngModel>    
+          <div *ngIf="!validationsForAdd.departuresOk" style="color:red">Departure can't be empty!</div>
+        </div>
+
+        <div class="form-group" >
+          <label for="VehicleId">Select vehicle </label>
+          <select name="VehicleId"  class="form-control" ngModel>
+          <option disabled>Please select...</option>
+          <option *ngFor="let v of allVehicleFromDb" value={{v._id}}>{{v.vehicleType}}</option>
+          </select>
+          </div>
+
+
+        <!-- <button class="nav-link" class="btn" id="designBtn" class="marginForAddButton1" (click)='addToArray()'>Add departures</button> -->
+      
+        <!-- <h3>Select the departure you want to delete</h3>
+
+        <button class="nav-link" class="btn" id="designBtn" class="marginForAddButton1" *ngFor='let dep of arrayForShowDepartures'>{{dep}}</button>
+        &nbsp;&nbsp;&nbsp; -->
+
         <button type="submit" class="nav-link" class="btn" id="designBtn" class="marginForAddButton">Add timetable</button>
       </div>
       </form> 
@@ -133,7 +148,7 @@
   
         <div *ngIf="showInputTime" class="form-group">
           <br><label for="NewDepartures" >Select time</label>
-          <input type="time" name="NewDepartures" value="{{departuresForEditInput}}" class="form-control" ngModel><br>
+          <input type="time" name="NewDepartures"  value="{{departuresForEditInput}}" class="form-control" ngModel><br>
           <div *ngIf="!validationsForEdit.newDeparturesOk" style="color:red">New departure can't be empty.</div>
           <div *ngIf="!validForNewD.newDepaturesOk" style="color:red">New departure can't be empty.</div>
         

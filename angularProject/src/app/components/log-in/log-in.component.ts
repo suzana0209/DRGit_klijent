@@ -32,10 +32,14 @@ export class LogInComponent implements OnInit {
 
   onSubmit(loginData: RegistrationModel, form:NgForm){
 
-   this.credentials.email = loginData.Email;
-   this.credentials.password = loginData.Password;
-   this.authService.logIn(this.credentials).subscribe(res=>{
+  //  this.credentials.email = loginData.Email;
+  //  this.credentials.password = loginData.Password;
+  let fd  = new FormData();
+  fd.append('email', loginData.Email);
+  fd.append('password', loginData.Password);
+   this.authService.logIn(fd).subscribe(res=>{
      this.authService.profile().subscribe(data=>{
+       
        this.pomocniUser = data;
        let user = data;
        localStorage.setItem('role', user.userType);

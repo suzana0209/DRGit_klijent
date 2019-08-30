@@ -12,6 +12,8 @@ export interface TokenPayload {
     role?: string;
     passengerType?: string;
     userType?: string;
+    id?:string;
+    img?:any;
     
   }
 
