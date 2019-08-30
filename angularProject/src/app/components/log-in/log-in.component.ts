@@ -47,7 +47,7 @@ export class LogInComponent implements OnInit {
        //console.log("Pomocni model: ", this.pomocniUser); 
      });
      
-     this.router.navigateByUrl('/profile');
+     this.router.navigateByUrl('/busLines');
    },
    error=>{
      console.log(error)

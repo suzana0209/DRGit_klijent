@@ -1,13 +1,19 @@
+import { Injectable } from '@angular/core';
+
 // import { Injectable, EventEmitter } from '@angular/core';
 // import { NotificationMessage } from 'src/app/models/notificationMessage.model';
 // import { BehaviorSubject } from 'rxjs';
 
 
-// Injectable({
-//   providedIn: 'root'
-// })
-// declare var $: any; 
-// export class RequestsService {
+Injectable({
+  providedIn: 'root'
+})
+declare var $: any; 
+export class RequestsService {
+
+constructor(){}
+
+}
 
 //   private proxy: any;  
 //   private proxyName: string = 'notifications';  
