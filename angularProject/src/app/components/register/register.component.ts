@@ -140,7 +140,7 @@ export class RegisterComponent {
       }
       else{
         this.formd.append('file',this.selectedImage, this.selectedImage.name); 
-        this.formd.append('activated', "PENDING");
+        this.formd.append('activated', "PENDING"); 
         
         console.log("korisnik kog saljem sa slikom: ", this.formd);
         this.register(this.formd);

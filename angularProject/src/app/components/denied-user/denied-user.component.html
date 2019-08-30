@@ -1,8 +1,8 @@
 <div id="wholePage">
 <div *ngIf="user" class="container" class="row1">
-  <div *ngIf="!user.Activated && !denyAdmin" id="info">You are not authorized for approval of the request ! Your request is processed! </div>
-  <div *ngIf="denyAdmin" id="info">You are not authorized for approval of the request! Your request is denied! </div>
-  <div *ngIf="user.Activated">
+  <!-- <div *ngIf="!user.Activated && !denyAdmin" id="info">You are not authorized for approval of the request ! Your request is processed! </div>
+  <div *ngIf="denyAdmin" id="info">You are not authorized for approval of the request! Your request is denied! </div> -->
+  <div > <!--*ngIf="user.Activated"-->
     <div *ngIf="loggedAdmin()">
       <div class="column1">
         <div class="col-md-12">
@@ -11,14 +11,14 @@
               <li class="list-group-item" class="row1">
                 <!-- {{userr.Name}}  -->
                 <div class="columnForInside50" >
-                    Fullname: {{userr.Name}} {{userr.LastName}} <br>
-                    {{userr.Email}}
+                    Fullname: {{userr.name}} {{userr.lastName}} <br>
+                    {{userr.email}}
                   </div>
                 <span class="pull-right" style="float:right">
               <div class="columnForInside">
-                <button class="btn" (click)="AuthorizeDeniedAdmins(userr.Id,i)" id="designButton">&#10003;</button>
+                <button class="btn" (click)="AuthorizeDeniedUser(userr._id,i)" id="designButton">&#10003;</button>
               </div>
-              </span>
+              </span> 
             </li>
             </ul>
            </div>

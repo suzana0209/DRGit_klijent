@@ -23,7 +23,8 @@ export class VerificationService {
   }
 
   private request(method: 'post'|'get'|'delete', type: 'getAwaitingAdmins'|'getAwaitingAppUsers'|'getAwaitingControllers'|
-      'autorizeAdmin'|'authorizeController'|'authorizeAppUser'|'denyAdmin'|'denyController'|'denyAppUser', fd?:FormData): Observable<any> {
+      'autorizeAdmin'|'authorizeController'|'authorizeAppUser'|'denyAdmin'|'denyController'|'denyAppUser'|'authorizeDeniedUser'|
+      'getDeniedUsers', fd?:FormData): Observable<any> {
     let base;
     if(method === 'get'){
       base = this.httpClient.get(`/api/${type}`, { headers: { Authorization: `Bearer ${this.getToken()}` }});
@@ -66,13 +67,20 @@ export class VerificationService {
   }
 
   public denyController(fd:FormData):Observable<any>{
-    return this.request('post', 'authorizeController', fd);
+    return this.request('post', 'denyController', fd);
   }
 
   public denyAppUser(fd:FormData): Observable<any>{
     return this.request('post', 'denyAppUser', fd);
   }
 
+  public authorizeDeniedUser(fd:FormData): Observable<any>{
+    return this.request('post', 'authorizeDeniedUser', fd);
+  }
+
+  public getDeniedUsers():Observable<any>{
+    return this.request('get', 'getDeniedUsers'); 
+  }
 
   //  authorizeAdmin(adminId): Observable<any> {
   //   return this.httpClient.post(this.baseUrl + "/api/Account/AuthorizeAdmin", adminId);
