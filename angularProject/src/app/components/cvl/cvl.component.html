@@ -11,37 +11,34 @@
   </select> 
 </div>
 
-<div align="center" id="mapaa">
+<div align="center" id="mapaa"> 
   <!-- Kreiramo mapu -->
    <agm-map   [latitude]="startLat" [longitude]="startLon" [zoom]="zoom" id = "mapa"> 
 
 
 
           <div  *ngFor="let point of polyline.path, let j = index">
-              <agm-direction 
-                [renderOptions] = "{polylineOptions: {strokeColor: polyline.color}, preserveViewport: true}"
+            <agm-direction 
+                [renderOptions] = "{polylineOptions: {strokeColor: polyline.color}, suppressMarkers:true, preserveViewport: true}"
                 *ngIf="polyline.path[j+1]"  
                 [origin]="{ lat: polyline.path[j].latitude, lng: polyline.path[j].longitude }" 
                 [destination]="{ lat: polyline.path[j+1].latitude, lng: polyline.path[j+1].longitude }">
-                    <!-- <agm-polyline-point  *ngFor="let point of oneLine.Stations" [latitude]="point.Latitude" [longitude]="point.Longitude">
-                    [strokeColor]="oneLine.ColorLine"
-                    </agm-polyline-point> -->
-                </agm-direction>
+                
+            </agm-direction>
           </div>
 
 
     <agm-marker *ngFor="let point of polyline.path" [latitude]="point.latitude" [longitude]="point.longitude" [iconUrl]="polyline.icon">
     </agm-marker>
 
-    <agm-marker *ngFor="let station of stations" [latitude]="station.Latitude" [longitude]="station.Longitude" 
-    [title]="station.Name" [iconUrl]="busImgIcon" label="">
-         <!-- Svakom markeru dodajemo info-window (Nije obavezno!) -->
+    <!-- <agm-marker *ngFor="let station of stations" [latitude]="station.latitude" [longitude]="station.longitude" 
+    [title]="station.name" [iconUrl]="busImgIcon" label="">
          <agm-info-window [latitude]="station.Latitude" [longitude]="station.Longitude" >
-          <span style="font-family:'Times New Roman'; color:gray;"><strong>Station name:{{station.Name}}</strong></span><br>
-          <span style="font-family:'Times New Roman'; color:gray;"><strong>Station address:{{station.AddressStation}}</strong></span>
+          <span style="font-family:'Times New Roman'; color:gray;"><strong>Station name:{{station.name}}</strong></span><br>
+          <span style="font-family:'Times New Roman'; color:gray;"><strong>Station address:{{station.addressStation}}</strong></span>
           
         </agm-info-window>
-    </agm-marker>
+    </agm-marker> -->
 
     <agm-marker *ngIf="latitude && longitude" [latitude]="latitude" [longitude]="longitude" [iconUrl]="autobusImgIcon" label="" [zIndex]=200>
 
