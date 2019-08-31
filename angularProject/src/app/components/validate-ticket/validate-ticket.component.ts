@@ -7,6 +7,7 @@ import { UsersService } from 'src/app/services/users/users.service';
 
 import { BuyTicketService } from 'src/app/services/buyTicketService/buy-ticket.service';
 import { ValidForValidateTicketModel } from 'src/app/models/modelsForValidation/validForValidateTicket.model';
+import { Form } from '@angular/forms';
 
 @Component({
   selector: 'app-validate-ticket',
@@ -22,7 +23,7 @@ export class ValidateTicketComponent implements OnInit {
 
   awaitingAppUsers:any = [];
   modelHelp: PomModelForAuthorization = new PomModelForAuthorization("");
-  user: any;
+  user: any; 
 
   //wtfList:any = []
   userBytesImages:any = [];
@@ -34,8 +35,7 @@ export class ValidateTicketComponent implements OnInit {
   nameOfCustomerMessage: string = "";
   denyController: boolean = false;
   validations: ValidForValidateTicketModel = new ValidForValidateTicketModel();
-  
-
+  fd: FormData = new FormData();
 
   constructor(private ticketServ: ValidateTicketService, 
     private verifyService: VerificationService,
@@ -240,19 +240,38 @@ export class ValidateTicketComponent implements OnInit {
     if(this.validations.validate(this.modelHelp)){
       return;
     }
-    this.buyTicketService.validateTicket(this.modelHelp).subscribe(data=>{
-      console.log("Poruka: ", data);
-      this.buyTicketService.GetNameOfCustomer(idTicket).subscribe(dd=>{
-        this.nameOfCustomer = dd.toString();
-        console.log("Nameeee", this.nameOfCustomer);
+    this.buyTicketService.validateTicket(idTicket.toString()).subscribe(data=>{
+      console.log("Poruka: ", data); 
+      this.func(idTicket);
+      alert(data.message);
+      
+      
+    },
+    err=>{
+      window.alert(err.error.message);
+     // window.location.reload();
+      this.func(idTicket);
+      
+    })
 
-        //this.nameOfCustomerMessage = this.nameOfCustomer.toString() + " bought the ticket!";
-        this.nameOfCustomerMessage = (this.nameOfCustomer.toString() != "Nobody") ? this.nameOfCustomer.toString() +  " bought the ticket!" : "" ;
-          //((this.nameOfCustomer.toString() == "Nobody") ?  ("")   : " bought the ticket!");
-      
-      })
-      this.ticketMessage = data.toString() + ".";
-      
+     
+
+
+  }
+
+  func(idTicket){
+    this.fd = new FormData();
+    this.fd.append('idTickett', idTicket);
+    this.buyTicketService.getNameOfCustomer(this.fd).subscribe(dd=>{
+      this.nameOfCustomer = dd.toString();
+      console.log("Nameeee", this.nameOfCustomer);
+
+      //this.nameOfCustomerMessage = this.nameOfCustomer.toString() + " bought the ticket!";
+      this.nameOfCustomerMessage = (this.nameOfCustomer.toString() != "Nobody") ? this.nameOfCustomer.toString() +  " bought the ticket!" : "" ;
+        //((this.nameOfCustomer.toString() == "Nobody") ?  ("")   : " bought the ticket!");
+    
+        
+      //this.ticketMessage = data.toString() + ".";
     })
   }
 

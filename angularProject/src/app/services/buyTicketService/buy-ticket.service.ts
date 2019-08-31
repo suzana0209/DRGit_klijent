@@ -23,19 +23,27 @@ export class BuyTicketService {
       return this.token;
     }
   
-    private request(method: 'post'|'get'|'delete', type: 'priceForPaypal'|'postPayPalModel'|'getTicketWithCurrentAppUser', 
-    fd?:FormData, stId?:any, noviPar?:any, stId1?:any): Observable<any> {
+    private request(method: 'post'|'get'|'delete', type: 'priceForPaypal'|'postPayPalModel'|'getTicketWithCurrentAppUser'|'validateTicket'|'getNameOfCustomer', 
+    fd?:FormData, stId?:any, noviPar?:any, noviPar1?:any): Observable<any> {
       let base;
   
       if (method === 'post') {
-        base = this.httpClient.post(`/api/${type}`, fd);
+
+        if( type === 'validateTicket'){
+          //base = this.httpClient.post(`/api/${type}/` + stId, noviPar);
+          base = this.httpClient.post(`/api/${type}/` + stId, noviPar);
+        }
+        else{
+          base = this.httpClient.post(`/api/${type}`, fd);
+        }
+        
       }
       else if(method === 'delete'){
         // base = this.httpClient.delete(`/api/${type}/`+ stid);
-      } 
+      }  
       else {
         if(type === 'priceForPaypal'){
-          base = this.httpClient.get(`/api/${type}`,{ headers: { Authorization: `Bearer ${this.getToken()}` }, params: {parami : stId, par:  noviPar}});
+          base = this.httpClient.get(`/api/${type}`,{ headers: { Authorization: `Bearer ${this.getToken()}` }, params: {parami : stId, par:  noviPar, par1: noviPar1}});
         }
         // else if(type === 'getTicketWithCurrentAppUser'){
         //   base = this.httpClient.get(`/api/${type}`,{ headers: { Authorization: `Bearer ${this.getToken()}` }, params: {parami : stId1}});
@@ -52,8 +60,8 @@ export class BuyTicketService {
   
     
   
-    public priceForPaypal(param,aa): Observable<any> {
-      return this.request('get', 'priceForPaypal', null,param, aa);
+    public priceForPaypal(param,aa, nn): Observable<any> {
+      return this.request('get', 'priceForPaypal', null,param, aa,nn);
     }
 
     public postPayPalModel(fd:FormData): Observable<any>{
@@ -62,6 +70,14 @@ export class BuyTicketService {
 
     public getTicketWithCurrentAppUser(fd:FormData): Observable<any>{
       return this.request('post', 'getTicketWithCurrentAppUser', fd);
+    }
+
+    public validateTicket(param):Observable<any> {
+      return this.request('post', 'validateTicket',null, param);
+    }
+
+    public getNameOfCustomer(fd:FormData): Observable<any>{
+      return this.request('post', 'getNameOfCustomer', fd);
     }
    
   
@@ -94,9 +110,9 @@ export class BuyTicketService {
       return this.httpClient.post(this.baseUrl + "/api/Tickets/SendMail",ticket);
    }
 
-   validateTicket(idTicket){
-     return this.httpClient.post(this.baseUrl + "/api/Tickets/ValidateTicket", idTicket); //idTicket -> pomModelForAuthorization
-   }
+  //  validateTicket(idTicket){
+  //    return this.httpClient.post(this.baseUrl + "/api/Tickets/ValidateTicket", idTicket); //idTicket -> pomModelForAuthorization
+  //  }
 
    GetTicketWithCurrentAppUser(idUser:string) {
      return this.httpClient.get(this.baseUrl + "/api/Tickets/GetTicketWithCurrentAppUser?pom="+ idUser);
