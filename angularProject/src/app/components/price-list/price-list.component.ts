@@ -64,7 +64,7 @@ export class PriceListComponent implements OnInit {
     this.showPriceInInput = false;
 
     this.pricelistServ.getPricelist().subscribe(data=>{
-      console.log("Podacii: ", data);
+      console.log("Podacii: ", data); 
       this.pomPricelist = data;
       this.pricelistServ.getTicketPrices(this.pomPricelist.ticketPrices).subscribe(aa=>{
         console.log("Nestooo: ", aa);

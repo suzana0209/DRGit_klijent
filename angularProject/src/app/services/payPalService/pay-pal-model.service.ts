@@ -13,7 +13,7 @@ export class PayPalModelService {
 
   constructor(private http: Http, private httpClient:HttpClient) { }
 
-  postPayPalModel(payPalModel1: PayPalModel): any{
-    return this.httpClient.post(this.base_url + "/api/PayPalModels/Add", payPalModel1);
-  }
+  // postPayPalModel(payPalModel1: PayPalModel): any{
+  //   return this.httpClient.post(this.base_url + "/api/PayPalModels/Add", payPalModel1);
+  // }
 }

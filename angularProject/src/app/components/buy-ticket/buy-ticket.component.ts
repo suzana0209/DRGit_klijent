@@ -11,6 +11,7 @@ import { ValidForBuyTicketModel } from 'src/app/models/modelsForValidation/valid
 import { IPayPalConfig, ICreateOrderRequest  } from 'ngx-paypal';
 import { PayPalModel } from 'src/app/models/payPal.model';
 import { PayPalModelService } from 'src/app/services/payPalService/pay-pal-model.service';
+import { AccountService } from 'src/app/services/account/account.service';
 
 
 @Component({
@@ -39,6 +40,7 @@ export class BuyTicketComponent implements OnInit {
   doublee: string = "3.14";
   nekiTest: number = 0;
   showButtonComplete: boolean = false;
+  fd: FormData = new FormData();
 
   mailPayPalUnregisterUser: string = "";
   payPalModel1: PayPalModel = new PayPalModel("", "", "", "", "", "", "", 0);
@@ -46,41 +48,65 @@ export class BuyTicketComponent implements OnInit {
   povratnaVrijednostPayPal: number = 0;
   pomZaKupovinuKarte: PomModelForAddTicketPayPal = new PomModelForAddTicketPayPal(new PomModelForBuyTicket("",""), 0);
 
+  loggedUser1: any;
+  dateOfPurchase: Date;
+  typeOfTicketForDb: string = ""
+  idOfPricelist = "";
+
   constructor(private authService: AuthenticationService, private usersService: UsersService,
     private buyTicketService: BuyTicketService,
     private router: Router,
-    private priceServie: PricelistService, private payPalModelService: PayPalModelService) { 
+    private priceServie: PricelistService, private payPalModelService: PayPalModelService, private accountService: AccountService) { 
       this.showButtonComplete = true;
        this.roleForPayPal =  localStorage.getItem('role');
        this.mailForPayPal = localStorage.getItem('name');
       console.log("cc", localStorage.getItem('name'));
 
     if(localStorage.getItem('name') != null){
-    this.usersService.getUserData(localStorage.getItem('name')).subscribe(d=>{
-      this.loggedUser = d;
-      this.denyOfLoggedUser = this.loggedUser.Deny;
+    this.accountService.getUserData(localStorage.getItem('name')).subscribe(d=>{
+      this.loggedUser1 = d;
+      // this.denyOfLoggedUser = this.loggedUser.Deny;
 
-      console.log("Deny of loggedUser: ", this.denyOfLoggedUser);
-      this.emailLoggedUser = this.loggedUser.Email
-      this.idLoggUser = this.loggedUser.Id;
-      console.log("Ulogovani korisnik: ", this.loggedUser)
+      // console.log("Deny of loggedUser: ", this.denyOfLoggedUser);
+      this.loggedUser1.forEach(element => {
+        this.emailLoggedUser = element.email;
+        this.idLoggUser = element._id;
+        this.loggedUser = element;
+      });
 
-      
-      this.buyTicketService.GetTicketWithCurrentAppUser(this.idLoggUser).subscribe(d=>{
+      this.fd = new FormData();
+      this.fd.append('idd', this.idLoggUser);
+      this.buyTicketService.getTicketWithCurrentAppUser(this.fd).subscribe(d=>{
         this.listOfBuyingTicket = d;
-        console.log("Buying ticket: ", this.listOfBuyingTicket);
-        
-        this.tipKarte.push("");
-        this.tipKarte.push("Hourly");
-        this.tipKarte.push("Daily");
-        this.tipKarte.push("Monthly");
-        this.tipKarte.push("Yearly");
-        
-        this.ticketForPrint();
+        console.log("Buying ticket: ", this.listOfBuyingTicket); 
+      })  
+
+      //this.emailLoggedUser = this.loggedUser.Email
+      //this.idLoggUser = this.loggedUser.Id;
+      console.log("Ulogovani korisnik: ", this.loggedUser)
+      console.log("IDD log", this.idLoggUser)
+
+
+     this.priceServie.getPricelist().subscribe(dataa=>{
+       //dataa.forEach(element => {
+         this.idOfPricelist = dataa._id;
+         console.log("IDDD", this.idOfPricelist)
+       //});
+     })
+
+      //TREBAAA!!!
       
-      })
+      //   this.tipKarte.push("");
+      //   this.tipKarte.push("Hourly");
+      //   this.tipKarte.push("Daily");
+      //   this.tipKarte.push("Monthly");
+      //   this.tipKarte.push("Yearly");
+        
+      //   this.ticketForPrint();
+      
+      // })
       if(localStorage.getItem('role') == "AppUser"){
-        if(this.loggedUser.Activated){      
+        if(this.loggedUser.activated == "ACTIVATED"){      
           this.bool =  true;
         } 
       }
@@ -97,21 +123,24 @@ export class BuyTicketComponent implements OnInit {
     console.log("Karta: ", buyTicketForm);
 
     this.mailPayPalUnregisterUser = buyTicketForm.Email;  //potrebno za neregistrovanog korisnika pri upisu u bazu
-
+    this.typeOfTicketForDb = buyTicketForm.TypeOfTicket;
 
     console.log("Email from Local storage: ", this.emailLoggedUser);
     let rola =  localStorage.getItem('role');
     let mail = localStorage.getItem('name');
     if(rola == "AppUser"){
-      if(this.validations.validateForTypeTicket(buyTicketForm.TypeOfTicket)){
-        return;
-      }
+      // if(this.validations.validateForTypeTicket(buyTicketForm.TypeOfTicket)){
+      //   return;
+      // } 
       this.buyTicketForm1 = buyTicketForm;
       console.log("1111", this.buyTicketForm1);
 
       this.buyTicketForm1.Email = localStorage.getItem('name')
       this.buyTicketForm1.PurchaseDate = new Date();
-      console.log("Trenutno vreme", this.buyTicketForm1.PurchaseDate)
+      this.dateOfPurchase = new Date();
+      //console.log("Trenutno vreme", this.buyTicketForm1.PurchaseDate)
+      
+      console.log("Trenutno vreme", this.dateOfPurchase)
     //   this.buyTicketService.PriceForPayPal(this.buyTicketForm1).subscribe(a=>{
         
    
@@ -135,11 +164,20 @@ export class BuyTicketComponent implements OnInit {
 
   buyTicketUnregisterUser(){
     console.log("Formmrrrr:", this.buyTicketForm1);
+
+
+    this.pomZaKupovinuKarte.pomModelForBuyTicket = this.buyTicketForm1;
+      this.pomZaKupovinuKarte.PayPalModelId = this.povratnaVrijednostPayPal;
+
+    if(this.mailPayPalUnregisterUser != ""){  //neregistrovani korisnik
+      this.buyTicketService.buyTicketViaEmail(this.pomZaKupovinuKarte).subscribe(); //buyTicketForm1
+      
+    }
+
     this.buyTicketForm1.Email = this.mailPayPalUnregisterUser;
     if(this.buyTicketForm1.Email.length != 0){
       
-      this.pomZaKupovinuKarte.pomModelForBuyTicket = this.buyTicketForm1;
-      this.pomZaKupovinuKarte.PayPalModelId = this.povratnaVrijednostPayPal;
+      
 
       this.buyTicketService.buyTicketViaEmail(this.pomZaKupovinuKarte).subscribe(); //buyTicketForm1
       alert("Succesfull bought ticket. Expect e-mail notification");
@@ -198,19 +236,26 @@ export class BuyTicketComponent implements OnInit {
       this.buyTicketForm1ForPrice.Email = "";
     }
     var diffDays;
-    this.buyTicketService.PriceForPayPal(this.buyTicketForm1ForPrice).subscribe(s=>{
+    this.fd.append('typeOfTicket',this.buyTicketForm1ForPrice.TypeOfTicket);
+    this.fd.append('email',this.buyTicketForm1ForPrice.Email);
+    this.fd.append('date',this.buyTicketForm1ForPrice.PurchaseDate.toString());
+    
+    this.buyTicketService.priceForPaypal(this.buyTicketForm1ForPrice.TypeOfTicket, this.buyTicketForm1ForPrice.Email).subscribe(s=>{
+      console.log("SSSSSS", s);
       if(s == "null"){
         
         alert("There is not active pricelist!");
         this.showButtonComplete = true;
-        window.location.reload();
+        window.location.reload(); 
       }
       else{
         diffDays = parseFloat(s.toString());
+        console.log("Diffday", diffDays)
       }
-      
+       
     diffDays = diffDays/118;
     var str = diffDays.toFixed(2);
+    console.log("Str: ", str);
     this.payPalConfig = {
       currency: 'EUR',
       clientId: 'sb',
@@ -256,28 +301,60 @@ export class BuyTicketComponent implements OnInit {
         
           this.dataFromPaypalService = data;
         
-          this.payPalModel1.PayerEmail = this.dataFromPaypalService.payer.email_address;
-          this.payPalModel1.PayerName = this.dataFromPaypalService.payer.name.given_name;
-          this.payPalModel1.PayerSurname = this.dataFromPaypalService.payer.name.surname;
-          this.payPalModel1.Status = this.dataFromPaypalService.status;
-          this.payPalModel1.CreateTime = this.dataFromPaypalService.create_time;
-          this.payPalModel1.PayementId = this.dataFromPaypalService.id;
-          this.payPalModel1.Value = this.dataFromPaypalService.purchase_units[0].amount.value;
-          this.payPalModel1.CurrencyCode = this.dataFromPaypalService.purchase_units[0].amount.currency_code;
+          // this.payPalModel1.PayerEmail = this.dataFromPaypalService.payer.email_address;
+          // this.payPalModel1.PayerName = this.dataFromPaypalService.payer.name.given_name;
+          // this.payPalModel1.PayerSurname = this.dataFromPaypalService.payer.name.surname;
+          // this.payPalModel1.Status = this.dataFromPaypalService.status;
+          // this.payPalModel1.CreateTime = this.dataFromPaypalService.create_time;
+          // this.payPalModel1.PayementId = this.dataFromPaypalService.id;
+          // this.payPalModel1.Value = this.dataFromPaypalService.purchase_units[0].amount.value;
+          // this.payPalModel1.CurrencyCode = this.dataFromPaypalService.purchase_units[0].amount.currency_code;
 
-          this.payPalModelService.postPayPalModel(this.payPalModel1).subscribe(ddd=>{
-          this.povratnaVrijednostPayPal = ddd;
-          
-          if(ddd != 0){
-            if(this.mailForPayPal == null){
-              this.buyTicketUnregisterUser();
-            }
-            else {
-              if(this.roleForPayPal == "AppUser"){
-                this.buyTicketRegisterUser();
-              }
-            }
+          this.fd = new FormData();
+
+          this.fd.append('pricelistId', this.idOfPricelist);
+          this.fd.append('payerEmail', this.dataFromPaypalService.payer.email_address);
+          this.fd.append('payerName',this.dataFromPaypalService.payer.name.given_name);
+          this.fd.append('payerSurname', this.dataFromPaypalService.payer.name.surname);
+          this.fd.append('status', this.dataFromPaypalService.status);
+          this.fd.append('createTime', this.dataFromPaypalService.create_time);
+          this.fd.append('paymentId', this.dataFromPaypalService.id);
+          this.fd.append('value', this.dataFromPaypalService.purchase_units[0].amount.value);
+          this.fd.append('currencyCode', this.dataFromPaypalService.purchase_units[0].amount.currency_code);
+
+          this.fd.append('dateOfPurchase', this.dateOfPurchase.toString());
+          this.povratnaVrijednostPayPal = this.dataFromPaypalService.id;
+
+          let ppp = localStorage.getItem('name');
+          if(ppp != null && ppp != ""){
+            this.fd.append('email', ppp);
+            this.fd.append('typeOfTicket', this.typeOfTicketForDb);
           }
+          else{
+            this.fd.append('email', this.mailPayPalUnregisterUser);
+            this.fd.append('typeOfTicket', "Hourly");
+            //this.fd.append('dateOfPurchase', this.dateOfPurchase.toString()); 
+         
+          }
+ 
+          
+          this.buyTicketService.postPayPalModel(this.fd).subscribe(ddd=>{
+          //this.povratnaVrijednostPayPal = ddd;
+           // this.buyTicketUnregisterUser();
+            alert("Succ buy t!");
+          // if(ddd != 0){
+          //   if(this.mailForPayPal == null){
+          //     this.buyTicketUnregisterUser();
+          //   }
+          //    else {
+          //     if(this.roleForPayPal == "AppUser"){
+          //       this.buyTicketRegisterUser();
+          //     }
+          //   }
+          // }
+         }, 
+         err=>{
+           window.alert(err.error.message);
          })
          
       },
@@ -294,6 +371,9 @@ export class BuyTicketComponent implements OnInit {
           console.log('onClick', data, actions);
       },
   };
+},
+err=>{
+  window.alert(err.error.message);
 }) 
 }
     
