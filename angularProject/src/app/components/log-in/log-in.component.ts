@@ -4,9 +4,7 @@ import { RegistrationModel } from 'src/app/models/registration.model';
 import { NgForm } from '@angular/forms';
 import { LogInValidations } from 'src/app/models/modelsForValidation/validForLogin.model';
 import { Router } from '@angular/router';
-import { TokenPayload } from 'src/app/models/modelsForNode/tokenPayload';
-import { Token } from '@angular/compiler/src/ml_parser/lexer';
-
+//import { TokenPayload } from 'src/app/models/modelsForNode/tokenPayload';
 
 @Component({
   selector: 'app-log-in',
@@ -16,10 +14,10 @@ import { Token } from '@angular/compiler/src/ml_parser/lexer';
 })
 
 export class LogInComponent implements OnInit {
-  credentials: TokenPayload = {
-    email: '',
-    password: ''
-  };
+  // credentials: TokenPayload = {
+  //   email: '',
+  //   password: ''
+  // };
 
   validations: LogInValidations = new LogInValidations();
   pomocniUser: any;
@@ -31,31 +29,22 @@ export class LogInComponent implements OnInit {
 
 
   onSubmit(loginData: RegistrationModel, form:NgForm){
-
-  //  this.credentials.email = loginData.Email;
-  //  this.credentials.password = loginData.Password;
-  let fd  = new FormData();
-  fd.append('email', loginData.Email);
-  fd.append('password', loginData.Password);
-   this.authService.logIn(fd).subscribe(res=>{
-     this.authService.profile().subscribe(data=>{
-       
+    let fd  = new FormData();
+    fd.append('email', loginData.Email);
+    fd.append('password', loginData.Password);
+    this.authService.logIn(fd).subscribe(res=>{
+    this.authService.profile().subscribe(data=>{
        this.pomocniUser = data;
        let user = data;
        localStorage.setItem('role', user.userType);
        localStorage.setItem('name', user.email);
-       //console.log("Pomocni model: ", this.pomocniUser); 
      });
      
      this.router.navigateByUrl('/busLines');
    },
-   error=>{
-     console.log(error)
-     alert("Wrong username or password!");
+   err=>{
+     window.alert(err.error.message);
    });
       
   }
-
-  
-
 }

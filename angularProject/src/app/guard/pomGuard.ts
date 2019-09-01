@@ -7,7 +7,7 @@ export class GuardForUser implements CanActivate {
    constructor(private router: Router) {}
     //Ako je ulogovan ne moze vrsiti registraciju i logovanje
    canActivate() {
-    if(localStorage.jwt) {
+    if(localStorage.getItem('name')) {
       this.router.navigateByUrl('/busLines');
       return false;
     }

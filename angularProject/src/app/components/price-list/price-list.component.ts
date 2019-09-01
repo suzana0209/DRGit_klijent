@@ -265,7 +265,7 @@ export class PriceListComponent implements OnInit {
   getSelectedPassanger(event){
     if(event.target.value == "Student" || 
       event.target.value == "Pensioner" ||
-      event.target.value == "Default" ){
+      event.target.value == "Regular" ){
         this.selectedPassanger = event.target.value;
     }
   }

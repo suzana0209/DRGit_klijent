@@ -1,12 +1,7 @@
 import { Injectable } from '@angular/core';
-
-import { Http, Response} from '@angular/http';
-import { Headers, RequestOptions } from '@angular/http';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { TokenPayload } from '../models/modelsForNode/tokenPayload';
 import { map } from 'rxjs/operators';
 import { RegistrationModel } from '../models/registration.model';
 
@@ -34,46 +29,45 @@ interface TokenResponse {
   providedIn: 'root'
 })
 export class AuthenticationService {
-    //base_url = 'http://localhost:52295'
     private token: string;
 
     constructor(private http: HttpClient, private router:Router) { }
 
-    private saveToken(token:string): void{
-      localStorage.setItem('mean-token', token);
-      this.token = token;
-    }
-
-    private getToken(): string{
-      if(!this.token){
-        this.token = localStorage.getItem('mean-token');
+      private saveToken(token:string): void{
+        localStorage.setItem('mean-token', token);
+        this.token = token;
       }
-      return this.token;
-    }
 
-    public getUserDetails(): UserDetails{
-      const token = this.getToken();
-      let payload;
-      if(token){
-        payload = token.split('.')[1];
-        payload = window.atob(payload);
-        return JSON.parse(payload);
+      private getToken(): string{
+        if(!this.token){
+          this.token = localStorage.getItem('mean-token');
+        }
+        return this.token;
       }
-      else{
-        return null;
-      }
-    }
 
-    public isLoggedIn(): boolean{
-      const user = this.getUserDetails();
-      if (user) {
-        return user.exp > Date.now() / 1000;
-      } else {
-        return false;
+      public getUserDetails(): UserDetails{
+        const token = this.getToken();
+        let payload;
+        if(token){
+          payload = token.split('.')[1];
+          payload = window.atob(payload);
+          return JSON.parse(payload);
+        }
+        else{
+          return null;
+        }
       }
-    }
 
-    private request(method: 'post'|'get', type: 'logIn'|'register'|'profile'|'getUserData'|'edit'|'editPassword', user?: FormData, usForEdit?:RegistrationModel): Observable<any> {
+      public isLoggedIn(): boolean{
+        const user = this.getUserDetails();
+        if (user) {
+          return user.exp > Date.now() / 1000;
+        } else {
+          return false;
+        }
+      }
+
+    private request(method: 'post'|'get', type: 'logIn'|'register'|'profile'|'getUserData'|'edit'|'editPassword', user?: FormData): Observable<any> {
       let base;
   
       if (method === 'post') {
@@ -82,25 +76,22 @@ export class AuthenticationService {
         }
         else{
           base = this.http.post(`/api/${type}`, user );
-        //base = this.http.post(`/api/${type}`, user);
         }
-      } else {
+      } 
+      else {
         base = this.http.get(`/api/${type}`, { headers: { Authorization: `Bearer ${this.getToken()}` }});
       }
   
       const request = base.pipe(
         map((data: TokenResponse) => {
           if (data.token) {
-            if( type === 'logIn')
-            {
+            if( type === 'logIn'){
               this.saveToken(data.token);
             }
-            
           }
           return data;
         })
       );
-  
       return request;
     }
 
@@ -127,16 +118,9 @@ export class AuthenticationService {
     public logout(): void {
       this.token = '';
       window.localStorage.removeItem('mean-token');
-      // localStorage.removeItem('jwt');
       localStorage.removeItem('role');
       localStorage.removeItem('name');
       this.router.navigateByUrl('/');
     }
-
-    // public getUserData():Observable<any>{
-    //   return this.request('get','getUserData');
-    // }
-
-
   }
 
