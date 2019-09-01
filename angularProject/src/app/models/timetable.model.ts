@@ -20,14 +20,18 @@ export class TimetableModel2{
     DayId: string;
     Departures: string;
     VehicleId: string;
+    TipDodavanja: string;
+    Idd?: string;
 
-    constructor(lineId: string, dayId: string, departures: string, vId:string){
+     constructor(lineId: string, dayId: string, departures: string, vId:string, tip: string, idd: string){
         this.LineId = lineId;
         this.DayId = dayId;
         this.Departures = departures;
         this.VehicleId = vId;
+        this.TipDodavanja = tip;
+        this.Idd = idd;
     }
-}
+} 
 
 export class TimetableModel3{
     LineId: number;
@@ -40,15 +44,17 @@ export class TimetableModel3{
 }
 
 export class TimetableModel4{
-    LineId: number;
-    DayId: number;
+    Idd: string;
+    LineId: string;
+    DayId: string;
     Departures: string
     NewDepartures: string
 
-    constructor(lineId: number, dayId: number, departures: string, newDepartures: string){
+    constructor(lineId: string, dayId: string, departures: string, newDepartures: string, idd: string){
         this.LineId = lineId;
         this.DayId = dayId;
         this.Departures = departures;
         this.NewDepartures = newDepartures;
+        this.Idd = idd;
     }
 }

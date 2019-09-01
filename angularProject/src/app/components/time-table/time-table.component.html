@@ -44,10 +44,10 @@
           <label for="VehicleId">Select vehicle </label>
           <select name="VehicleId"  class="form-control" ngModel>
           <option disabled>Please select...</option>
-          <option *ngFor="let v of allVehicleFromDb" value={{v._id}}>{{v.vehicleType}}</option>
+          <option *ngFor="let v of allVehicleFromDb" value={{v._id}}>{{v.vehicleType}}|{{v._id}}</option>
           </select>
           </div>
-
+ 
 
         <!-- <button class="nav-link" class="btn" id="designBtn" class="marginForAddButton1" (click)='addToArray()'>Add departures</button> -->
       
@@ -71,9 +71,7 @@
           <label for="DayId">Day type</label>
           <select name="DayId" class="form-group"  class="form-control" (click)="getLineForEdit($event)" ngModel>
             <option disabled>Please select...</option>
-            <option value="Workday">Workday</option>
-            <option value="Saturday">Saturday</option>
-            <option value="Sunday">Sunday</option>
+            <option *ngFor="let day of allDaysFromDb" value="{{day._id}}">{{day.name}}</option>
           </select>
           <!--validationsForDelete-->
           <div *ngIf="!validationsForDelete.dayIdOk" style="color:red">Please select day type!</div>
@@ -105,9 +103,7 @@
               <label for="DayId">Select day type</label>
           <select name="DayId" class="form-group"  class="form-control" (click)="getLineForEdit($event)" ngModel>
             <option disabled>Please select...</option>
-            <option value="Workday">Workday</option>
-            <option value="Saturday">Saturday</option>
-            <option value="Sunday">Sunday</option>
+            <option *ngFor="let day of allDaysFromDb" value="{{day._id}}">{{day.name}}</option>
           </select>
           <div *ngIf="!validationsForEdit.dayIdOk" style="color:red">Please select day type.</div>
         
@@ -161,7 +157,7 @@
         <button type="submit"  class="btn" id="designBtn" class="marginForEditButton">Save changes</button>
         </div>
        
-      </div>
+      </div> 
       </form>
     </div>
     </div>

@@ -10,6 +10,7 @@ import { ValidTimetableModel } from 'src/app/models/validTimetable.model';
 import { ValidForTimetableModel, ValidForTimetableDeleteModel, ValidForTimetableEditModel, ValidForNewDepModel } from 'src/app/models/modelsForValidation/validForTimetable.model';
 import { UsersService } from 'src/app/services/users/users.service';
 import { VehicleService } from 'src/app/services/vehicleService/vehicle.service';
+import { AccountService } from 'src/app/services/account/account.service';
 
 @Component({
   selector: 'app-time-table',
@@ -24,9 +25,9 @@ export class TimeTableComponent implements OnInit {
   allDaysFromDb: any = []
   //tt: TimetableModel2;
 
-  dayId: number = 0;
-  lineId: number = 0;
-  timetableId: number = 0;
+  dayId: string = "";
+  lineId: string = "";
+  timetableId: string = "";
 
   allLinesFromTimetable: any = [];
 
@@ -49,7 +50,7 @@ export class TimeTableComponent implements OnInit {
   departuresForEditInput: string = ""
   showInputTime: boolean = false;
 
-  timetableIdForSend: number = 0
+  timetableIdForSend: string = ""
 
   clickedDeleteTime: boolean = false;
   boolForButton: boolean = false;
@@ -68,6 +69,8 @@ export class TimeTableComponent implements OnInit {
    polasci: any = []
    showDepForUnregisterUser: boolean = false;
    messageDontDepartures: string = ""
+   fd: FormData = new FormData()
+   sviPolasciIzBaze: string = ""
 
    validations: ValidTimetableModel = new ValidTimetableModel();
    validationsForAdd: ValidForTimetableModel = new ValidForTimetableModel();
@@ -85,6 +88,9 @@ export class TimeTableComponent implements OnInit {
   arrayForShowDepartures: any = []
   timeForAddTTString: string = "";
   allVehicleFromDb: any = []
+  allTimetableFromDb: any = []
+  tt: TimetableModel2 = new TimetableModel2("","","","","", "")
+  idOfTT: string = ""
   
 
 
@@ -92,15 +98,15 @@ export class TimeTableComponent implements OnInit {
               private timetableService: TimetableService, 
               private daysService: DayService, private router:Router,
               private userService: UsersService,
-              private vehicleService: VehicleService) { 
+              private vehicleService: VehicleService, private accountService: AccountService) { 
 
-    this.userService.getUserData(localStorage.getItem('name')).subscribe(a=>{
+    this.accountService.getUserData(localStorage.getItem('name')).subscribe(a=>{
       
       if(a != null && a != undefined){
         
         this.userPom = a;
-        this.boolBezvezeZaPoruku = this.userPom.Activated;
-        this.boolBezvezeZaPorukuDenied = this.userPom.Deny; 
+        //this.boolBezvezeZaPoruku = this.userPom.Activated;
+        //this.boolBezvezeZaPorukuDenied = this.userPom.Deny; 
       }
       
     })
@@ -135,137 +141,150 @@ export class TimeTableComponent implements OnInit {
   ngOnInit() {
   }
 
-  // onSubmit(timetableData: TimetableModel, form:NgForm){
-  //     console.log("TimeTable:", timetableData);
-      
-
-  //     var kk: string = "";
-  //     kk = timetableData.Departures.toString()
-  //     var tt = new TimetableModel2(timetableData.LineId, timetableData.DayId, kk, timetableData.VehicleId);
-      
-
-  //     // if(this.validationsForAdd.validate(tt)){
-  //     //   return;
-  //     // }
-
-  //     this.timetableService.AlredyExistTimetable(tt).subscribe(a=>{
-  //       console.log(a);
-  //       if(a == "No"){
-  //         this.timetableService.addTimeTable(tt).subscribe(rez=>{
-  //           alert("Timetable successful added!");
-  //           window.location.reload();
-  //         })
-  //       }
-  //       else if(a == "Yes"){
-  //         alert("Timetable aleredy exists!");
-  //         //window.location.reload();
-  //       }
-  //     })
-
-  //     // this.timetableService.addTimeTable(tt).subscribe();   
-      
-  // }
-
   onSubmit(timetableData: TimetableModel, form:NgForm){
     console.log("TimeTable:", timetableData);
     
-
+    this.fd = new FormData();
     var kk: string = "";
+    var ss = "update";
+    var postoji: boolean = false;
     kk = timetableData.Departures.toString()
-    var tt = new TimetableModel2(timetableData.LineId, timetableData.DayId, kk, timetableData.VehicleId);
-    
+    this.timetableService.getAllTimetable().subscribe(dd=>{
+        this.allTimetableFromDb = dd;
+        console.log("All", this.allTimetableFromDb);
+        this.allTimetableFromDb.forEach(element => {
+          if(element.dayType == timetableData.DayId && element.line == timetableData.LineId &&
+            element.vehicle == timetableData.VehicleId){
+              if(element.departures.includes(kk) == 0){ 
+                this.idOfTT = element._id; 
+                kk = kk +"|"+ element.departures;
+              }
+              else{ 
+                //window.alert("Departures already exist for Line "+element.Line+"!")
+                ss = "alreadyExist"
+                //window.location.reload();  
+              }
 
-    // if(this.validationsForAdd.validate(tt)){ 
-    //   return;
-    // }
+              // this.fd.append('lineIdd', timetableData.LineId);
+              // this.fd.append('vehicleIdd', timetableData.VehicleId);
+              // this.fd.append('dayIdd', timetableData.DayId);
+              // this.fd.append('departuresIdd', kk);
+              // this.fd.append('tipDodavanjaIdd', "update");
+              
+              postoji = true;
+              
+            }
+        });
 
-    // this.timetableService.AlredyExistTimetable(tt).subscribe(a=>{
-    //   console.log(a);
-    //   if(a == "No"){
-        this.timetableService.addTimetable(tt).subscribe(rez=>{
+        if(!postoji){
+          // this.fd.append('lineIdd', timetableData.LineId);
+          // this.fd.append('vehicleIdd', timetableData.VehicleId);
+          // this.fd.append('dayIdd', timetableData.DayId);
+          // this.fd.append('departuresIdd', kk);
+          // this.fd.append('tipDodavanjaIdd', "add");
+          ss = "add";
+          //this.tt = new TimetableModel2(timetableData.LineId, timetableData.DayId, kk, timetableData.VehicleId, "add");
+          this.idOfTT = "";
+        }  
+        this.tt = new TimetableModel2(timetableData.LineId, timetableData.DayId, kk, timetableData.VehicleId, ss, this.idOfTT);
+      
+        this.timetableService.addTimetable(this.tt).subscribe(rez=>{
           alert("Timetable successful added!");
           window.location.reload();
         },
         err=>{ 
           window.alert(err.error.message);
         })
-    //   }
-    //   else if(a == "Yes"){  
-    //     alert("Timetable aleredy exists!");
-    //     //window.location.reload();
-    //   }
-    // })
 
-    // this.timetableService.addTimeTable(tt).subscribe();   
+
+
+
+    })
     
 }
 
   onSubmitDelete(timetableData: TimetableModel3, form:NgForm){
 
-    if(this.validationsForDelete.validate(timetableData)){
-      return;
-    }
+    // if(this.validationsForDelete.validate(timetableData)){
+    //   return;
+    // }
     
-    this.allDaysFromDb.forEach(d => {
-      if(d.Name == timetableData.DayId){
-        this.dayId = d.Id;
-      }
-    });
+    // this.allDaysFromDb.forEach(d => {
+    //   if(d.Name == timetableData.DayId){
+    //     this.dayId = d.Id;
+    //   }
+    // });
 
 
     this.allLinesFromDb.forEach(l => {
-      if(l.RegularNumber == timetableData.LineId){
-        this.lineId = l.Id;
+      if(l.regularNumber == timetableData.LineId){
+        this.lineId = l._id;
         
       }
     });
 
 
-    this.allTimetablesFromDb.forEach(element => {
-        if(element.LineId == this.lineId && element.DayId == this.dayId){
-            this.timetableId = element.Id;
+    this.timetableService.getAllTimetable().subscribe(dd=>{
+      this.allTimetablesFromDb = dd;
+
+      this.allTimetablesFromDb.forEach(element => {
+        if(element.line == this.lineId && element.dayType == this.dayId){
+            this.timetableId = element._id;
         }
     });
+    })
 
-    // this.timetableService.deleteTimetable(this.timetableId).subscribe(data => {
-    //   alert("Timetable deleted successful!");
-    //   window.location.reload();
-    // },
-    // error => {
-    //   alert("Timetable delete - error Don't exist!");
-    //   window.location.reload();
-    // });
+   
+
+    this.timetableService.deleteTimetable(this.timetableId).subscribe(data => {
+      alert("Timetable  successful deleted!");
+      window.location.reload();
+    },
+    err => {
+      window.alert(err.error.message)
+    });
 
   }
 
   onSubmitEdit(timetableData: TimetableModel4, form:NgForm){
    
-    let ttt = new TimetableModel4(this.lineId, this.dayId, this.departuresForEditInput, timetableData.NewDepartures);
+    let ttt = new TimetableModel4(this.lineId, this.dayId, this.departuresForEditInput, timetableData.NewDepartures, this.timetableIdForSend);
+    let pol = this.sviPolasciIzBaze.toString().replace(this.departuresForEditInput, timetableData.NewDepartures);
+    console.log("Pol: ", pol);
+                                                                                                //a umjesto tip se stavlja novi polazak koji smo unijeli      
+    var ttForEditt = new TimetableModel2(timetableData.LineId, timetableData.DayId, pol, "",timetableData.NewDepartures, this.timetableIdForSend);   //vId i se ne popunjavaju ostaju ""
 
     if(this.clickedDeleteTime){
-      ttt.NewDepartures = ttt.Departures;
-      this.timetableService.editTimetable(this.timetableIdForSend, ttt).subscribe(dd=>{
+      ttForEditt.Departures = timetableData.Departures;
+      ttForEditt.TipDodavanja = "";
+      this.timetableService.changeTimetable(ttForEditt).subscribe(dd=>{
         alert("Departure successful deleted!");
-        window.location.reload();
+        window.location.reload(); 
         
+      }, 
+      err=>{
+        window.alert(err.error.message);
       });
     }
     else{
-      if(this.validForNewD.validate(ttt.NewDepartures)){
-        return;
-      }
-      this.timetableService.AlreadyExistByEdit(ttt).subscribe(a=>{
-        if(a == "No"){
-          this.timetableService.editTimetable(this.timetableIdForSend, ttt).subscribe(dd=>{
+      // if(this.validForNewD.validate(ttt.NewDepartures)){
+      //   return;
+      // }
+      // this.timetableService.AlreadyExistByEdit(ttt).subscribe(a=>{
+      //   if(a == "No"){
+          this.timetableService.changeTimetable(ttForEditt).subscribe(dd=>{
             alert("Departure successful edit!");
             window.location.reload();
+          },
+          err=>{
+            window.alert(err.error.message);
           });
-        }
-        else if(a == "Yes"){
-          alert("New departure alredy exist in timetable!");
-          //window.location.reload();
-        }
-      });
+        //}
+        // else if(a == "Yes"){
+        //   alert("New departure alredy exist in timetable!");
+        //   //window.location.reload();
+        // }
+      //});
     }
   }
 
@@ -283,30 +302,33 @@ export class TimeTableComponent implements OnInit {
       this.allLineForSelDay = []
       this.idLinesArray = []
   
-      this.selectedDayForEdit = event.target.value;
+      this.dayId = event.target.value;
+
+      this.timetableService.getAllTimetable().subscribe(dd=>{
+        this.allTimetableFromDb = dd;
+      
   
-      this.allDaysFromDb.forEach(element => {
-        if(element.Name == this.selectedDayForEdit){
-          this.dayId = element.Id;
-        }
-      });
-  
-      this.allTimetablesFromDb.forEach(element => {
-        if(element.DayId == this.dayId){ 
-          this.idLinesArray.push(element.LineId);
-        }
-      });
-  
+        this.allTimetableFromDb.forEach(element => {
+          if(element.dayType == this.dayId){ 
+            this.idLinesArray.push(element.line);
+          }
+        });
+
+        
+
+    //});
+        //Nadjemo nazive svih linija
       this.idLinesArray.forEach(d=>{
         this.allLinesFromDb.forEach(e => {
-          if(d == e.Id){
-            if(!this.allLineForSelDay.includes(e.RegularNumber)){
-              this.allLineForSelDay.push(e.RegularNumber);
+          if(d == e._id){
+            if(!this.allLineForSelDay.includes(e.regularNumber)){
+              
+              this.allLineForSelDay.push(e.regularNumber);
             } 
           }
         });
       })
-    }
+    //}
     
     if(this.allLineForSelDay.length != 0){
       this.messageForEmptyLine = "";
@@ -314,6 +336,8 @@ export class TimeTableComponent implements OnInit {
     else{
       this.messageForEmptyLine = "There is not Line!";
     }
+  })
+  }
 
   }
 
@@ -326,23 +350,24 @@ export class TimeTableComponent implements OnInit {
       this.showDepartureComboBox = true;
       this.pom = event.target.value;
      this.allLinesFromDb.forEach(element => {
-       if(element.RegularNumber == event.target.value){
-         this.lineId = element.Id;
+       if(element.regularNumber == event.target.value){
+         this.lineId = element._id;
        }
      });
 
-     this.allTimetablesFromDb.forEach(e1 => {
-       if(e1.DayId == this.dayId && e1.LineId == this.lineId){
-         this.allDeparturesForSelect = e1.Departures.split("|");
-         this.timetableIdForSend = e1.Id;
+     this.allTimetableFromDb.forEach(e1 => {
+       if(e1.dayType == this.dayId && e1.line == this.lineId){
+         this.sviPolasciIzBaze = e1.departures;
+         this.allDeparturesForSelect = e1.departures.split("|");
+         this.timetableIdForSend = e1._id;
        }
      });
      this.polasci = this.allDeparturesForSelect;
-     this.allDeparturesForSelect.pop();
+     //this.allDeparturesForSelect.pop();
     }
   }
 
-  setNewDepartures(event){
+  setNewDepartures(event){ 
     //this.showInputTime = true;
     if(event.target.value.length != 0){
       this.boolForButton = true;
