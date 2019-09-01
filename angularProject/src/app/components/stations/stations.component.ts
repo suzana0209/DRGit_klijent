@@ -39,7 +39,7 @@ export class StationsComponent implements OnInit {
   newStation: StationModel
   public nameOfStation: string = "";
   id: number;
-  //version: number;
+  version: number;
 
   validationsForAdd: ValidForAddStationModel = new ValidForAddStationModel();
   boolBezvezeZaPoruku: string = "";
@@ -167,17 +167,17 @@ export class StationsComponent implements OnInit {
     stationData.AddressStation = this.address;
     stationData.Name = this.nameOfStation;
     stationData.Id = this.id;
-    //stationData.Version = this.version;
+    stationData.Version = this.version;
 
     console.log(stationData);
 
-    if(this.validationsForAdd.validate(stationData)){
-      return;
-    }
+    // if(this.validationsForAdd.validate(stationData)){
+    //   return;
+    // }
 
     // this.stationService.AlredyExistsStationForEdit(stationData).subscribe(aa=>{
     //   if(aa == "Yes"){
-    //     alert("On address: "+ stationData.AddressStation +" alredy exists station!");
+    //     alert("On address: "+ stationData.AddressStation +" alredy exists station!");  
     //     //window.location.reload();
         
     //   }
@@ -189,7 +189,7 @@ export class StationsComponent implements OnInit {
         },
         err => {
           //alert("Station changed - error!");
-          window.alert(err.error);
+          window.alert(err.error.message);
           
           window.location.reload();
         });
@@ -276,21 +276,21 @@ export class StationsComponent implements OnInit {
     }
   }
 
-  markerDragEnd($event: MouseEvent, nameOfStation:string, id: number) { //version:number
+  markerDragEnd($event: MouseEvent, nameOfStation:string, id: number, version:number) { //version:number
     console.log($event);
      this.coordinates.latitude = $event.coords.lat;
      this.coordinates.longitude = $event.coords.lng;
      this.getAddress(this.coordinates.latitude, this.coordinates.longitude);
      this.nameOfStation = nameOfStation;
      this.id = id;
-     //this.version = version;
+     this.version = version;
      console.log(id);
   }
 
-  stationClick(id: number){
+  stationClick(id: number){ 
     this.id = id;
   }
-
+ 
   placeMarker1($event){
     this.coordinates = new GeoLocation($event.coords.lat, $event.coords.lng);
     this.getAddress(this.coordinates.latitude,this.coordinates.longitude);

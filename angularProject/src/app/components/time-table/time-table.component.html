@@ -175,9 +175,7 @@
     <label for="DayId">Day type</label>
     <select name="DayId" class="form-group"  class="form-control" (click)="getLineForEdit($event)">
       <option disabled>Please select</option>
-      <option value="Workday">Workday</option>
-      <option value="Saturday">Saturday</option>
-      <option value="Sunday">Sunday</option>
+      <option *ngFor="let day of allDaysFromDb" value="{{day._id}}">{{day.name}}</option>
     </select>
       <div *ngIf="!validations.dayTypeOk" style="color:red">Day type can't be empty.</div>
     </div>  

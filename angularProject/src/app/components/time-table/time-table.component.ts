@@ -303,6 +303,13 @@ export class TimeTableComponent implements OnInit {
       this.idLinesArray = []
   
       this.dayId = event.target.value;
+      this.daysService.getAllDayTypes().subscribe(dd=>{
+        dd.forEach(e1 => {
+          if(e1._id == this.dayId){
+            this.selectedDayForEdit = e1.name;
+          }
+        });
+      })
 
       this.timetableService.getAllTimetable().subscribe(dd=>{
         this.allTimetableFromDb = dd;
