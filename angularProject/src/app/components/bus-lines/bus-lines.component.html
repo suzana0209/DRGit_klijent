@@ -20,27 +20,17 @@
 
       </div>
       
-
-
-      <!-- <div class="mapa"  style="width:80%; height: 50%; margin: 5% 25%"> -->
-   
     <div id="mapa">
       
       <agm-map  [latitude]="markerInfo.location.latitude" [longitude]="markerInfo.location.longitude" [zoom]="18">
-          <agm-marker *ngFor="let station of stations" [latitude]="station.latitude" [longitude]="station.longitude" [title]="station.name"
+        <agm-marker *ngFor="let station of stations" [latitude]="station.latitude" [longitude]="station.longitude" [title]="station.name"
           [label]="" [iconUrl]="iconPath">
   
-            <!-- Svakom markeru dodajemo info-window (Nije obavezno!) -->
             <agm-info-window [latitude]="station.Latitude" [longitude]="station.Longitude" >
               <span style="font-family:'Times New Roman'; color:gray;"><strong>Station name:{{station.name}}</strong></span><br>
               <span style="font-family:'Times New Roman'; color:gray;"><strong>Station address:{{station.addressStation}}</strong></span>
-              <!-- <span style="font-family:'Times New Roman'; color:gray;">Bulevar oslobođenja 131</span> -->
-              <!-- <a [href]="markerInfo.link">See the site.</a> -->
             </agm-info-window>
         </agm-marker>
-
-            
-             
 
           <div *ngFor="let ls of listOfCheckedLines, let i = index">
             <div *ngFor="let dir of ls.ListOfStations, let j= index">
@@ -48,15 +38,11 @@
               [renderOptions] = "{polylineOptions: {strokeColor: ls.ColorLine}, suppressMarkers: true}"
               [origin] = "{lat: ls.ListOfStations[j].latitude, lng: ls.ListOfStations[j].longitude}"
               [destination] = "{lat: ls.ListOfStations[j+1].latitude, lng: ls.ListOfStations[j+1].longitude}">
-              
             </agm-direction>
           </div>
-      </div>
-
-          
+        </div>
       </agm-map>
       </div>      
-
-<br><br>
+<br>
 </div>
 

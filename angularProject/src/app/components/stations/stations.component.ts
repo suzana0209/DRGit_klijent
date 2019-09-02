@@ -47,12 +47,14 @@ export class StationsComponent implements OnInit {
   userPom: any;
   sakrijDugmice: boolean = true;
   pomocniUser: RegistrationModel = new RegistrationModel("","","","","","","","",new Date(),"","","","");
+  selectedStationForDelete: StationModel = new StationModel("",0,0,"",0)
 
 
 
 
   constructor(private ngZone: NgZone, private route: Router, private mapsApiLoader: MapsAPILoader,
     private stationService: StationService, private userService: UsersService, private authService: AuthenticationService) {
+    this.selectedStationForDelete = new StationModel("",0,0,"",0)
     this.sakrijDugmice = true;
 
     this.stationService.getAllStations().subscribe(st =>{
@@ -80,85 +82,18 @@ export class StationsComponent implements OnInit {
 
     console.log(stationData);
 
-    // if(this.validationsForAdd.validate(stationData)){
-    //   return;
-    // }
-
     this.stationService.addStation(stationData).subscribe(data => {
-      alert("Station: " +stationData.Name+ " successfully added!");
       form.reset();
+      window.alert(data.message);
       this.refreshPage();
-      //window.location.reload(); 
     },
     err => {
-      //alert("Station - error!");
-      window.alert(err.error.message);  
-      this.refreshPage();
-      //window.location.reload();
-
+      window.alert(err.error.message);   
     });
-
-    // this.stationService.addStation(stationData)
-    // .pipe(map((res: Response) => res.json()))
-    // .subscribe(data => {
-    //   alert("Station: " +stationData.Name+ " successfully added!");
-    //   form.reset();
-    //   this.refreshPage();
-    //   //window.location.reload(); 
-    // },
-    // (error: HttpErrorResponse) => {
-    //   //alert("Station - error!");
-    //   window.alert(error.error.message); 
-    //   this.refreshPage();
-    //   //window.location.reload();
-
-    // });
-
-   
-   
-
   }
 
-  
-
  
-  // onSubmitEdit(stationData: StationModel, form: NgForm){
 
-  //   stationData.Latitude = this.coordinates.latitude;
-  //   stationData.Longitude = this.coordinates.longitude;
-  //   stationData.AddressStation = this.address;
-  //   stationData.Name = this.nameOfStation;
-  //   stationData.Id = this.id;
-  //   stationData.Version = this.version;
-
-  //   console.log(stationData);
-
-  //   if(this.validationsForAdd.validate(stationData)){
-  //     return;
-  //   }
-
-  //   this.stationService.AlredyExistsStationForEdit(stationData).subscribe(aa=>{
-  //     if(aa == "Yes"){
-  //       alert("On address: "+ stationData.AddressStation +" alredy exists station!");
-  //       //window.location.reload();
-        
-  //     }
-  //     else if(aa == "No"){
-  //       this.stationService.editStation(stationData).subscribe(data => {
-  //         alert("Station with Name="+ stationData.Name +" changed successfully!");
-  //         //this.route.navigate(['/station']);
-  //         window.location.reload();
-  //       },
-  //       err => {
-  //         //alert("Station changed - error!");
-  //         window.alert(err.error);
-          
-  //         window.location.reload();
-  //       });
-  //     }
-  //   })
-      
-  // }
 
   onSubmitEdit(stationData: StationModel, form: NgForm){
 
@@ -187,7 +122,7 @@ export class StationsComponent implements OnInit {
           //this.route.navigate(['/station']);
           window.location.reload();
         },
-        err => {
+        err => { 
           //alert("Station changed - error!");
           window.alert(err.error.message);
           
@@ -197,30 +132,6 @@ export class StationsComponent implements OnInit {
     // })
       
   }
-
-
-  // onSubmitDelete(stationData: StationModel, form:NgForm){
-
-  //   console.log("Stanicaaa: ", stationData);
-
-  //   if(this.id == null || this.id == undefined){
-  //     alert("please select the station that you want to delete!");
-      
-  //     window.location.reload();
-  //   }
-  //   else{
-  //     this.stationService.deleteStation(this.id).subscribe(x => {
-  //       alert("Station with ID="+ this.id +" is successful deleted! ")
-  //       window.location.reload();
-  //     },
-  //     err=>{
-  //       window.alert(err.error);
-        
-  //       window.location.reload();
-  //     });
-  //   }
-    
-  // }
 
    
   onSubmitDelete(stationData: StationModel, form:NgForm){
@@ -234,22 +145,24 @@ export class StationsComponent implements OnInit {
 
     console.log("Stanicaaa: ", stationData);
 
-    if(this.id == null || this.id == undefined){
-      alert("please select the station that you want to delete!");
+    // if(this.id == null || this.id == undefined){
+    //   alert("please select the station that you want to delete!");
       
-      window.location.reload();
-    }
-    else{
+    //   window.location.reload();
+    // }
+    //else{
       this.stationService.deleteStation(this.id.toString()).subscribe(x => {
-        alert("Station with ID="+ this.id +" is successful deleted! ")
-        window.location.reload();
+        //alert("Station with ID="+ this.id +" is successful deleted! ")
+       // window.location.reload();
+       window.alert(x.message);
+       this.refreshPage();
       },
       err=>{
-        window.alert(err.error);
+        window.alert(err.error.message);
         
-        window.location.reload();
+        //window.location.reload();
       });
-    }
+   // }
     
   }
 
@@ -289,6 +202,17 @@ export class StationsComponent implements OnInit {
 
   stationClick(id: number){ 
     this.id = id;
+
+    this.stationService.getAllStations().subscribe(st=>{
+      st.forEach(element => {
+        if(element._id == this.id){
+          this.selectedStationForDelete.Name = element.name;
+          this.selectedStationForDelete.Latitude = element.latitude;
+          this.selectedStationForDelete.Longitude = element.longitude;
+          this.selectedStationForDelete.AddressStation = element.addressStation;
+        }
+      });
+    })
   }
  
   placeMarker1($event){
@@ -349,6 +273,8 @@ export class StationsComponent implements OnInit {
   }
 
   refreshPage(){
+    this.sakrijDugmice = true;
+    this.selectedStationForDelete = new StationModel("",0,0,"",0)
     this.coordinates = new GeoLocation(0,0);
     this.stations = [];
     this.address = "";

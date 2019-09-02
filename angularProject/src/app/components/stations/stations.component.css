@@ -5,7 +5,33 @@ div#wholePage{
     padding: 11px !important;
     
     background-color:lightgray !important;
-    height: 500px !important;
+    height: 100%  !important;   /*500px*/
+}
+
+div#mapa{
+
+    /* border-radius: 15px;
+    border: 1p solid #999; */
+    /* width: 70%;  */
+    /* height: 100%; */
+    
+    /* position: relative; */
+    /* text-align: center; */
+    /* margin-left: 5%; */
+    /* background-color: lightgray; */
+    /* margin-bottom: 0px; */
+    border: 5px solid #555555;
+
+     /* border-top-width: 0% !important;
+    border-bottom-width: 1% !important;
+   */
+    border-left-width: 90px !important;
+    border-right-width: 9px !important; 
+    
+
+    /* height:370px !important;
+    width: 90% !important; */
+    
 }
 
 h2#info{
@@ -26,10 +52,23 @@ h2#info:hover{
 }
 
 button#designBtn{
-    background-color: #555555; /* Black */
+    /* background-color: #555555; 
     border: none;
     color: white;
-    padding: 15px 45px; /*32*/
+    padding: 15px 45px; 
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 26px;
+    margin: 2px 2px;
+    cursor: pointer;
+    margin-left: 0%;
+    margin-top: 0% !important;
+    width: 300px !important;
+    margin-bottom: 20% !important; */
+
+    
+    padding: 15px 45px; 
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -40,14 +79,24 @@ button#designBtn{
     margin-top: 0% !important;
     width: 300px !important;
     margin-bottom: 20% !important;
+
+    background: #555555 linear-gradient(to bottom, transparent, #A9A9A9);
+    border: 1px solid black;
+    border-radius: 5px;
+    color: white;
+    display: inline-block;
+    font-size: 22px;
+    font-family: Tahoma, Geneva, sans-serif;
+    padding: 15px 15px;
+    text-decoration: none;
     
 }
 
-button#designBtnForAction{
-    background-color: #555555; /* Black */
+/* button#designBtnForAction{
+    background-color: #555555; 
     border: none;
     color: white;
-    padding: 15px 45px; /*32*/
+    padding: 15px 45px; 
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -55,6 +104,42 @@ button#designBtnForAction{
     margin: 2px 2px;
     cursor: pointer;
     margin-left: 0%;
+
+    border-radius: 15px;
+    border: 1p solid #999;
+    font-family: Tahoma, Geneva, sans-serif;
+    
+} */
+
+button#designBtnForAction{
+    /* background-color: #555555; 
+    border: none;
+    color: white;
+    padding: 15px 45px; 
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 26px;
+    margin: 2px 2px;
+    cursor: pointer;
+    margin-left: 0%;
+
+    border-radius: 15px;
+    border: 1p solid #999;
+    font-family: Tahoma, Geneva, sans-serif; */
+
+    background: #555555 linear-gradient(to bottom, transparent, #A9A9A9);
+    border: 1px solid black;
+    border-radius: 5px;
+    color: white;
+    display: inline-block;
+    font-size: 22px;
+    font-family: Tahoma, Geneva, sans-serif;
+    padding: 15px 15px;
+    text-decoration: none;
+    
+
+    
     
 }
 
@@ -77,9 +162,6 @@ label#idForLab{
     clear: both;
 }
 
-.marginForEndButton{
-    /* margin-bottom: 15px !important; */
-}
 
 button#designBtn:active{
     background:white;
@@ -137,4 +219,71 @@ button#designBtn:focus{
     background-color: lightgrey;
     transform: translate(80%, 0%);
     width: 700px !important;
+  }
+
+  /* div#addForma{
+    border-style: solid;
+    border-color: red;
+    width: 100%;
+  }
+
+  div#addForma.form-group{
+      width: 300px;
+  } */
+
+  form {
+    background: -webkit-linear-gradient(bottom, #CCCCCC, #EEEEEE 175px);
+    background: -moz-linear-gradient(bottom, #CCCCCC, #EEEEEE 175px);
+    background: linear-gradient(to bottom, #CCCCCC, #EEEEEE, 175px);
+    margin: auto;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    font-family: Tahoma, Geneva, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    line-height: 24px;
+    font-weight: bold;
+    color: #555555; /*#09C;*/
+    text-decoration: none;
+    border-radius: 10px;
+    padding: 10px;
+    padding-right: 25px;
+    border: 1px solid #999;
+    border: inset 1px solid #333;
+    -webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  /* button#bzvv {
+    width: 150px;
+    position: absolute;
+    right: 20px;
+    bottom: 0px;
+    background: #09C;
+    color: #fff;
+    font-family: Tahoma, Geneva, sans-serif;
+    height: 60px;
+    border-radius: 15px;
+    border: 1p solid #999;
+  } */
+
+  input[type="text"], textarea {
+
+    background-color: #ededed; 
+    /* border: 1px solid #3f3f3f; */
+  
+  }
+
+  input[type="button"]{
+    background: #555555 linear-gradient(to bottom, transparent, #A9A9A9);
+    border: 1px solid black;
+    border-radius: 5px;
+    color: white;
+    display: inline-block;
+    font-size: 22px;
+    font-family: Tahoma, Geneva, sans-serif;
+    padding: 15px 15px;
+    text-decoration: none;
   }

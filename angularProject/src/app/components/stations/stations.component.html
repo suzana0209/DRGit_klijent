@@ -5,8 +5,9 @@
 <div *ngIf="LoggedAdmin()" class="row1">   
   <!-- <div class="row1"> -->
     
-
+     
       <div class="column70">
+          
 
           <agm-map [latitude]="markerInfo.location.latitude" [longitude]="markerInfo.location.longitude" [zoom]="18" (mapClick)="placeMarker1($event)">  
               <agm-marker  *ngFor="let stat of stations" [latitude]="stat.latitude" [longitude]="stat.longitude" [title]="stat.name" [label]="" [iconUrl]="iconPath"
@@ -24,11 +25,9 @@
                 </agm-info-window>
               
               </agm-marker>
-            </agm-map>
-
-           
-              </div>
-
+            </agm-map>  
+      </div>
+      
               <div class="column30">
                   <div align="center" class="row1">
                     <!-- <h3>Currently existing stations</h3> -->
@@ -41,14 +40,16 @@
                   </div>
                  
              
-
+                  
         <div *ngIf="isSelectedAdd()">
-          <h4 id="infoh4">Add station</h4>
+          
+          <!-- <h4 id="infoh4">Add station</h4> -->
           <form #stationForm="ngForm" (ngSubmit)="onSubmit(stationForm.value, stationForm)">
+              <h4 align="center">Add station</h4>
             <div class="form-group">
               <label for="Name" id="idForLab">Name station</label>
               <input required type="text" class="form-control" name="Name" value="{{nameOfStation}}" ngModel>
-              <div *ngIf="!validationsForAdd.nameOk" style="color:red">Station name can't be empty.</div>
+              <!-- <div *ngIf="!validationsForAdd.nameOk" style="color:red">Station name can't be empty.</div> -->
         
               <!--validationsForAdd-->
             </div>
@@ -56,14 +57,14 @@
               <label for="Longitude">Longitude: </label>
               <!-- <input required type="number" class="form-control" name="Longitude" value={{coordinates.longitude}} ngModel> -->
               <label name="Longitude">{{coordinates.longitude}}</label>
-              <div *ngIf="!validationsForAdd.longitudeOk" style="color:red">Longitude can't be empty.</div>
+              <!-- <div *ngIf="!validationsForAdd.longitudeOk" style="color:red">Longitude can't be empty.</div> -->
         
             </div>
             <div class="form-group">
               <label for="Latitude">Latitude: </label>
               <!-- <input required type="text" class="form-control" name="Latitude" value={{coordinates.latitude}} ngModel> -->
               <label name = "Latitude">{{coordinates.latitude}}</label>
-              <div *ngIf="!validationsForAdd.latitudeOk" style="color:red">Latitude can't be empty.</div>
+              <!-- <div *ngIf="!validationsForAdd.latitudeOk" style="color:red">Latitude can't be empty.</div> -->
         
             </div>
 
@@ -71,13 +72,16 @@
                 <label for="AddressStation">Address: </label>
                 <!-- <input required type="text" class="form-control" name="AddressStation" value={{address}} ngModel> -->
                 <label name="AddressStation">{{address}}</label>
-                <div *ngIf="!validationsForAdd.addressStationOk" style="color:red">Address station  can't be empty.</div>
+                <!-- <div *ngIf="!validationsForAdd.addressStationOk" style="color:red">Address station  can't be empty.</div> -->
         
             </div>
 
             
             <div align="center">
-              <button type="submit" class="button" class="btn" id="designBtnForAction">Add station</button>  
+              <button type="submit" class="button" class="btn"  id="designBtnForAction">Add station</button>   <!--id="designBtnForAction"-->
+              &nbsp;&nbsp;&nbsp;
+              <!-- <button  class="button" class="btn"  id="designBtnForAction" name="cc" onclick="refreshPage()">Cancel</button> -->
+              <input  type="button" class="btn"  id="designBtnForAction" value="Cancel" (click)="refreshPage()">
             </div>
           </form>
         </div>
@@ -86,27 +90,28 @@
 
   <div *ngIf="isSelectedEdit()">
       
-    <h3>Edit station</h3>
+    <!-- <h3>Edit station</h3> -->
           <form #stationForm="ngForm" (ngSubmit)="onSubmitEdit(stationForm.value, stationForm)">
+              <h4 align="center">Edit station</h4>
             <div class="form-group">
               <label for="Name">Name station: </label>
               <!-- <input required type="text" class="form-control" name="Name" value="{{nameOfStation}}" ngModel> -->
               <label name="Name">{{nameOfStation}}</label>
-              <div *ngIf="!validationsForAdd.nameOk" style="color:red">Station name can't be empty.</div>
+              <!-- <div *ngIf="!validationsForAdd.nameOk" style="color:red">Station name can't be empty.</div> -->
         
             </div>
             <div class="form-group">
               <label for="Longitude">Longitude:</label>
               <!-- <input required type="number" class="form-control" name="Longitude" value={{coordinates.longitude}} ngModel> -->
               <label name="Longitude">{{coordinates.longitude}}</label>
-              <div *ngIf="!validationsForAdd.longitudeOk" style="color:red">Longitude can't be empty.</div>
+              <!-- <div *ngIf="!validationsForAdd.longitudeOk" style="color:red">Longitude can't be empty.</div> -->
         
             </div>
             <div class="form-group">
               <label for="Latitude">Latitude</label>
               <!-- <input required type="text" class="form-control" name="Latitude" value={{coordinates.latitude}} ngModel> -->
               <label name="Latitude">{{coordinates.latitude}}</label>
-              <div *ngIf="!validationsForAdd.latitudeOk" style="color:red">Latitude can't be empty.</div>
+              <!-- <div *ngIf="!validationsForAdd.latitudeOk" style="color:red">Latitude can't be empty.</div> -->
         
             </div>
 
@@ -114,13 +119,14 @@
                 <label for="AddressStation">Address: </label>
                 <!-- <input required type="text" class="form-control" name="AddressStation" value={{address}} ngModel> -->
                 <label name="AddressStation">{{address}}</label>
-                <div *ngIf="!validationsForAdd.addressStationOk" style="color:red">Address station  can't be empty.</div>
+                <!-- <div *ngIf="!validationsForAdd.addressStationOk" style="color:red">Address station  can't be empty.</div> -->
         
             </div>
 
             
             <div align="center">
-              <button type="submit" class="button" class="btn" id="designBtnForAction">Save changes</button>  
+              <button type="submit" class="button" class="btn" id="designBtnForAction">Save changes</button> &nbsp;&nbsp;&nbsp; 
+              <input  type="button" class="btn"  id="designBtnForAction" value="Cancel" (click)="refreshPage()">
             </div>
           </form>
   </div>
@@ -129,7 +135,33 @@
       <!-- <h2>DELETE STATION</h2> -->
     <form #stationForm="ngForm" (ngSubmit)="onSubmitDelete(stationForm.value, stationForm)">
         <div align="center">
-            <button type="submit" class="button" class="btn" id="designBtnForAction">Delete station</button>  
+        
+          <h4 align="center" *ngIf="selectedStationForDelete.Name.length == 0" >Select station that you want delete</h4>
+        
+          <div *ngIf="selectedStationForDelete.Name.length != 0 ">
+            <h5 align="center">Selected station:</h5>
+
+            <div class="form-group">
+                <label for="Name">Name: </label>
+                <label name="Name">{{selectedStationForDelete.Name}}</label>
+            </div>
+            <div class="form-group">
+                <label for="Latitude">Latitude: </label>
+                <label name="Latitude">{{selectedStationForDelete.Latitude}}</label>
+            </div>
+            <div class="form-group">
+                <label for="Longitude">Longitude: </label>
+                <label name="Latitude">{{selectedStationForDelete.Longitude}}</label>
+            </div>
+            <div class="form-group">
+                <label for="AddressStation">Address station: </label>
+                <label name="Latitude">{{selectedStationForDelete.AddressStation}}</label>
+            </div>
+        </div>
+
+          <button type="submit" class="button" class="btn" id="designBtnForAction">Delete station</button> &nbsp;&nbsp;&nbsp;
+          <input  type="button" class="btn"  id="designBtnForAction" value="Cancel" (click)="refreshPage()">
+               
           </div>
     </form>
 

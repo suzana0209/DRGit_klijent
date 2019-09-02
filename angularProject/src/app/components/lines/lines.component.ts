@@ -167,7 +167,7 @@ export class LinesComponent implements OnInit {
         }
       }));
       this.directionsService  = new google.maps.DirectionsService();
-    this.directionsDisplay = new google.maps.DirectionsRenderer();
+      this.directionsDisplay = new google.maps.DirectionsRenderer();
     });
 
   }
@@ -562,5 +562,31 @@ export class LinesComponent implements OnInit {
     }
     return false;
   }
+
+  stationClick(id: string){
+    this.pomStat = new StationModel("",0,0,"",0);
+    let postojiStanica: boolean = false;
+
+    this.stations.forEach(element => {
+      if(element._id == id){
+        //this.pomStat = element;
+        this.pomStat.Id = element._id;
+        this.pomStat.Name = element.name;
+        this.pomStat.Latitude = element.latitude;
+        this.pomStat.Longitude = element.longitude;
+
+        this.pomStat.AddressStation = element.addressStation;
+      }
+    });
+
+    console.log(this.pomStat);
+    this.selectedStations.push(this.pomStat);
+
+
+    this.polyline.addLocation(new GeoLocation(this.pomStat.Latitude, this.pomStat.Longitude));
+    this.id = id;
+
+  }
+
 
 }

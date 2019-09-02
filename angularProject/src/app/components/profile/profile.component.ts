@@ -21,11 +21,9 @@ export class ProfileComponent implements OnInit {
   selected: string = "";
   user: any;
   user1: RegistrationModel = new RegistrationModel("","","","","","","","",new Date(),"","","","");
-  //userForEdit: PomAppUserModel;
   userForEdit: RegistrationModel = new RegistrationModel("","","","","","","","",new Date(),"","","","");
 
   studentOrPensioner = false;
-
   ClickedButtonEdit: boolean = false;
 
   showImageBool: boolean = false;
@@ -38,6 +36,7 @@ export class ProfileComponent implements OnInit {
   userBytesImage:any ;
   rodjendan: string = ""
   mejlZaShow: string = ""
+  pendingUser: boolean = false;
 
   //validations: ValidForProfileModel = new ValidForProfileModel();
   //validationsForPass: ValidForChangePassModel = new ValidForChangePassModel();
@@ -67,10 +66,11 @@ export class ProfileComponent implements OnInit {
           this.user1.Number = element.number;
           this.user1.Street = element.street;
           this.user1.Email = element.email;
-
+          
           if(element.userType != "AppUser"){
             this.typePassanger = element.userType;
           }else{
+            this.pendingUser = (element.activated == "PENDING") ? true : false;
             this.accountService.getPassengerTypes().subscribe(pt=>{
               pt.forEach(element1 => {
                 if(element1._id == element.passengerType){
