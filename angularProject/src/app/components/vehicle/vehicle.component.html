@@ -1,6 +1,6 @@
 <div id=wholePage>
     <div align="center">
-        <button type="submit" class="button" class="btn"  id="designBtn" (click)='showAdd()' >Add vehicle</button>  
+        <button type="submit" class="button" class="btn"  id="designBtn" (click)='showAdd()' >Add vehicle</button>  &nbsp;&nbsp;
         <!-- <button type="submit" class="button" class="btn"  id="designBtn" (click)='showEdit()' >Edit vehicle</button>   -->
         <button type="submit" class="button" class="btn"  id="designBtn" (click)='showDelete()'>Delete vehicle</button>  
     </div>
@@ -9,7 +9,7 @@
         <form #vehicleForm="ngForm" (ngSubmit)="onSubmit(vehicleForm.value, vehicleForm)" id="designForFormAdd">
 
             <div class="form-group" >
-                <label for="TypeOfVehicle">Vehicle Type</label>
+                <label for="TypeOfVehicle" style="color:#000000; font-size: 20px; padding-right: 8px; ">Vehicle type</label>
                 <select name="TypeOfVehicle" class="form-group"  class="form-control" ngModel>
                   <option disabled>Please select...</option>
                   <option value="Bus">Bus</option>
@@ -17,12 +17,11 @@
                   <option value="Trolley">Trolley bus</option>
                 </select>
               </div>
-
+              <br><br>
             <div align="center">
                 <button type="submit" class="button" class="btn" id="designBtnForAction">Add vehicle</button>  
             </div>
         </form>
-
     </div>
 
     <div *ngIf="isSelectedDelete()">
@@ -30,12 +29,12 @@
       <div class="form-group">
         <label style="color:#000000; font-size: 20px; padding-right: 8px; "  for="Type">Available vehicles:</label>
         <select class="form-control" name="Id" [value] = 0  [(ngModel)] = 'idVehicleForDelete'>
-            <option value =0 >None</option>
+            <option value =0 disabled>None</option>
         <option *ngFor="let ln of availableVehicles" value={{ln._id}}  > License plate:{{ln._id.substring(2,8)}} - {{ln.vehicleType}} </option>
         </select>
       </div>
       
-     
+     <br><br>
           <div align="center">
             <button type="button" class="button" class="btn" id = "designBtnForAction" (click)="deleteVehicle()">Delete vehicle</button>  
         </div>

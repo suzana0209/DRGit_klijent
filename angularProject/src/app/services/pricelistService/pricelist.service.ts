@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PriceListModel } from 'src/app/models/priceList.model';
 import { TicketPricesPomModel } from 'src/app/models/ticketPrice.model';
+import { PomModelForPriceList } from 'src/app/models/pomModelForPriceList.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,20 +22,27 @@ export class PricelistService {
     return this.token;
   }
 
-  private request(method: 'post'|'get', type: 'addPricelist'|'getPricelist'|'getTicketPrices', pricelist?:TicketPricesPomModel, param?:any): Observable<any>{
+  private request(method: 'post'|'get', type: 'addPricelist'|'getPricelist'|'getTicketPrices'|'calculatePrice', 
+  pricelist?:TicketPricesPomModel, param?:any, fd?:FormData): Observable<any>{
     let base;
    
     if(method ==='get'){
-      if(type === 'getTicketPrices'){
+      if(type === 'getTicketPrices' || type === 'calculatePrice'){
         //base = this.httpClient.get(`/api/${type}/` + idPL);
         base = this.httpClient.get(`/api/${type}`,  { headers: { Authorization: `Bearer ${this.getToken()}` }, params: {parami : param}});
       }else{
         base = this.httpClient.get(`/api/${type}`, { headers: { Authorization: `Bearer ${this.getToken()}` }});
       }
       
-    }
+    }  
     else{
-      base = this.httpClient.post(`/api/${type}`, pricelist);
+      if(type === 'calculatePrice'){
+        base = this.httpClient.post(`/api/${type}`, fd);
+      }
+      else{
+        base = this.httpClient.post(`/api/${type}`, pricelist);
+      }
+     
     }
 
     return base;
@@ -51,6 +59,10 @@ export class PricelistService {
 
   public getTicketPrices(idPL:any): Observable<any>{
     return this.request('get', 'getTicketPrices', null,idPL);
+  }
+
+  public calculatePrice(pp: FormData): Observable<any>{
+    return this.request('post', 'calculatePrice', null,null,pp);
   }
 
 
@@ -75,9 +87,9 @@ export class PricelistService {
   //   return this.httpClient.get(this.base_url+"/api/Pricelist/GetPricelist");
   // }
 
-  getPricelistLast(){
-    return this.httpClient.get(this.base_url+"/api/Pricelist/GetPricelistLast");
-  }
+  // getPricelistLast(){
+  //   return this.httpClient.get(this.base_url+"/api/Pricelist/GetPricelistLast");
+  // }
   
   // deletePricelist(id){
   //   return this.httpClient.delete(this.base_url+"/api/Pricelist/Delete?id=" + id);

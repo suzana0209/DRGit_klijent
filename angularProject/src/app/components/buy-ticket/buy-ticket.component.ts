@@ -65,10 +65,10 @@ export class BuyTicketComponent implements OnInit {
       this.priceServie.getPricelist().subscribe(dataa=>{
         //dataa.forEach(element => { 
           this.idOfPricelist = dataa._id;
-          console.log("IDDD", this.idOfPricelist)
+          console.log("IDDD", this.idOfPricelist) 
         //}); 
       })
-
+ 
     if(localStorage.getItem('name') != null){
     this.accountService.getUserData(localStorage.getItem('name')).subscribe(d=>{
       this.loggedUser1 = d;

@@ -46,7 +46,6 @@
         </tr>
       </table> <br><br>
       </div>
-      <!-- <button class="btn" type="submit" class="button" (click)="editPricelistClick()">Add(edit) price list</button>   -->
       <div *ngIf="prviAddPL">
       <button *ngIf="validPricesForShow" class="btn" type="submit" class="button" (click)="editPricelistClick()" id="btnForAddPL">Edit price list</button>  
       <button *ngIf="!validPricesForShow" class="btn" type="submit" class="button" (click)="editPricelistClick()" id="btnForAddPL">Add price list</button>  
@@ -58,12 +57,12 @@
       </div> 
 
       <div class="form3">
-      <div *ngIf = "!LoggedAdmin() && !messageNoExistPricelist">
+      <div *ngIf = "!LoggedAdmin() && !messageNoExistPricelist"> 
         
        <div class="designForFormTickets3">
           <h2 align="center" id="info">Currently active price list</h2>
         
-          <div class="form-group">
+          <div class="form-group" id = "form-group1">
               <label for="TypeOfTicket">Select type of ticket</label>
               <select name="TypeOfTicket" (click)="getSelectedTicket($event)"  class="form-group"  class="form-control" >
                 <option disabled>Please select...</option>
@@ -76,22 +75,22 @@
             </div> <br>
             
 
-            <div class="form-group">
+            <div class="form-group" id="form-group1">
                 <label for="PassangerType">Select type of Passanger</label>
                 <select name="PassangerType"  class="form-group"  class="form-control" (click)="getSelectedPassanger($event)">
                   <option disabled>Please select...</option>
                   <option value="Student">Student</option>
                   <option value="Pensioner">Pensioner</option>
-                  <option value="Regular">None</option>
+                  <option value="Regular">Regular passenger</option>
                 </select>
-                <div *ngIf="!validations.passangerTypeOk" style="color:red">Please select passanger type! </div>      
+                <!-- <div *ngIf="!validations.passangerTypeOk" style="color:red">Please select passanger type! </div>       -->
             </div><br><br>
             
 
             <button type="button" class="nav-link" (click)="calculatePrice()" class="btn" align="center"
             class="marForButton" id="btnForAddPL">Show price</button><br><br>
 
-            <p *ngIf = "showLabel" align="center" id="info">Price for selected ticket: {{retPrice.Id}} din.</p>
+            <p *ngIf = "showLabel" align="center" id="info">Price for selected ticket: {{retPrice}} din.</p><br>
       </div>
     </div>
     </div>
@@ -106,17 +105,17 @@
       <label>Hourly ticket:</label>
       <input type="number" name="Hourly"  class="form-control"   [(ngModel)] = "validPrices.Hourly">
       <!---->
-      <div *ngIf="!validationsForPrice.HourlyOk" style="color:red">The price of time limited ticket can't be empty.</div>      
+      <!-- <div *ngIf="!validationsForPrice.HourlyOk" style="color:red">The price of time limited ticket can't be empty.</div>      
       <div *ngIf="!validationsForPrice.HourlyOk0" style="color:red">The price of time limited ticket must not be zero.</div>
-      <div *ngIf="!validationsForPrice.HourlyOkMinus" style="color:red">The price of time limited ticket must not be less than zero.</div>
+      <div *ngIf="!validationsForPrice.HourlyOkMinus" style="color:red">The price of time limited ticket must not be less than zero.</div> -->
     </div>
 
     <div class="form-group">
       <label>Daily ticket:</label>
       <input type="number" name="Daily"  class="form-group"  class="form-control"  [(ngModel)] = "validPrices.Daily">
-      <div *ngIf="!validationsForPrice.dailyOk" style="color:red">The price of daily ticket can't be empty.</div>      
+      <!-- <div *ngIf="!validationsForPrice.dailyOk" style="color:red">The price of daily ticket can't be empty.</div>      
       <div *ngIf="!validationsForPrice.dailyOk0" style="color:red">The price of daily ticket must not be zero.</div>
-      <div *ngIf="!validationsForPrice.dailyOkMinus" style="color:red">The price of daily ticket must not be less than zero.</div>
+      <div *ngIf="!validationsForPrice.dailyOkMinus" style="color:red">The price of daily ticket must not be less than zero.</div> -->
     </div> 
       </div> 
       <div class="column1">
@@ -124,20 +123,20 @@
     <div class="form-group">
       <label>Monthly ticket:</label>
       <input type="number" name="Monthly"  class="form-group"  class="form-control"  [(ngModel)] = "validPrices.Monthly">
-      <div *ngIf="!validationsForPrice.monthlyOk" style="color:red">The price of monthly ticket can't be empty.</div>      
+      <!-- <div *ngIf="!validationsForPrice.monthlyOk" style="color:red">The price of monthly ticket can't be empty.</div>      
       <div *ngIf="!validationsForPrice.monthlyOk0" style="color:red">The price of monthly ticket must not be zero.</div>
-      <div *ngIf="!validationsForPrice.mohtlyOkMinus" style="color:red">The price of monthly ticket must not be less than zero.</div>
+      <div *ngIf="!validationsForPrice.mohtlyOkMinus" style="color:red">The price of monthly ticket must not be less than zero.</div> -->
      </div>
      
      <div class="form-group">
       <label>Yearly ticket:</label>
       <input type="number" name="Yearly"  class="form-group"  class="form-control" [(ngModel)] = "validPrices.Yearly">
-      <div *ngIf="!validationsForPrice.YearlyOk" style="color:red">The price of Yearly ticket can't be empty.</div>      
+      <!-- <div *ngIf="!validationsForPrice.YearlyOk" style="color:red">The price of Yearly ticket can't be empty.</div>      
       <div *ngIf="!validationsForPrice.YearlyOk0" style="color:red">The price of Yearly ticket must not be zero.</div>
-      <div *ngIf="!validationsForPrice.YearlyOkMinus" style="color:red">The price of Yearly ticket must not be less than zero.</div>
+      <div *ngIf="!validationsForPrice.YearlyOkMinus" style="color:red">The price of Yearly ticket must not be less than zero.</div> -->
      </div>   
     </div>
-      <button *ngIf="!datumVazenjaBool"  class="btn" type="submit" class="button" class="marginForButton" id="btnForAddPL">Add new prices</button>
+      <button align="center" *ngIf="!datumVazenjaBool"  class="btn" type="submit" class="button"  id="btnForAddPL">Add new prices</button>
     
   </div>
   </form>
@@ -150,7 +149,7 @@
         <div class="form-group">
           <label>Start of validity:</label><br>
           <input type="date" name="FromTime" [min]= "datePickerId" ngModel>
-          <div *ngIf="!validationsForDate.fromTimeOk" style="color:red">Date can't be empty.</div>
+          <!-- <div *ngIf="!validationsForDate.fromTimeOk" style="color:red">Date can't be empty.</div> -->
           <!--validationsForDate-->
         </div>
       </div>
@@ -158,12 +157,12 @@
         <div class="form-group">
           <label>End of validity:</label><br>
           <input type="date" name="ToTime" [min]="datePickerId" ngModel>
-          <div *ngIf="!validationsForDate.toTimeOk" style="color:red">Date can't be empty.</div>
+          <!-- <div *ngIf="!validationsForDate.toTimeOk" style="color:red">Date can't be empty.</div> -->
         </div>
       </div>
           <button type="submit" class="btn" class="button" class="marginForButton" id="btnForAddPL">Add pricelist</button>
         
-      </form>
+      </form> 
     </div>
   </div>
 </div>

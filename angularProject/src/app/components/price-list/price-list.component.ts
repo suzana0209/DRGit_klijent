@@ -27,7 +27,7 @@ export class PriceListComponent implements OnInit {
   selectedPassanger: string = "";
   showLabel: boolean = false;
 
-  pomModelForPriceList: PomModelForPriceList = new PomModelForPriceList(0, "", "");
+  pomModelForPriceList: PomModelForPriceList = new PomModelForPriceList("", "", "");
 
   retPrice: any;
   validations: ValidForPriceListModel = new ValidForPriceListModel();
@@ -273,17 +273,25 @@ export class PriceListComponent implements OnInit {
   calculatePrice(){
     this.pomModelForPriceList.PassangerType = this.selectedPassanger;
     this.pomModelForPriceList.TypeOfTicket = this.selectedTicket;
-    this.pomModelForPriceList.PriceListId = this.priceList.Id;
+    this.pomModelForPriceList.PriceListId = this.pomPricelist._id;
 
-    if(this.validations.validate(this.pomModelForPriceList)){
-      return;
-    }
+    // if(this.validations.validate(this.pomModelForPriceList)){
+    //   return;
+    // }
 
-    this.pricelistServ.calculateTicketPrice(this.pomModelForPriceList).subscribe(d=>{
+    let fd = new FormData();
+    fd.append('PassengerType', this.selectedPassanger);
+    fd.append('SelectedTicket', this.selectedTicket);
+    fd.append('IdOfPriceList', this.pomPricelist._id);
+
+    this.pricelistServ.calculatePrice(fd).subscribe(d=>{
       this.retPrice = d;
       this.showLabel = true;
-      console.log("Ret: ", this.retPrice);
+      console.log("Ret: ", this.retPrice); 
       
+    },
+    err=>{
+      window.alert(err.error.message);
     });
   } 
   

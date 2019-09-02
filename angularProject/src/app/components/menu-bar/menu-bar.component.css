@@ -36,8 +36,7 @@ div#busImage{
   /* width: 70%;*/
 
    display: block;
-   /* margin-left: 12%; */
-   /* margin-right: 10% !important; */
+
    width: 100%;
    z-index: 10;   /*ovo je rijesilo problem da mapa ide iza slike i menija!*/
 
@@ -49,16 +48,6 @@ div#busImage{
 navbar-brand.classForimg{
     width: 90px;
 }
-
-/* ul li a :hover {  
-    background-color:#ffff99;
-    color: black;
-    
-  } */
-
-/* nav ul{
-    display: flex;
-} */
 
 nav ul li{
     list-style: none;
@@ -73,7 +62,7 @@ nav ul li a{
     /* margin: 0; */
     text-align: center;
     /* width: 10% !important; */
-    /* color: red; */
+    color: black; /*navbar*/
     
 }
 

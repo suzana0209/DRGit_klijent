@@ -26,14 +26,6 @@ export class VehicleComponent implements OnInit {
 
 
   constructor(private vehicleService: VehicleService, private lineService: LineService) {     
-    // vehicleService.getLinesForVehicle().subscribe(xx =>{
-    //   this.linesWithoutVehicle = xx;
-    //   vehicleService.getTimetablesForVehicle().subscribe(x =>{
-    //     this.timetables = x;
-    //     console.log("Timetables:" ,x);
-    //   })
-    // })
-
     this.vehicleService.getAllVehicle().subscribe(d=>{
       this.vehicles = d; 
       console.log("All vehicels: ", this.vehicles);
@@ -67,7 +59,7 @@ export class VehicleComponent implements OnInit {
 
 
   //Samo one koji nemaju timetable u sebi
-  deleteVehicle(){
+    deleteVehicle(){
     console.log("Reg number: ", this.idVehicleForDelete);
     this.vehicleService.deleteVehicle(this.idVehicleForDelete).subscribe(d=>{
       alert("Vehicle delete successfull! ");
@@ -79,20 +71,6 @@ export class VehicleComponent implements OnInit {
       this.refresh();
     })
   } 
-
-
-  // getIdVehiclee(event){
-  //   this.idVehicleForEdit = event.target.value;
-  //   if(this.idVehicleForEdit != null && event.target.value != ""){
-  //   this.vehicleService.getVehicle(this.idVehicleForEdit).subscribe(c=>{
-  //     this.vehicleForEdit = c;
-  //     console.log("Vehicle for edit: ", this.vehicleForEdit);
-  //   })
-  // }
-  // }
-
-
-
 
   showAdd(){
     this.selected = "Add";

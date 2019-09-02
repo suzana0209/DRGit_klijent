@@ -106,71 +106,37 @@ export class StationsComponent implements OnInit {
 
     console.log(stationData);
 
-    // if(this.validationsForAdd.validate(stationData)){
-    //   return;
-    // }
-
-    // this.stationService.AlredyExistsStationForEdit(stationData).subscribe(aa=>{
-    //   if(aa == "Yes"){
-    //     alert("On address: "+ stationData.AddressStation +" alredy exists station!");  
-    //     //window.location.reload();
-        
-    //   }
-    //   else if(aa == "No"){
-        this.stationService.changeStation(stationData).subscribe(data => {
-          alert("Station with Name="+ stationData.Name +" changed successfully!");
-          //this.route.navigate(['/station']);
-          window.location.reload();
-        },
-        err => { 
-          //alert("Station changed - error!");
-          window.alert(err.error.message);
-          
-          window.location.reload();
-        });
-    //   }
-    // })
-      
+   
+    this.stationService.changeStation(stationData).subscribe(data => {
+      window.alert(data.message);
+      this.refreshPage();
+    },
+    err => { 
+      window.alert(err.error.message);
+    });  
   }
 
    
   onSubmitDelete(stationData: StationModel, form:NgForm){
-
     //Dodato
     this.stationService.getAllStations().subscribe(st =>{
       this.stations = st;
       console.log("Podaci o stanicama: ", this.stations);
     });
 
+      console.log("Stanicaaa: ", stationData);
 
-    console.log("Stanicaaa: ", stationData);
-
-    // if(this.id == null || this.id == undefined){
-    //   alert("please select the station that you want to delete!");
-      
-    //   window.location.reload();
-    // }
-    //else{
       this.stationService.deleteStation(this.id.toString()).subscribe(x => {
-        //alert("Station with ID="+ this.id +" is successful deleted! ")
-       // window.location.reload();
-       window.alert(x.message);
-       this.refreshPage();
+        window.alert(x.message);
+        this.refreshPage();
       },
       err=>{
         window.alert(err.error.message);
-        
-        //window.location.reload();
-      });
-   // }
-    
+      });  
   }
 
-
-
   LoggedAdmin(): boolean{
-    // if(localStorage.getItem('role') == "Admin" && this.boolBezvezeZaPoruku == "ACTIVATED" && !this.boolBezvezeZaPorukuDenied){
-      if(localStorage.getItem('role') == "Admin"){
+    if(localStorage.getItem('role') == "Admin"){
       return true;
     }
     return false;
@@ -200,7 +166,7 @@ export class StationsComponent implements OnInit {
      console.log(id);
   }
 
-  stationClick(id: number){ 
+  stationClick(id: number){  
     this.id = id;
 
     this.stationService.getAllStations().subscribe(st=>{

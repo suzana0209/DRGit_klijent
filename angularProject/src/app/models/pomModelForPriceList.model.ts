@@ -1,9 +1,9 @@
 export class PomModelForPriceList{
-    PriceListId: number;
+    PriceListId: string;
     PassangerType: string;
     TypeOfTicket: string;
 
-    constructor(priceListId: number, passType:string, typeOfTicket: string){
+    constructor(priceListId: string, passType:string, typeOfTicket: string){
         this.PriceListId = priceListId;
         this.PassangerType = passType;
         this.TypeOfTicket = typeOfTicket;
