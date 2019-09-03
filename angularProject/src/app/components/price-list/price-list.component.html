@@ -49,6 +49,7 @@
       <div *ngIf="prviAddPL">
       <button *ngIf="validPricesForShow" class="btn" type="submit" class="button" (click)="editPricelistClick()" id="btnForAddPL">Edit price list</button>  
       <button *ngIf="!validPricesForShow" class="btn" type="submit" class="button" (click)="editPricelistClick()" id="btnForAddPL">Add price list</button>  
+      <br><br><br><br><br><br>
     </div>
 </div>  
 
@@ -136,7 +137,7 @@
       <div *ngIf="!validationsForPrice.YearlyOkMinus" style="color:red">The price of Yearly ticket must not be less than zero.</div> -->
      </div>   
     </div>
-      <button align="center" *ngIf="!datumVazenjaBool"  class="btn" type="submit" class="button"  id="btnForAddPL">Add new prices</button>
+      <button align="center" *ngIf="!datumVazenjaBool"  class="marginForButtonAddNewPrices" type="submit"   id="btnForAddPL">Add new prices</button>
     
   </div>
   </form>
@@ -160,7 +161,7 @@
           <!-- <div *ngIf="!validationsForDate.toTimeOk" style="color:red">Date can't be empty.</div> -->
         </div>
       </div>
-          <button type="submit" class="btn" class="button" class="marginForButton" id="btnForAddPL">Add pricelist</button>
+          <button type="submit" class="btn" class="marginForButtonAddNewPrices"  id="btnForAddPL">Add pricelist</button>
         
       </form> 
     </div>

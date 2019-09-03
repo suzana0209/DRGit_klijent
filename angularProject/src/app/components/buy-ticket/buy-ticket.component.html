@@ -51,24 +51,27 @@
 
     <table border="0" class="marginForTable">
       <tr *ngIf="listOfBuyingTicket.length" class="trHeader">
-        <td>Id ticket</td>
+        <!-- <td>Id ticket</td> -->
         <td>Type of ticket</td>
         <td>Purchase date</td>
         <td>Price of ticket</td>
         <td>Valid</td>
       </tr>
-      <tr *ngFor="let t of listOfBuyingTicket" class="trClass">
-        <td>{{t.Id}}</td>
-        <td>{{tipKarte[t.TypeOfTicketId]}}</td>
+      <tr *ngFor="let t of listOfBuyingTicket; index as i" class="trClass">
+        <!-- <td>{{t.Id}}</td> -->
+        <td>{{t.ticketType}}</td>
         <td>
-          {{t.PurchaseDate.split(" ")[0].split("-")[2]}}-{{t.PurchaseDate.split(" ")[0].split("-")[1]}}-{{t.PurchaseDate.split(" ")[0].split("-")[0]}}
-           {{t.PurchaseDate.split(" ")[1].split(".")[0]}}
+          <!-- {{t.purchaseTime.split(".000Z")[0]}}  -->
+          {{showDate(t.purchaseTime)}}
+          
+          <!--.split("-")[2]}}-{{t.PurchaseDate.split(" ")[0].split("-")[1]}}-{{t.PurchaseDate.split(" ")[0].split("-")[0]}}
+            {{t.PurchaseDate.split(" ")[1].split(".")[0]-->
         </td>
-        <td>{{t.PriceOfTicket}}</td>
-        <td>{{t.Valid == false ? 'No' : 'Yes'}}</td>
+        <td>{{t.priceOfTicket}}</td>
+        <td>{{listaVaznosti[i]}}</td>
       </tr>
     </table>
-    
+     
   </div>
 </div>
 </div>

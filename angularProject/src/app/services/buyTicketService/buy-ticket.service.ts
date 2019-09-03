@@ -23,7 +23,7 @@ export class BuyTicketService {
       return this.token;
     }
   
-    private request(method: 'post'|'get'|'delete', type: 'priceForPaypal'|'postPayPalModel'|'getTicketWithCurrentAppUser'|'validateTicket'|'getNameOfCustomer', 
+    private request(method: 'post'|'get'|'delete', type: 'priceForPaypal'|'postPayPalModel'|'getTicketWithCurrentAppUser'|'validateTicket'|'getNameOfCustomer'|'getAllTicket', 
     fd?:FormData, stId?:any, noviPar?:any, noviPar1?:any): Observable<any> {
       let base;
   
@@ -78,6 +78,10 @@ export class BuyTicketService {
 
     public getNameOfCustomer(fd:FormData): Observable<any>{
       return this.request('post', 'getNameOfCustomer', fd);
+    }
+
+    public getAllTicket(): Observable<any>{
+      return this.request('get', 'getAllTicket');
     }
    
   

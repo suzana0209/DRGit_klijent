@@ -196,7 +196,7 @@
       </div>
       <div class = "columnShow50">
       <div *ngIf="showDepForUnregisterUser">
-        <h4 id="infoh4">
+        <h4 id="infoh4" *ngIf="allDeparturesForSelect">
         <!-- <label >Departures for {{selectedDayForEdit}} on Line: {{pom}}:</label> -->
         <label>{{allDeparturesForSelect.length != 0 ? 'Departures for ' + selectedDayForEdit + " " : 
           'No departures for ' + selectedDayForEdit +' '}} {{pom != "Please select" && pom != "" ? "on Line: " + pom : ""}}  </label>

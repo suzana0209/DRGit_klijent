@@ -310,6 +310,15 @@ export class TimeTableComponent implements OnInit {
      this.allTimetableFromDb.forEach(e1 => {
        if(e1.dayType == this.dayId && e1.line == this.lineId){
          this.sviPolasciIzBaze = e1.departures;
+
+         /*
+         this.stringovi.push(n);
+        this.stringovi.sort((a,b)=> a.localeCompare(b));
+        this.stringovi1 = this.stringovi;
+         */
+        this.allDeparturesForSelect.sort((a,b) => a.localeCompare(b));
+
+
          this.allDeparturesForSelect = e1.departures.split("|");
          this.timetableIdForSend = e1._id;
        }
@@ -444,6 +453,7 @@ showTimetableForUser(){
 
   refreshPage(){
     this.selected = "";
+    this.allDeparturesForSelect = [];
 
     this.lineService.getAllLines().subscribe(d=>{
       this.allLinesFromDb = d;

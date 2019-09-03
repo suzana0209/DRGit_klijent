@@ -52,6 +52,7 @@ export class BuyTicketComponent implements OnInit {
   dateOfPurchase: Date;
   typeOfTicketForDb: string = ""
   idOfPricelist = "";
+  listaVaznosti: string[] = []
 
   constructor(private authService: AuthenticationService, private usersService: UsersService,
     private buyTicketService: BuyTicketService,
@@ -85,12 +86,16 @@ export class BuyTicketComponent implements OnInit {
       this.fd.append('idd', this.idLoggUser);
       this.buyTicketService.getTicketWithCurrentAppUser(this.fd).subscribe(d=>{
         this.listOfBuyingTicket = d;
+        this.listOfBuyingTicket.forEach(element => {
+          this.validateTicket(element._id)
+          // element.purchaseTime = new Date(element.purchaseTime);
+        });
         console.log("Buying ticket: ", this.listOfBuyingTicket); 
       })  
 
       //this.emailLoggedUser = this.loggedUser.Email
       //this.idLoggUser = this.loggedUser.Id;
-      console.log("Ulogovani korisnik: ", this.loggedUser)
+      console.log("Ulogovani korisnik: ", this.loggedUser) 
       console.log("IDD log", this.idLoggUser)
 
       this.priceServie.getPricelist().subscribe(dataa=>{
@@ -374,12 +379,13 @@ export class BuyTicketComponent implements OnInit {
             //this.fd.append('dateOfPurchase', this.dateOfPurchase.toString()); 
          
           }
-   
+    
           
           this.buyTicketService.postPayPalModel(this.fd).subscribe(ddd=>{
           //this.povratnaVrijednostPayPal = ddd;
            // this.buyTicketUnregisterUser(); 
-            alert("Succ buy t!");
+            //alert("Succ buy t!");
+            window.alert(ddd.message);
           // if(ddd != 0){
           //   if(this.mailForPayPal == null){
           //     this.buyTicketUnregisterUser();
@@ -394,7 +400,7 @@ export class BuyTicketComponent implements OnInit {
          err=>{
            window.alert(err.error.message);
          })
-         
+           
       },
       onCancel: (data, actions) => {
           console.log('OnCancel', data, actions);
@@ -414,5 +420,27 @@ err=>{
   window.alert(err.error.message);
 }) 
 }
-    
+ 
+
+validateTicket(idTicket){
+  this.buyTicketService.validateTicket(idTicket).subscribe(aa=>{
+    if(aa.message.toString().includes("is valid")){
+      this.listaVaznosti.push("Yes");
+    }
+    else{
+      this.listaVaznosti.push("No");
+    }
+  })
+}
+
+showDate(datum){
+  let datum1 = new Date(datum);
+  //datum1.setHours(datum1.getHours()+2);
+  //Tue Sep 03 2019 01:09:52
+  let ret = datum1.toString().split('GMT')[0].split(' ');
+  let pomm = ret[2]+"-"+ret[1]+"-"+ret[3]+" "+ret[4];
+
+  return pomm;
+}
+
 }
