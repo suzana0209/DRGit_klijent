@@ -1,9 +1,13 @@
 <div id="wholePage">
 <div *ngIf="user" class="container" class="row1">
-  <!-- <div *ngIf="!user.Activated && !denyAdmin" id="info">You are not authorized for approval of the request ! Your request is processed! </div>
-  <div *ngIf="denyAdmin" id="info">You are not authorized for approval of the request! Your request is denied! </div> -->
-  <div > <!--*ngIf="user.Activated"-->
-    <div *ngIf="loggedAdmin()">
+    <h2 *ngIf="NonActiveAdmin()" id="info">You are not authorized for authorize users! Your request is processed! </h2>
+    <h2 *ngIf="DeniedAdmin()" id="info">You are not authorized for authorize users! Your request is denied!</h2>
+    
+    <div *ngIf="NonActiveAdmin() || DeniedAdmin()">
+      <br><br><br><br><br><br><br><br><br><br><br>
+    </div>
+
+    <div *ngIf="LoggedAdmin()">
       <div class="column1">
         <div class="col-md-12">
             <h1 id="headerh1">Authorize denied users </h1> <br>
@@ -26,4 +30,4 @@
     </div>
   </div>
 </div>
-</div>
+<!-- </div> -->

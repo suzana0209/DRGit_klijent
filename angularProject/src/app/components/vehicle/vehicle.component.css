@@ -156,3 +156,11 @@ button#designBtn:focus{
     width: 700px !important;
     /* top: 20px !important; */
   }
+
+  h2#info{
+    font-size: 40px;
+    width: 100% !important;
+    text-align: center !important;
+    font-family: cursive;
+    margin-top: 150px ;   
+}

@@ -25,10 +25,28 @@ export class RequestsComponent implements OnInit {
   pomBool: boolean = false;
   denyAdmin: boolean = false;
   fd: FormData = new FormData();
+  userPom: any;
+  aktivan: boolean = false;
+  naCekanju: boolean = false;
+  odbijen: boolean = false;
 
   constructor(private verifyService: VerificationService,private usersService: UsersService, 
     private accountService: AccountService){
       this.accountService.getUserData(localStorage.getItem('name')).subscribe(data => {
+
+        this.userPom = data;
+      this.userPom.forEach(element => {
+        if(element.activated == "DENIED"){
+          this.odbijen = true;
+        }
+        else if(element.activated == "PENDING"){
+          this.naCekanju = true;
+        }
+        else if(element.activated == "ACTIVATED"){
+          this.aktivan = true;
+        }
+      });
+
         this.fd = new FormData();
         this.user = data;    
         console.log("Adminnnn: ", this.user);
@@ -149,26 +167,26 @@ export class RequestsComponent implements OnInit {
         window.alert(err.error.message);
       })
     }
-      
         
-      
-        loggedAdmin(): boolean{
-          if(localStorage.getItem('role') == "Admin"){
-            return true;
-          }
-          else{
-            return false;
-          }
-        }
-      
-        loggedController(): boolean{
-          if(localStorage.getItem('role') == "Controller"){
-            return true;
-          }else{
-            return false;
-          }
-      
-        }
+  LoggedAdmin(): boolean{
+    if(localStorage.getItem('role') == "Admin" && this.aktivan){
+      return true;
+    }
+    return false;
+  }
+
+  NonActiveAdmin(){
+    if(localStorage.getItem('role') == "Admin" && this.naCekanju){
+      return true;
+    }
+    return false;
+  }
+
+  DeniedAdmin(){
+    if(localStorage.getItem('role') == "Admin" && this.odbijen){
+      return true;
+    }
+  }
       
 }
       

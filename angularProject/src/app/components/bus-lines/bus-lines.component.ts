@@ -27,9 +27,6 @@ export class BusLinesComponent implements OnInit {
   pomModel: any = []; //lista PomModela (idLinije, ListaStanica po datom redosledu)
   listOfCheckedLines: any = [];
   idOfCheckedLines: string[] = [];
-  
- // listOfCheckedColors: PoModelForColors[] = [];
-  //counterForColor: number = 0;
 
   linesWStations:any = []
 
@@ -88,20 +85,6 @@ export class BusLinesComponent implements OnInit {
 
     return ret;
   }
-
-  // stationClick(id: number){
-  //   this.stations.forEach(element => {
-  //     if(element._id == id){
-  //       this.pomStat = element;
-  //     }
-  //   });
-
-  //   console.log(this.pomStat);
-  //   this.selectedStations.push(this.pomStat);
-    
-  //   this.polyline.addLocation(new GeoLocation(this.pomStat.Latitude, this.pomStat.Longitude));
-  //   this.id = id;
-  // }
 
 
   ShowCheckedLine(event: any){

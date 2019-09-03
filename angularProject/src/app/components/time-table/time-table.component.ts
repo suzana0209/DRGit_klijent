@@ -90,8 +90,11 @@ export class TimeTableComponent implements OnInit {
   allVehicleFromDb: any = []
   allTimetableFromDb: any = []
   tt: TimetableModel2 = new TimetableModel2("","","","","", "")
-  idOfTT: string = ""
+  idOfTT: string = "";
   
+  odbijen: boolean = false;
+  aktivan: boolean = false;
+  naCekanju: boolean = false;
 
 
   constructor(private lineService: LineService, 
@@ -100,16 +103,31 @@ export class TimeTableComponent implements OnInit {
               private userService: UsersService,
               private vehicleService: VehicleService, private accountService: AccountService) { 
 
-    this.accountService.getUserData(localStorage.getItem('name')).subscribe(a=>{
+                accountService.getUserData(localStorage.getItem('name')).subscribe(dd=>{
+                  this.userPom = dd;
+                  this.userPom.forEach(element => {
+                    if(element.activated == "DENIED"){
+                      this.odbijen = true;
+                    }
+                    else if(element.activated == "PENDING"){
+                      this.naCekanju = true;
+                    }
+                    else if(element.activated == "ACTIVATED"){
+                      this.aktivan = true;
+                    }
+                  });
+                })    
+
+    // this.accountService.getUserData(localStorage.getItem('name')).subscribe(a=>{
       
-      if(a != null && a != undefined){
+    //   if(a != null && a != undefined){
         
-        this.userPom = a;
-        //this.boolBezvezeZaPoruku = this.userPom.Activated;
-        //this.boolBezvezeZaPorukuDenied = this.userPom.Deny; 
-      }
+    //     this.userPom = a;
+    //     //this.boolBezvezeZaPoruku = this.userPom.Activated;
+    //     //this.boolBezvezeZaPorukuDenied = this.userPom.Deny; 
+    //   }
       
-    })
+    // })
                 
     this.lineService.getAllLines().subscribe(d=>{
       this.allLinesFromDb = d;
@@ -417,23 +435,22 @@ showTimetableForUser(){
     }
   }
 
-  //&& this.boolBezvezeZaPoruku && !this.boolBezvezeZaPorukuDenied
   LoggedAdmin(): boolean{
-    if(localStorage.getItem('role') == "Admin" ){
+    if(localStorage.getItem('role') == "Admin" && this.aktivan){
       return true;
     }
     return false;
   }
 
   NonActiveAdmin(){
-    if(localStorage.getItem('role') == "Admin" && !this.boolBezvezeZaPoruku && !this.boolBezvezeZaPorukuDenied){
+    if(localStorage.getItem('role') == "Admin" && this.naCekanju){
       return true;
     }
     return false;
   }
 
   DeniedAdmin(){
-    if(localStorage.getItem('role') == "Admin" && this.boolBezvezeZaPorukuDenied){
+    if(localStorage.getItem('role') == "Admin" && this.odbijen){
       return true;
     }
   }

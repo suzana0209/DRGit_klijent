@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/app/services/users/users.service';
 import { RegistrationModel } from 'src/app/models/registration.model';
-import { PomAppUserModel } from 'src/app/models/pomAppUser.model';
 import { NgForm } from '@angular/forms';
 import { PomModelForPassword } from 'src/app/models/PomModelForPassword.model';
 import { Router } from '@angular/router';
-import { PomModelForAuthorization } from 'src/app/models/pomModelForAuth.model';
-import { ValidForProfileModel, ValidForChangePassModel } from 'src/app/models/modelsForValidation/validForProfile.model';
 import { AccountService } from 'src/app/services/account/account.service';
 import { AuthenticationService } from 'src/app/services/authentication-service.service';
 
@@ -37,9 +34,6 @@ export class ProfileComponent implements OnInit {
   rodjendan: string = ""
   mejlZaShow: string = ""
   pendingUser: boolean = false;
-
-  //validations: ValidForProfileModel = new ValidForProfileModel();
-  //validationsForPass: ValidForChangePassModel = new ValidForChangePassModel();
 
   typePassanger: string = ""
   kk: string = ""
@@ -98,8 +92,6 @@ export class ProfileComponent implements OnInit {
         }
       });
       this.userForEdit  = this.user1;
-      //console.log("KOnacnooo: ", this.userForEdit);
-
     })
   }
 
@@ -152,21 +144,11 @@ export class ProfileComponent implements OnInit {
      // let errorss = [];
 
       this.authenticationService.editPassword(this.fdd).subscribe(x=>{
-        //alert("Password successfull changed!");
-        //window.location.reload();
         alert(x.message);
         this.refresh();
       }, 
       err=> {
         window.alert(err.error.message);
-        // for(var key in err.error.ModelState){
-        //   for(var i = 0; i < err.error.ModelState[key].length; i++){
-        //     errorss.push(err.error.ModelState[key][i]);
-        //   }
-        // }
-        // console.log("ERRRORR: ", errorss);
-        // window.alert(errorss);
-        
       });
   }
 
@@ -238,8 +220,6 @@ export class ProfileComponent implements OnInit {
 
   refresh(){
     this.selected = "";
-        // new ProfileComponent( this.usersService,  this.router, this.accountService,
-        //    this.authenticationService);
         this.fdd = new FormData();
         this.mejlZaShow = localStorage.getItem('name').toString();
            this.accountService.getUserData(localStorage.getItem('name')).subscribe(data=>{

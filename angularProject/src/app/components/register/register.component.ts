@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RegistrationModel } from 'src/app/models/registration.model';
 import { AuthenticationService } from 'src/app/services/authentication-service.service';
-import { TypesService } from 'src/app/services/types.service';
-import { UsersService } from 'src/app/services/users/users.service';
-import { ValidForRegistrationModel } from 'src/app/models/modelsForValidation/validForRegistration.model';
 import { Router } from '@angular/router';
 import { AccountService } from 'src/app/services/account/account.service';
 
@@ -18,8 +15,6 @@ import { AccountService } from 'src/app/services/account/account.service';
 export class RegisterComponent implements OnInit {
 
   types: any =[];
-  //validations: ValidForRegistrationModel = new ValidForRegistrationModel();
-
   selectedImage: any = null;
   userBytesImage: any;
 
@@ -28,14 +23,10 @@ export class RegisterComponent implements OnInit {
   formd: FormData = new FormData();
 
   constructor(private authService: AuthenticationService, 
-    //private typesService: TypesService,
-    //private userService: UsersService,
-    //private notificationServ: RequestsService, 
     private router: Router, private accountService: AccountService) { 
 
       this.accountService.getPassengerTypes().subscribe(data => {
         this.types = data;
-        //console.log("Tipovi putnika: ", this.types);
       },
       err => {
         console.log(err.error.message); 
@@ -121,9 +112,4 @@ export class RegisterComponent implements OnInit {
   onFileSelected(event){
     this.selectedImage = event.target.files[0];
   }
-
-  // confirmPassword(password1: string, password2: string) {
-  //   if(password1 !== password2) return false;
-  //   else return true;
-  // }
 }

@@ -4,6 +4,7 @@ import { VehicleService } from 'src/app/services/vehicleService/vehicle.service'
 import { LineService } from 'src/app/services/lineService/line.service';
 import { VehicleModel } from 'src/app/models/vehicle.model';
 import { NgForm } from '@angular/forms';
+import { AccountService } from 'src/app/services/account/account.service';
 
 @Component({
   selector: 'app-vehicle',
@@ -23,9 +24,27 @@ export class VehicleComponent implements OnInit {
 
   vehicleForEdit: any;
   availableVehicles: any = []
+  userPom: any;
+  odbijen: boolean = false;
+  aktivan: boolean = false;
+  naCekanju: boolean = false;
 
 
-  constructor(private vehicleService: VehicleService, private lineService: LineService) {     
+  constructor(private vehicleService: VehicleService, private lineService: LineService, private accountService: AccountService) { 
+    accountService.getUserData(localStorage.getItem('name')).subscribe(dd=>{
+      this.userPom = dd;
+      this.userPom.forEach(element => {
+        if(element.activated == "DENIED"){
+          this.odbijen = true;
+        }
+        else if(element.activated == "PENDING"){
+          this.naCekanju = true;
+        }
+        else if(element.activated == "ACTIVATED"){
+          this.aktivan = true;
+        }
+      });
+    })    
     this.vehicleService.getAllVehicle().subscribe(d=>{
       this.vehicles = d; 
       console.log("All vehicels: ", this.vehicles);
@@ -46,13 +65,14 @@ export class VehicleComponent implements OnInit {
     
     this.vehicleService.addVehicle(vehicleData).subscribe(data => {     
       console.log(data); 
-      alert("Successfully added vehicle")
+      //alert("Successfully added vehicle")
+      window.alert(data.message)
       //window.location.reload();
       this.refresh();
     },
     err=>{
       window.alert(err.error.message);
-      this.refresh();
+      //this.refresh();
     });     
   }
 
@@ -62,13 +82,14 @@ export class VehicleComponent implements OnInit {
     deleteVehicle(){
     console.log("Reg number: ", this.idVehicleForDelete);
     this.vehicleService.deleteVehicle(this.idVehicleForDelete).subscribe(d=>{
-      alert("Vehicle delete successfull! ");
+      window.alert(d.message);
+      //alert("Vehicle delete successfull! ");
       //window.location.reload();
       this.refresh();
     },
     err=>{
       window.alert(err.error.message);
-      this.refresh();
+      //this.refresh();
     })
   } 
 
@@ -103,6 +124,25 @@ export class VehicleComponent implements OnInit {
     }
   }
 
+  LoggedAdmin(): boolean{
+    if(localStorage.getItem('role') == "Admin" && this.aktivan){
+      return true;
+    }
+    return false;
+  }
+
+  NonActiveAdmin(){
+    if(localStorage.getItem('role') == "Admin" && this.naCekanju){
+      return true;
+    }
+    return false;
+  }
+
+  DeniedAdmin(){
+    if(localStorage.getItem('role') == "Admin" && this.odbijen){
+      return true;
+    }
+  }
 
 
   refresh(){

@@ -1,7 +1,11 @@
 <div id="wholePage">
-<!-- <h2 *ngIf="NonActiveAdmin()" id="info">You are not authorized for add/edit/delete lines! Your request is processed!  You can only see the departures for the selected day!</h2>
-<h2 *ngIf="DeniedAdmin()" id="info">You are not authorized for add/edit/delete lines! Your request is denied! You can only see the departures for the selected day</h2> -->
-
+    <h2 *ngIf="NonActiveAdmin()" id="info">You are not authorized for add/delete timetables! Your request is processed! You can only look at the currently  timetable!</h2>
+  
+    <h2 *ngIf="DeniedAdmin()" id="info">You are not authorized for add/delete timetables! Your request is denied!You can only look at the currently  timetable!</h2>
+  
+    <!-- <div *ngIf="NonActiveAdmin() || DeniedAdmin()">
+      <br><br><br><br><br><br><br><br><br><br><br>
+    </div> -->
 
 <div *ngIf = "LoggedAdmin()">    
     <div align="center">

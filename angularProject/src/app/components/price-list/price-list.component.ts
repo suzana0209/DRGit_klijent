@@ -6,7 +6,6 @@ import { NgForm } from '@angular/forms';
 import { PomModelForPriceList } from 'src/app/models/pomModelForPriceList.model';
 import { ValidForPriceListModel, ValidForPriceModel, ValidForDateTimeInPriceList } from 'src/app/models/modelsForValidation/validForPriceList.model';
 import { UsersService } from 'src/app/services/users/users.service';
-import { AuthenticationService } from 'src/app/services/authentication-service.service';
 import { AccountService } from 'src/app/services/account/account.service';
 
 @Component({
@@ -23,7 +22,7 @@ export class PriceListComponent implements OnInit {
   //validPrices: TicketPricesPomModel
   validPricesForShow: TicketPricesPomModel = new TicketPricesPomModel(0,0,0,0);
 
-  selectedTicket: string = "";
+  selectedTicket: string = ""; 
   selectedPassanger: string = "";
   showLabel: boolean = false;
 
@@ -46,20 +45,28 @@ export class PriceListComponent implements OnInit {
   prviAddPL: boolean = true;
   pomPricelist: any;
   savePriceFromDb: any;
+  odbijen: boolean = false;
+  aktivan: boolean = false;
+  naCekanju: boolean = false;
 
-  constructor( private pricelistServ: PricelistService, private userService: UsersService, private acountService: AccountService) { 
+  constructor( private pricelistServ: PricelistService, private userService: UsersService, private accountService: AccountService) { 
     this.prviAddPL = true;
-    this.acountService.getUserData(localStorage.getItem('name')).subscribe(a=>{
-      console.log("Userrr: ", a);
-      if(a != null && a != undefined){
-        
-        this.userPom = a;
-        console.log("User: ", this.userPom)
-        this.boolBezvezeZaPoruku = this.userPom.Activated;
-        this.boolBezvezeZaPorukuDenied = this.userPom.Deny;
-      }
-      
+    
+    this.accountService.getUserData(localStorage.getItem('name')).subscribe(dd=>{
+      this.userPom = dd;
+      this.userPom.forEach(element => {
+        if(element.activated == "DENIED"){
+          this.odbijen = true;
+        }
+        else if(element.activated == "PENDING"){
+          this.naCekanju = true;
+        }
+        else if(element.activated == "ACTIVATED"){
+          this.aktivan = true;
+        }
+      });
     })
+
     this.datePickerId = new Date().toISOString().split('T')[0];
     this.showPriceInInput = false;
 
@@ -74,142 +81,33 @@ export class PriceListComponent implements OnInit {
         
       })
     }) 
-
-    // this.pricelistServ.getPricelist().subscribe(data => {  
-    //   if(data == null){
-    //     //alert("There is not currently active price list!");
-    //     this.messageNoExistPricelist = "There is not valid price list!";
-    //     return;
-    //   }    
-    //   this.priceList = data; 
-    //   console.log("Price list from db: ", this.priceList);
-      
-    //   console.log("Data list from db: ",data);
-
-    //    this.validPrices = new TicketPricesPomModel(0,0,0,0,0,new PriceListModel(new Date(),new Date(),0, []));
-    //    this.validPricesForShow = new TicketPricesPomModel(0,0,0,0,0,new PriceListModel(new Date(),new Date(),0, []));
-    //    this.priceList.ListOfTicketPrices.forEach(element => {
-
-    //     if(element.TypeOfTicketId == 2)
-    //     {
-    //       this.validPrices.Daily = element.Price;
-    //       this.validPricesForShow.Daily = element.Price;
-
-    //     }
-    //     if(element.TypeOfTicketId == 1)
-    //     {
-    //       this.validPrices.Hourly = element.Price;
-    //       this.validPricesForShow.Hourly = element.Price;
-    //     }
-    //     if(element.TypeOfTicketId == 3)
-    //     {
-    //       this.validPrices.Monthly = element.Price;
-    //       this.validPricesForShow.Monthly = element.Price;
-    //     }
-    //     if(element.TypeOfTicketId == 4)
-    //     {
-    //       this.validPrices.Yearly = element.Price;
-    //       this.validPricesForShow.Yearly = element.Price;
-    //     }        
-    //   });
-    //  });
-     
   }
 
   ngOnInit() {
   }
 
-  // onSubmit(pm: PriceListModel, form: NgForm){
-    
-  //   console.log("PM: ", pm);
-  //   if(this.validationsForDate.validate(pm)){
-  //     return;
-  //   }
-    
-
-  //   this.pricelistServ.CheckDateTime(pm).subscribe(a=>{
-  //     if(a == "No"){
-  //       alert("Date is invalid!");
-  //       //window.location.reload();
-  //       return;
-  //     }
-  //     else if(a == "less"){
-  //       alert("<To time> date can't be less than <From time> date!");
-  //       return;
-  //     }
-  //     else if(a == "Yes"){
-  //       this.ticketPricesPom.PriceList = pm;
-  //   this.pricelistServ.addPricelist(this.ticketPricesPom).subscribe( x =>{
-  //     if(x){
-  //       alert("Price list succesfull added!");
-  //       window.location.reload();
-  //       //form.reset();
-  //     }
-  //     else{
-  //       alert("Erorr!");
-  //       //window.location.reload();
-  //     }
-  //     //console.log(x);
-  //   })
-
-  //     }
-  //   })
-
-  // }
 
   onSubmit(pm: PriceListModel, form: NgForm){
     
     console.log("PM: ", pm);
-    // if(this.validationsForDate.validate(pm)){
-    //   return;
-    // }
     
-
-   // this.pricelistServ.CheckDateTime(pm).subscribe(a=>{
-      // if(a == "No"){
-      //   alert("Date is invalid!");
-      //   //window.location.reload();
-      //   return;
-      // }
-      // else if(a == "less"){
-      //   alert("<To time> date can't be less than <From time> date!");
-      //   return;
-      // }
-      // else if(a == "Yes"){
       this.ticketPricesPom.PriceList = pm;
       this.pricelistServ.addPricelist(this.ticketPricesPom).subscribe( x =>{
-        alert("Succ add!");
+        //alert("Succ add!");
+        window.alert(x.message);
         window.location.reload();
-      // if(x){
-      //   alert("Price list succesfull added!");
-      //   window.location.reload();
-      //   //form.reset();
-      // }
-      // else{
-      //   alert("Erorr!");
-      //   //window.location.reload();
-      // }
-      //console.log(x);
+    
     },err => {
       //alert("Station - error!");
       window.alert(err.error.message);  
-      //this.refreshPage();
-      //window.location.reload();
-
     });
-    
-
-    //  }
-   // })
 
   }
 
 
 
   onSubmit1(pm: TicketPricesPomModel, form: NgForm){
-    // if(this.validationsForPrice.validate(pm)){
-    //   return;
-    // }
+    
     this.ticketPricesPom = pm;
     this.datumVazenjaBool = true;
     // this.pricelistServ.addTicketPrices(pm).subscribe();
@@ -224,31 +122,22 @@ export class PriceListComponent implements OnInit {
     }
   }
 
-  // LoggedAdmin(): boolean{
-  //   if(localStorage.getItem('role') == "Admin" && this.boolBezvezeZaPoruku && !this.boolBezvezeZaPorukuDenied){
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
   LoggedAdmin(): boolean{
-    if(localStorage.getItem('role') == "Admin"){
+    if(localStorage.getItem('role') == "Admin" && this.aktivan){
       return true;
     }
     return false;
   }
 
-
-
   NonActiveAdmin(){
-    if(localStorage.getItem('role') == "Admin" && !this.boolBezvezeZaPoruku && !this.boolBezvezeZaPorukuDenied){
+    if(localStorage.getItem('role') == "Admin" && this.naCekanju){
       return true;
     }
     return false;
   }
 
   DeniedAdmin(){
-    if(localStorage.getItem('role') == "Admin" && this.boolBezvezeZaPorukuDenied){
+    if(localStorage.getItem('role') == "Admin" && this.odbijen){
       return true;
     }
   }
@@ -275,9 +164,6 @@ export class PriceListComponent implements OnInit {
     this.pomModelForPriceList.TypeOfTicket = this.selectedTicket;
     this.pomModelForPriceList.PriceListId = this.pomPricelist._id;
 
-    // if(this.validations.validate(this.pomModelForPriceList)){
-    //   return;
-    // }
 
     let fd = new FormData();
     fd.append('PassengerType', this.selectedPassanger);
@@ -285,7 +171,7 @@ export class PriceListComponent implements OnInit {
     fd.append('IdOfPriceList', this.pomPricelist._id);
 
     this.pricelistServ.calculatePrice(fd).subscribe(d=>{
-      this.retPrice = d;
+      this.retPrice = d.toFixed(2);
       this.showLabel = true;
       console.log("Ret: ", this.retPrice); 
       
@@ -303,7 +189,7 @@ export class PriceListComponent implements OnInit {
   checkIsAuthorized(){
     if(this.LoggedAdmin()){
       
-      this.userService.getUserData(localStorage.getItem('name')).subscribe(a=>{
+      this.accountService.getUserData(localStorage.getItem('name')).subscribe(a=>{
         console.log("Userrr: ", a);
         this.userPom = a;
         console.log(this.userPom);

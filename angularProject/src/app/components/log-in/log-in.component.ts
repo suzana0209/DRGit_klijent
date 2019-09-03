@@ -14,12 +14,7 @@ import { Router } from '@angular/router';
 })
 
 export class LogInComponent implements OnInit {
-  // credentials: TokenPayload = {
-  //   email: '',
-  //   password: ''
-  // };
 
-  validations: LogInValidations = new LogInValidations();
   pomocniUser: any;
 
   constructor(private authService: AuthenticationService, private router: Router) { }

@@ -8,37 +8,30 @@
         <label for="email">Email address</label>
         <input  required type="email"  pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*" class="form-control" name="Email" placeholder="Email" ngModel>
         
-        <!-- <div *ngIf="!validations.emailOk" style="color:red">Email can't be empty.</div>
-        <div *ngIf="!validations.emailOk1" style="color:red">Email must have '@' character! </div> -->
 
       </div>
       <div class="form-group">
         <label for="Name">Name</label>
         <input required type="text" class="form-control" name="Name" placeholder="Name" ngModel>
 
-        <!-- <div *ngIf="!validations.nameOk" style="color:red">Name can't be empty.</div> -->
-      </div>
+        </div>
 
       <div class="form-group">
         <label for="LastName">Last Name</label>
         <input required type="text" class="form-control" name="LastName" placeholder="LastName" ngModel>
 
-        <!-- <div *ngIf="!validations.lastNameOk" style="color:red">LastName can't be empty.</div> -->
-      </div>
+        </div>
 
       <div class="form-group">
         <label for="City">City</label>
         <input required type="text" class="form-control" name="City" placeholder="City" ngModel>
 
-        <!-- <div *ngIf="!validations.cityOk" style="color:red">City can't be empty.</div> -->
-      </div>
+        </div>
 
       <div class="form-group">
         <label for="Street">Street</label>
         <input required type="text" class="form-control" name="Street" placeholder="Street" ngModel>
-
-        <!-- <div *ngIf="!validations.streetOk" style="color:red">Street can't be empty.</div> -->
-      </div>
+       </div>
 
       <div *ngIf="isSelectedForImage()" class="form-group">
           <input  type="file" id="imageFile" (change)="onFileSelected($event)" 
@@ -53,7 +46,6 @@
         <label for="Number">Number</label>
         <input required type="text" class="form-control" name="Number" placeholder="Number" ngModel>
 
-        <!-- <div *ngIf="!validations.numberOk" style="color:red">Number can't be empty.</div> -->
       </div>
     
 
@@ -66,7 +58,6 @@
           <option value="AppUser" >Passanger</option>
         </select>
 
-        <!-- <div *ngIf="!validations.userTypeOk" style="color:red">UserType can't be empty.</div> -->
       </div>
 
     
@@ -80,7 +71,6 @@
           <option value="Regular">Regular passanger</option>
         </select>
 
-        <!-- <div *ngIf="!validations.passangerTypeOk" style="color:red">PassangerType can't be empty.</div> -->
       </div>
 
       <div class="form-group">
@@ -88,21 +78,18 @@
         <!-- <i class="fa fa-birthday-cake" aria-hidden="true"></i> -->
         <input required type="date" class="form-control" [max]="datePickerId" name="Birthaday" placeholder="dd/mm/yyyy" ngModel>
 
-        <!-- <div *ngIf="!validations.birthadayOk" style="color:red">Birthaday can't be empty.</div> -->
       </div>
 
       <div class="form-group">
         <label for="password">Password</label>
         <input required type="password" class="form-control" name="Password" placeholder="Password" ngModel>
 
-        <!-- <div *ngIf="!validations.passwordOk" style="color:red">Password can't be empty.</div> -->
       </div>
 
       <div class="form-group">
           <label for="confirmPassword">Confirm Password</label>
           <input required type="password" class="form-control" name="ConfirmPassword" placeholder="Password" ngModel>
 
-          <!-- <div *ngIf="!validations.confirmPasswordOk" style="color:red">Confirm password can't be empty.</div> -->
       </div>
     </div>
     

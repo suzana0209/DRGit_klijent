@@ -114,3 +114,20 @@ h1#headerh1:hover{
   font-family: cursive;
 }
 
+h2#info{
+  font-size: 40px;
+  width: 100% !important;
+  text-align: center !important;
+  font-family: cursive;
+  margin-top: 150px ;   
+}
+
+h2#info:hover{
+  width: 100%;
+  background-color: gray;
+  color: white;
+  text-align: center;
+  border-color: white;
+  font-family: cursive;
+}
+

@@ -9,22 +9,8 @@ div#wholePage{
 }
 
 div#mapa{
-
-    /* border-radius: 15px;
-    border: 1p solid #999; */
-    /* width: 70%;  */
-    /* height: 100%; */
-    
-    /* position: relative; */
-    /* text-align: center; */
-    /* margin-left: 5%; */
-    /* background-color: lightgray; */
-    /* margin-bottom: 0px; */
     border: 5px solid #555555;
 
-     /* border-top-width: 0% !important;
-    border-bottom-width: 1% !important;
-   */
     border-left-width: 90px !important;
     border-right-width: 9px !important; 
     
@@ -52,20 +38,6 @@ h2#info:hover{
 }
 
 button#designBtn{
-    /* background-color: #555555; 
-    border: none;
-    color: white;
-    padding: 15px 45px; 
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 26px;
-    margin: 2px 2px;
-    cursor: pointer;
-    margin-left: 0%;
-    margin-top: 0% !important;
-    width: 300px !important;
-    margin-bottom: 20% !important; */
 
     
     padding: 15px 45px; 
@@ -92,41 +64,10 @@ button#designBtn{
     
 }
 
-/* button#designBtnForAction{
-    background-color: #555555; 
-    border: none;
-    color: white;
-    padding: 15px 45px; 
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 26px;
-    margin: 2px 2px;
-    cursor: pointer;
-    margin-left: 0%;
 
-    border-radius: 15px;
-    border: 1p solid #999;
-    font-family: Tahoma, Geneva, sans-serif;
-    
-} */
 
 button#designBtnForAction{
-    /* background-color: #555555; 
-    border: none;
-    color: white;
-    padding: 15px 45px; 
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 26px;
-    margin: 2px 2px;
-    cursor: pointer;
-    margin-left: 0%;
 
-    border-radius: 15px;
-    border: 1p solid #999;
-    font-family: Tahoma, Geneva, sans-serif; */
 
     background: #555555 linear-gradient(to bottom, transparent, #A9A9A9);
     border: 1px solid black;
@@ -144,10 +85,6 @@ button#designBtnForAction{
 }
 
 h4#infoh4{
-    /* text-align: left; */
-    /* border-bottom: 1px solid;
-    border-bottom-width: 50%; */
-    /* text-align: center;*/
     font-size: 20px;
     width: 100%;
     /* margin-top: 60px !important;     */
@@ -221,16 +158,6 @@ button#designBtn:focus{
     width: 700px !important;
   }
 
-  /* div#addForma{
-    border-style: solid;
-    border-color: red;
-    width: 100%;
-  }
-
-  div#addForma.form-group{
-      width: 300px;
-  } */
-
   form {
     background: -webkit-linear-gradient(bottom, #CCCCCC, #EEEEEE 175px);
     background: -moz-linear-gradient(bottom, #CCCCCC, #EEEEEE 175px);
@@ -255,19 +182,6 @@ button#designBtn:focus{
     -moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
     box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
   }
-
-  /* button#bzvv {
-    width: 150px;
-    position: absolute;
-    right: 20px;
-    bottom: 0px;
-    background: #09C;
-    color: #fff;
-    font-family: Tahoma, Geneva, sans-serif;
-    height: 60px;
-    border-radius: 15px;
-    border: 1p solid #999;
-  } */
 
   input[type="text"], textarea {
 

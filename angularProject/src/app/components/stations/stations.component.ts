@@ -11,9 +11,8 @@ import { ValidForAddStationModel } from 'src/app/models/modelsForValidation/vali
 import { UsersService } from 'src/app/services/users/users.service';
 import { AuthenticationService } from 'src/app/services/authentication-service.service';
 import { RegistrationModel } from 'src/app/models/registration.model';
-import { throwError } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { HttpErrorResponse } from '@angular/common/http';
+import { AccountService } from 'src/app/services/account/account.service';
+
 
 @Component({
   selector: 'app-stations',
@@ -41,19 +40,37 @@ export class StationsComponent implements OnInit {
   id: number;
   version: number;
 
-  validationsForAdd: ValidForAddStationModel = new ValidForAddStationModel();
+  //validationsForAdd: ValidForAddStationModel = new ValidForAddStationModel();
   boolBezvezeZaPoruku: string = "";
   boolBezvezeZaPorukuDenied: boolean = false;
   userPom: any;
   sakrijDugmice: boolean = true;
   pomocniUser: RegistrationModel = new RegistrationModel("","","","","","","","",new Date(),"","","","");
   selectedStationForDelete: StationModel = new StationModel("",0,0,"",0)
-
+  aktivan: boolean = false;
+  odbijen: boolean = false;
+  naCekanju: boolean = false;
 
 
 
   constructor(private ngZone: NgZone, private route: Router, private mapsApiLoader: MapsAPILoader,
-    private stationService: StationService, private userService: UsersService, private authService: AuthenticationService) {
+    private stationService: StationService, private userService: UsersService, private authService: AuthenticationService, private accountService: AccountService) {
+
+    accountService.getUserData(localStorage.getItem('name')).subscribe(dd=>{
+      this.userPom = dd;
+      this.userPom.forEach(element => {
+        if(element.activated == "DENIED"){
+          this.odbijen = true;
+        }
+        else if(element.activated == "PENDING"){
+          this.naCekanju = true;
+        }
+        else if(element.activated == "ACTIVATED"){
+          this.aktivan = true;
+        }
+      });
+    })
+
     this.selectedStationForDelete = new StationModel("",0,0,"",0)
     this.sakrijDugmice = true;
 
@@ -91,9 +108,6 @@ export class StationsComponent implements OnInit {
       window.alert(err.error.message);   
     });
   }
-
- 
-
 
   onSubmitEdit(stationData: StationModel, form: NgForm){
 
@@ -136,21 +150,21 @@ export class StationsComponent implements OnInit {
   }
 
   LoggedAdmin(): boolean{
-    if(localStorage.getItem('role') == "Admin"){
+    if(localStorage.getItem('role') == "Admin" && this.aktivan){
       return true;
     }
     return false;
   }
 
   NonActiveAdmin(){
-    if(localStorage.getItem('role') == "Admin" && this.boolBezvezeZaPoruku != "ACTIVATED" && !this.boolBezvezeZaPorukuDenied){
+    if(localStorage.getItem('role') == "Admin" && this.naCekanju){
       return true;
     }
     return false;
   }
 
   DeniedAdmin(){
-    if(localStorage.getItem('role') == "Admin" && this.boolBezvezeZaPorukuDenied){
+    if(localStorage.getItem('role') == "Admin" && this.odbijen){
       return true;
     }
   }

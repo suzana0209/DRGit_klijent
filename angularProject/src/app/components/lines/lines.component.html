@@ -1,9 +1,13 @@
 <div id="wholePage">
-<!-- <h2 *ngIf="NonActiveAdmin()" id="info">You are not authorized for add/edit/delete lines! Your request is processed! </h2>
-<h2 *ngIf="DeniedAdmin()" id="info">You are not authorized for add/edit/delete lines! Your request is denied!</h2> -->
+<h2 *ngIf="NonActiveAdmin()" id="info">You are not authorized for add/edit/delete lines! Your request is processed! </h2>
+<h2 *ngIf="DeniedAdmin()" id="info">You are not authorized for add/edit/delete lines! Your request is denied!</h2>
+
+<div *ngIf="NonActiveAdmin() || DeniedAdmin()">
+  <br><br><br><br><br><br><br><br><br><br><br>
+</div>
 
 
-<!-- <div *ngIf="LoggedAdmin()" class="row1" class="backk"> -->
+<div *ngIf="LoggedAdmin()" class="row1" class="backk">
 <div class="row1">
   <div class="column70">
     <agm-map  [latitude]="markerInfo.location.latitude" [longitude]="markerInfo.location.longitude" [zoom]="18">
@@ -42,7 +46,7 @@
         <div > 
             <div *ngFor="let ls of sl.ListOfStations, let j= index">
                 <agm-direction *ngIf="sl.ListOfStations[j+1]" 
-                  [renderOptions] = "{polylineOptions: {strokeColor: sLineForEdit.ColorLine}, suppressMarkers: true}"
+                  [renderOptions] = "{polylineOptions: {strokeColor: sl.colorLine}, suppressMarkers: true}"
                   [origin] = "{lat: ls.Latitude, lng: ls.Longitude}"
                   [destination] = "{lat:  sl.ListOfStations[j + 1].Latitude, lng:  sl.ListOfStations[ j + 1].Longitude}">
                 </agm-direction> 
@@ -53,13 +57,10 @@
 
       <!-- zaEditovvanje -->
       <div *ngIf = "isSelectedEdit()">  <!--ovdje iscrtati  selektovanu liniji -->
-        <!-- <agm-polyline  [strokeColor]="'red'">
-          <agm-polyline-point *ngFor="let station of orderedStationEdit" [latitude]="station.Latitude" [longitude]="station.Longitude">
-          </agm-polyline-point>
-        </agm-polyline> -->
+       
         <div *ngFor="let ls of sl.ListOfStations, let j= index">
             <agm-direction *ngIf="sl.ListOfStations[j+1]" 
-              [renderOptions] = "{polylineOptions: {strokeColor: sLineForEdit.ColorLine}, suppressMarkers: true}"
+              [renderOptions] = "{polylineOptions: {strokeColor: sl.colorLine}, suppressMarkers: true}"
               [origin] = "{lat: ls.Latitude, lng: ls.Longitude}"
               [destination] = "{lat:  sl.ListOfStations[j + 1].Latitude, lng:  sl.ListOfStations[ j + 1].Longitude}">
 
@@ -98,10 +99,7 @@
             <label for="RegularNumber">Line number</label>
             <input required type="text" class="form-control" name="RegularNumber" value="{{regularNumber}}" ngModel>
 
-            <!-- <div *ngIf="!validationsForAdd.regularLineOk" style="color:red">Line number can't be empty.</div> 
-            <div *ngIf="!validationsForAdd.regularLineOk0" style="color:red">Line number  must not be zero.</div>
-           <div *ngIf="!validationsForAdd.regularLineOkMinus" style="color:red">Line number must not be less than zero.</div>
-             -->
+            
           </div> 
           <div class="form-group">
             <label>Color: </label><br>
@@ -117,13 +115,6 @@
         
       </form>
 
-      <!-- <div>
-          <label for="Stations">Selected stations:</label>
-          <div *ngFor="let station of selectedStations">
-              <label><b>{{station.Name}}</b></label><br/>
-              <label>{{station.AddressStation}}</label><br/><br/>
-          </div>
-      </div> -->
   </div>
 
   <div *ngIf="isSelectedEdit()" class="backk">
@@ -134,17 +125,6 @@
                 <option *ngFor="let line of allLinesForEditFromDb" value={{line.regularNumber}}>{{line.regularNumber}}</option>
               </select>
               
-              <!-- <label *ngIf="showListOfStations">ListOfStations</label> -->
-              <!-- <table border="1">
-              <div *ngFor="let station of sLineForEdit?.ListOfStations">
-                <tr>
-                  <td>
-                <label>Name: {{station.Name}}</label>
-                <label>Address: {{station.AddressStation}}</label>
-              </td>
-            </tr>
-            </div>
-            </table> -->
             <br>
             
             <h6 *ngIf="showListOfStations">Click on station that you want to delete:</h6>
@@ -171,9 +151,7 @@
                   <option disabled>Please select...</option>
                   <option *ngFor="let station of restStation" value={{station._id}}>{{station.name}}</option>
                 </select>
-                <!--validationsForEdit-->
-                <!-- <div *ngIf="!validationsForEdit.idAddedOk" style="color:red">Station can't be empty.</div> -->
-            
+               
             </div>
             
             <div  class="form-group" id="iddRight"*ngIf = "showComboBoxForAddSt2" > 
@@ -182,8 +160,7 @@
                   <option disabled>Please select...</option>
                   <option *ngFor="let i of arrayIntForAddStation" value={{i}}>{{i}}</option>
                 </select>
-                <!-- <div *ngIf="!validationsForEdit.addStationPositionOk" style="color:red">Position can't be empty.</div> -->
-            
+                
             </div>
             
             <div *ngIf = "showAddButtonBool">
@@ -194,7 +171,7 @@
       <button *ngIf="showListOfStations" type="submit" class="button" class="btn" (click) = "onSubmitEdit()" align="center" id="designBtnForAction">Save changes</button> &nbsp;&nbsp;&nbsp;
       <input  type="button" class="btn"  id="designBtnForAction" value="Cancel" (click)="refreshPage()">
             
-    </div>
+    </div> 
 
       <!-- <h3>Edit line</h3> -->
   </div>
@@ -208,11 +185,9 @@
               <select name="RegularNumber" (click)='showLines($event)' class="form-control" ngModel>
                 <option disabled>Please select...</option>
                 <option *ngFor="let line of linesForComboBox" value={{line.regularNumber}}>{{line.regularNumber}}</option>
-                <!-- <option value="Controller" >Controller</option>
-                <option value="AppUser" >Passanger</option> -->
+                
               </select>
-              <div *ngIf="!validationsForAdd.regularLineOk" style="color:red">Please select regular number!</div>
-        
+              
             </div>
             <br>
             <label *ngIf="selectedForComboBox" align="center">Station list for line {{selectedForComboBox}}</label>
@@ -237,4 +212,6 @@
   </div>
 </div> 
 </div>
+</div>
+
 </div>

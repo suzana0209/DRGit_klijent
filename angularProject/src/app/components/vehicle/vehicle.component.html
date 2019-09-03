@@ -1,4 +1,11 @@
 <div id=wholePage>
+    <h2 *ngIf="NonActiveAdmin()" id="info">You are not authorized for add/delete vehicles! Your request is processed! </h2>
+    <h2 *ngIf="DeniedAdmin()" id="info">You are not authorized for add/delete vehicles! Your request is denied!</h2>
+    
+    <div *ngIf="NonActiveAdmin() || DeniedAdmin()">
+      <br><br><br><br><br><br><br><br><br><br><br>
+    </div>
+    <div *ngIf="LoggedAdmin()">
     <div align="center">
         <button type="submit" class="button" class="btn"  id="designBtn" (click)='showAdd()' >Add vehicle</button>  &nbsp;&nbsp;
         <!-- <button type="submit" class="button" class="btn"  id="designBtn" (click)='showEdit()' >Edit vehicle</button>   -->
@@ -39,6 +46,6 @@
             <button type="button" class="button" class="btn" id = "designBtnForAction" (click)="deleteVehicle()">Delete vehicle</button>  
         </div>
     </div>
-
+  </div>
 
 </div>

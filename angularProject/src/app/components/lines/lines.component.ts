@@ -84,12 +84,8 @@ export class LinesComponent implements OnInit {
   addStationPosition: number;
   idAdded: string;
 
-  validationsForAdd: ValidForLineModel = new ValidForLineModel();
-  validationsForEdit: ValidForEditLineModel = new ValidForEditLineModel();
   showListOfStations: boolean = false;
 
-  boolBezvezeZaPoruku: string = "";
-  boolBezvezeZaPorukuDenied: string = "";
   userPom: any;
   sakrijDugmice: boolean = true;
 
@@ -97,6 +93,9 @@ export class LinesComponent implements OnInit {
   directionsService :any ;
   directionsDisplay : any ;
   sl: LineModel = new LineModel(0,"",[],0,"","");
+  naCekanju: boolean = false;
+  odbijen: boolean = false;
+  aktivan: boolean = false;
   
 
   iconPath: any = {url: "assets/busicon.png", scaledSize: {width: 50, height:50}}
@@ -108,16 +107,22 @@ export class LinesComponent implements OnInit {
     private accountService: AccountService, private userService: UsersService) { 
 
       this.sakrijDugmice = true;
-      this.accountService.getUserData(localStorage.getItem('name')).subscribe(a=>{
-        console.log("Userrr: ", a);
-        if(a != null && a != undefined){
-          
-          this.userPom = a;
-          //this.boolBezvezeZaPoruku = this.userPom.Activated;
-          // this.boolBezvezeZaPorukuDenied = this.userPom.Deny; 
-        }
-        
+
+      accountService.getUserData(localStorage.getItem('name')).subscribe(dd=>{
+        this.userPom = dd;
+        this.userPom.forEach(element => {
+          if(element.activated == "DENIED"){
+            this.odbijen = true;
+          }
+          else if(element.activated == "PENDING"){
+            this.naCekanju = true;
+          }
+          else if(element.activated == "ACTIVATED"){
+            this.aktivan = true;
+          }
+        });
       })
+  
 
     this.stationService.getAllStations().subscribe(data => {
       this.stations = data;
@@ -197,12 +202,9 @@ export class LinesComponent implements OnInit {
   onSubmitDelete(lineData: LineModel, form:NgForm){
    
       this.lineService.deleteLine(this.selectedLine._id.toString()).subscribe(data => {
-        alert("Line with Number="+ lineData.RegularNumber +" successful delted!");
-        window.alert(data.message);
+       window.alert(data.message);
         this.refreshPage();
-        //form.reset();
-        //window.location.reload();
-  
+      
       },
       err => {
         window.alert(err.error.message);
@@ -498,6 +500,24 @@ export class LinesComponent implements OnInit {
     this.sakrijDugmice = true;
     this.selected = "";
 
+    this.accountService.getUserData(localStorage.getItem('name')).subscribe(dd=>{
+      this.userPom = dd;
+      this.userPom.forEach(element => {
+        if(element.activated == "DENIED"){
+          this.odbijen = true;
+        }
+        else if(element.activated == "PENDING"){
+          this.naCekanju = true;
+        }
+        else if(element.activated == "ACTIVATED"){
+          this.aktivan = true;
+        }
+      });
+    })
+    this.sLineForEdit = new LineModel(0,"",[])
+    this.sl = new LineModel(0,"",[],0,"","");
+    this.showListOfStations = false;
+    this.selectedLineForEdit = new LineModel(0,"",[])
     this.stationService.getAllStations().subscribe(data => {
       this.stations = data;
       this.allStationFromDb = data
@@ -513,5 +533,25 @@ export class LinesComponent implements OnInit {
       this.arrayIntForAddStation = []; 
 
     //ostatak 
+  }
+
+  LoggedAdmin(): boolean{
+    if(localStorage.getItem('role') == "Admin" && this.aktivan){
+      return true;
+    }
+    return false;
+  }
+
+  NonActiveAdmin(){
+    if(localStorage.getItem('role') == "Admin" && this.naCekanju){
+      return true;
+    }
+    return false;
+  }
+
+  DeniedAdmin(){
+    if(localStorage.getItem('role') == "Admin" && this.odbijen){
+      return true;
+    }
   }
 }
