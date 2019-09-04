@@ -1,7 +1,10 @@
 <div id="wholePage">
-<!-- <h2 *ngIf="!pomBool && !denyController" id="info"> You are not authorized by admin! Your request is processed! </h2>
-<h2 *ngIf="denyController" id="info">You are not authorized by admin! Your request has been denied!</h2> -->
-
+  <h2 *ngIf="NonActiveController()" id="info">You are not authorized for validate ticket ! Your request is processed! </h2>
+  <h2 *ngIf="DeniedController()" id="info">You are not authorized for validate ticket! Your request is denied!</h2>
+  
+  <div *ngIf="NonActiveController() || DeniedController()">
+    <br><br><br><br><br><br><br><br><br><br><br>
+  </div>
 <!-- <div *ngIf="pomBool">
 <label>Ticket ID:</label>
 <input class="form-group"  class="form-control" type="number" name="ticketId" [(ngModel)]="myInput">
@@ -23,7 +26,7 @@
 
 </div> -->
 
-<div class="row1"> <!-- *ngIf="pomBool" -->
+<div class="row1" *ngIf="LoggedController()"> <!-- *ngIf="pomBool" -->
   <h1 id="headerh1">Validate ticket</h1>
 <div  class="columnForInside40"> 
   <label id="info">Ticket ID:</label>

@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ValidateTicketService } from 'src/app/services/validateTicketService/validate-ticket.service';
 import { VerificationService } from 'src/app/services/verificationService/verification.service';
 import { PomModelForAuthorization } from 'src/app/models/pomModelForAuth.model';
-import { AuthenticationService } from 'src/app/services/authentication-service.service';
 import { UsersService } from 'src/app/services/users/users.service';
 
 import { BuyTicketService } from 'src/app/services/buyTicketService/buy-ticket.service';
 import { ValidForValidateTicketModel } from 'src/app/models/modelsForValidation/validForValidateTicket.model';
-import { Form } from '@angular/forms';
+import { AccountService } from 'src/app/services/account/account.service';
+
 
 @Component({
   selector: 'app-validate-ticket',
@@ -37,13 +37,32 @@ export class ValidateTicketComponent implements OnInit {
   validations: ValidForValidateTicketModel = new ValidForValidateTicketModel();
   fd: FormData = new FormData();
   allTicket: any = []
+  userPom: any;
+  odbijen: boolean = false;
+  aktivan: boolean = false;
+  naCekanju: boolean = false;
 
   constructor(private ticketServ: ValidateTicketService, 
     private verifyService: VerificationService,
-    private userService: UsersService, private buyTicketService: BuyTicketService) { 
+    private userService: UsersService, private buyTicketService: BuyTicketService, private accountService:AccountService) { 
       this.ticketMessage = "";
       this.nameOfCustomerMessage = "";  
-      this.userService.getUserData(localStorage.getItem('name')).subscribe(data => {
+      this.accountService.getUserData(localStorage.getItem('name')).subscribe(data => {
+
+        this.userPom = data;
+        this.userPom.forEach(element => {
+          if(element.activated == "DENIED"){
+            this.odbijen = true;
+          }
+          else if(element.activated == "PENDING"){
+            this.naCekanju = true;
+          }
+          else if(element.activated == "ACTIVATED"){
+            this.aktivan = true;
+          }
+        });
+  
+
         this.user = data;    
         this.pomBool = this.user.Activated;
         this.denyController = this.user.Deny;
@@ -62,160 +81,7 @@ export class ValidateTicketComponent implements OnInit {
   }
 
 
-  // FindTicket(n:any){
- 
-  //   console.log(n);
-  //   this.ticketServ.getTicket(n).subscribe(data => {
-  //     if(data == null){
-  //       alert("Ticket not exists! ");
-  //       return;
-  //     }
-  //     this.ticketForV = data;
-      
-  //     if(this.ticketForV)
-  //     {
-  //         this.ticketExists = "";
-  //         if(this.ticketForV.AppUserId == "" || this.ticketForV.AppUserId == undefined || this.ticketForV.AppUserId == null)
-  //         {
-  //           this.ValidateTicketNoUser();
-  //         }
-  //     }
-  //     else{
-  //       this.ticketExists = "Ticket doesn't exist in database!"
-  //     }
-  //   }
 
-    
-  //   );
-    
-  // }
-
-  // ValidateTicketNoUser()
-  // {
-    
-  
-  //   let d : Date = new Date(this.ticketForV.PurchaseTime);
-
-  //   d.setHours(d.getHours() + 1);
-  //       if(d < new Date())
-  //       {
-  //         this.ticketMessage = "Ticket is not valid. Time is up!"
-  //       }else
-  //       {
-  //         this.ticketMessage = "Ticket is valid."
-  //       }
-  //   }
-  
-
-  
-  // ValidateTicket(n: any)
-  // {
-  //   let TT : string = "";
-  //   this.allTT.forEach(element => {
-  //     if(this.ticketForV.TypeOfTicketId == element.Id)
-  //     {
-  //         TT = element.Name;  //zapamti ime karte
-  //     }      
-  //   });
-  
-  //   let d : Date = new Date(this.ticketForV.PurchaseDate);
-
-  //   if(n == this.ticketForV.AppUserId)
-  //   {
-
-  //     if(TT == "Hourly")
-  //     {
-  //       d.setHours(d.getHours() + 1);
-  //       if(d < new Date())
-  //       {
-  //         this.ticketMessage = "Ticket is not valid. Time is up!"
-  //       }else
-  //       {
-  //         this.ticketMessage = "Ticket is valid."
-  //       }
-  //     }
-
-  //     if(TT == "Daily")
-  //     {
-  //       if(d.getFullYear() < new Date().getFullYear())
-  //       {
-  //         this.ticketMessage = "Ticket is not valid. Time is up!"
-  //       }else if(d.getFullYear() == new Date().getFullYear())
-  //       {
-  //         if(d.getMonth() < new Date().getMonth())
-  //         {
-  //           this.ticketMessage = "Ticket is not valid. Time is up!"
-  //         }else if(d.getMonth() == new Date().getMonth())
-  //         {
-  //           if(d.getDate() == new Date().getDate())
-  //           {
-  //             this.ticketMessage = "Ticket is valid."
-  //           }
-  //           else{
-  //             this.ticketMessage = "Ticket is not valid. Time is up!"
-  //           }
-          
-  //         }
-  //       }
-  //     }
-
-  //     if(TT == "Monthly")
-  //     {
-  //       if(d.getFullYear() < new Date().getFullYear())
-  //       {
-  //         this.ticketMessage = "Ticket is not valid. Time is up!"
-  //       }else if(d.getFullYear() == new Date().getFullYear())
-  //       {
-  //         if(d.getMonth() == new Date().getMonth())
-  //         {
-  //           this.ticketMessage = "Ticket is valid."
-  //         }
-  //         else{
-  //           this.ticketMessage = "Ticket is not valid. Time is up!"
-  //         }
-         
-  //       }
-  //     }
-
-  //     if(TT == "Yearly")
-  //     {
-  //       if(d.getFullYear() == new Date().getFullYear())
-  //       {
-  //         this.ticketMessage = "Ticket is valid."
-  //       }
-  //       else
-  //       {
-  //         this.ticketMessage = "Ticket is not valid. Time is up!"
-  //       }
-  //     }
-
-  //   }else
-  //   {
-  //     this.ticketMessage = "User with email: " + n + " did not buy ticket with Id: " + this.ticketForV.Id;
-  //   }
-  // }
-
-  // AuthorizeAppUsers(id, i){
-  //   this.modelHelp.Id = id;
-  //   this.verifyService.authorizeAppUser(this.modelHelp).subscribe(resp => {
-  //     if(resp == "Ok")  {
-  //       alert("AppUser has been authorized!");
-  //       this.awaitingAppUsers.splice(i,1);
-  //     }
-  //      else alert("Something went wrong");
-  //   })
-  // }
-
-  // DenyAppUsers(id, i){
-  //   this.modelHelp.Id = id;
-  //   this.verifyService.denyAppUser(this.modelHelp).subscribe(resp => {
-  //     if(resp == "Ok")  {
-  //       alert("AppUser has been denied!");
-  //       this.awaitingAppUsers.splice(i,1);
-  //     }
-  //      else alert("Something went wrong");
-  //   })
-  // }
 
   CheckTicket(idTicket: any){
     this.ticketMessage = "";
@@ -226,11 +92,7 @@ export class ValidateTicketComponent implements OnInit {
       idTicket = "";
     }
 
-    // this.modelHelp.Id = idTicket.toString();
-
-    // if(this.validations.validate(this.modelHelp)){
-    //   return;
-    // }
+    
     var boool;
     var count = 0;
     this.buyTicketService.getAllTicket().subscribe(tt=>{
@@ -284,5 +146,25 @@ export class ValidateTicketComponent implements OnInit {
       //this.ticketMessage = data.toString() + ".";
     })
   } 
+
+  LoggedController(): boolean{
+    if(localStorage.getItem('role') == "Controller" && this.aktivan){
+      return true;
+    }
+    return false;
+  }
+
+  NonActiveController(){
+    if(localStorage.getItem('role') == "Controller" && this.naCekanju){
+      return true;
+    }
+    return false;
+  }
+
+  DeniedController(){
+    if(localStorage.getItem('role') == "Controller" && this.odbijen){
+      return true;
+    }
+  }
 
 }

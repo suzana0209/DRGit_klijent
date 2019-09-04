@@ -1,12 +1,14 @@
 <div id="wholePage">
 
-<div *ngIf="!nonRegister() && !nonActivated() && !requestDeny()">
-  <!-- <h2 id="info">You are not authorized to purchase tickets. Your request is processed! </h2> -->
-</div>
+  <h2 *ngIf="NonActiveUser()" id="info">You are not authorized for buying a ticket ! Your request is processed! </h2>
+  <h2 *ngIf="DeniedUser()" id="info">You are not authorized for buying a ticket! Your request is denied!</h2>
+  
+  <div *ngIf="NonActiveUser() || DeniedUser()">
+    <br><br><br><br><br><br><br><br><br><br><br>
+  </div>
 
-<!-- <h2 *ngIf="requestDeny() && !nonRegister()" id="info">You do not have the right to purchase tickets, your request has been denied!</h2> -->
- 
-<h1  id="headerh1">Buy ticket</h1> <!--*ngIf="nonActivated()"-->
+ <!-- <div *ngIf="LoggedUser()"> -->
+<h1  id="headerh1">Buy a ticket</h1> <!--*ngIf="nonActivated()"-->
   <div class="row1" class="designForForm">
   <div class="columnForInside40">
     <form #buyTicketForm="ngForm"  (ngSubmit)="onSubmit(buyTicketForm.value, buyTicketForm)">
@@ -30,13 +32,13 @@
             <option value="Yearly">Yearly</option> 
           </select>
           
-          <div *ngIf="!validations.typeOfTicketOk" style="color:red">Please select type ticket.</div>
+          <!-- <div *ngIf="!validations.typeOfTicketOk" style="color:red">Please select type ticket.</div> -->
         </div>
       </div>
-
-      <ngx-paypal [config]="payPalConfig"></ngx-paypal>
-
-      <button  type="submit" class="nav-link" class="btn" class="marginForBtn" id="btnDesign">Complete shopping</button> 
+      <div >
+        <ngx-paypal [config]="payPalConfig"></ngx-paypal>
+       </div>
+      <button  type="submit" class="nav-link" class="btn" class="marginForBtn" id="btnDesign" *ngIf = "dugmeComplete">Complete shopping</button> 
       <!--*ngIf="(nonActivated() || nonRegister()) && (showButtonComplete)"-->
   </form>
 </div>
@@ -44,7 +46,7 @@
 
  <div class="columnForInside60">
   <label *ngIf="nonRegister && !mailForPayPal" id="info">We are sorry, you are not registered, we do not have your ticket history</label>
-  <div *ngIf="!nonRegister() && nonActivated() && !requestDeny()">
+  <div *ngIf="!nonRegister() && nonActivated() && !DeniedUser()">
     
     <!--Niste kupili ni jednu kartu-->
     <label id="info">{{listOfBuyingTicket.length != 0 ? 'History of buying ticket' : 'You did not buy any tickets!'}}!</label>
@@ -75,5 +77,7 @@
   </div>
 </div>
 </div>
+<!-- </div>  -->
 
 </div>
+ 
