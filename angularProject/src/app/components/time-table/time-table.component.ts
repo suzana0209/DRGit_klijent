@@ -224,7 +224,7 @@ export class TimeTableComponent implements OnInit {
       window.alert(data.message);
       this.refreshPage();
     },
-    err => {
+    err => { 
       window.alert(err.error.message)
     });
 
@@ -327,17 +327,19 @@ export class TimeTableComponent implements OnInit {
 
      this.allTimetableFromDb.forEach(e1 => {
        if(e1.dayType == this.dayId && e1.line == this.lineId){
-         this.sviPolasciIzBaze = e1.departures;
 
-         /*
-         this.stringovi.push(n);
-        this.stringovi.sort((a,b)=> a.localeCompare(b));
-        this.stringovi1 = this.stringovi;
-         */
+         this.sviPolasciIzBaze = e1.departures;
+        let pom = [];
+        pom = e1.departures.toString().split('|');
+        pom.forEach(ee=>{
+          this.allDeparturesForSelect.push(ee);
+        })
+        //this.allDeparturesForSelect = this.sviPolasciIzBaze.split('|');
         this.allDeparturesForSelect.sort((a,b) => a.localeCompare(b));
 
-
-         this.allDeparturesForSelect = e1.departures.split("|");
+        
+        //this.allDeparturesForSelect.sort((a,b) => a.localeCompare(b));
+         //this.allDeparturesForSelect = e1.departures.split("|");
          this.timetableIdForSend = e1._id;
        }
      });

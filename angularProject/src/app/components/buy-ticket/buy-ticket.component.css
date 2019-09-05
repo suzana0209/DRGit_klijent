@@ -7,7 +7,7 @@ div#wholePage{
     background-color:lightgray !important;
     /* height: 800px !important; */
     /* overflow-y: hidden; */
-    height: 500px;
+    height: 500px !important;
     
 }
 

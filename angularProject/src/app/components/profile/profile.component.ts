@@ -34,6 +34,7 @@ export class ProfileComponent implements OnInit {
   rodjendan: string = ""
   mejlZaShow: string = ""
   pendingUser: boolean = false;
+  nonActivatedUser: boolean = false;
 
   typePassanger: string = ""
   kk: string = ""
@@ -65,6 +66,7 @@ export class ProfileComponent implements OnInit {
             this.typePassanger = element.userType;
           }else{
             this.pendingUser = (element.activated == "PENDING") ? true : false;
+            this.nonActivatedUser = (element.activated == "NOT ACTIVATED") ? true : false;
             this.accountService.getPassengerTypes().subscribe(pt=>{
               pt.forEach(element1 => {
                 if(element1._id == element.passengerType){
@@ -220,6 +222,7 @@ export class ProfileComponent implements OnInit {
 
   refresh(){
     this.selected = "";
+    this.showApplyButton = false;
         this.fdd = new FormData();
         this.mejlZaShow = localStorage.getItem('name').toString();
            this.accountService.getUserData(localStorage.getItem('name')).subscribe(data=>{

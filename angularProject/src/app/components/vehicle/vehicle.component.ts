@@ -31,6 +31,7 @@ export class VehicleComponent implements OnInit {
 
 
   constructor(private vehicleService: VehicleService, private lineService: LineService, private accountService: AccountService) { 
+    this.availableVehicles = [];
     accountService.getUserData(localStorage.getItem('name')).subscribe(dd=>{
       this.userPom = dd;
       this.userPom.forEach(element => {
@@ -50,8 +51,8 @@ export class VehicleComponent implements OnInit {
       console.log("All vehicels: ", this.vehicles);
       
       this.vehicles.forEach(element => {
-        if(element.timetable == null || element.timetable == undefined){
-          this.availableVehicles.push(element);
+        if(element.timetables.length == 0 || element.timetables == undefined){
+          this.availableVehicles.push(element); 
         }
       });
 
@@ -155,8 +156,8 @@ export class VehicleComponent implements OnInit {
       this.vehicles = data;
 
       this.vehicles.forEach(element => {
-        if(element.timetable == null || element.timetable == undefined){
-          this.availableVehicles.push(element);
+        if(element.timetables.length == 0 || element.timetables == undefined){
+          this.availableVehicles.push(element); 
         }
       });
     })

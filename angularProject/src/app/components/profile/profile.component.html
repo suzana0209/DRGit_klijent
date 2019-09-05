@@ -28,7 +28,7 @@
                 </h3>
                 </div>
             </div>
-            <div class="col-25" *ngIf="pendingUser">
+            <div class="col-25" *ngIf="pendingUser || nonActivatedUser">
                 <h3 id="imageInfo">{{typePassanger == "Student" ? "Photo index" : ''}} {{typePassanger == "Pensioner" ? "Pensioner check" : ""}}</h3>
                 <img src="{{listOfImage}}" width="300" height="170" alt="">
                 <div class="row">

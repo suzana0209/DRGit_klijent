@@ -58,6 +58,8 @@ export class BuyTicketComponent implements OnInit {
   naCekanju: boolean = false;
   odbijen: boolean = false;
   dugmeComplete: boolean = true;
+  dugmePayPal: boolean = false;
+  neAktivan: boolean = false;
 
   constructor(private authService: AuthenticationService, private usersService: UsersService,
     private buyTicketService: BuyTicketService,
@@ -74,6 +76,9 @@ export class BuyTicketComponent implements OnInit {
           }
           else if(element.activated == "ACTIVATED"){
             this.aktivan = true;
+          }
+          else if(element.activated == "NOT ACTIVATED"){
+            this.neAktivan = true;
           }
         });
       })
@@ -207,7 +212,9 @@ export class BuyTicketComponent implements OnInit {
   }
 
   private initConfig(): void {
+    this.dugmePayPal = true;
     this.showButtonComplete = false;
+    this.dugmeComplete = false;
     
     var diffDays;
     var mejl = "";
@@ -330,6 +337,7 @@ export class BuyTicketComponent implements OnInit {
           
           this.buyTicketService.postPayPalModel(this.fd).subscribe(ddd=>{
             window.alert(ddd.message);
+            window.location.reload();
             this.refreshPage();
          
          }, 
@@ -387,7 +395,7 @@ LoggedUser(): boolean{
 }
 
 NonActiveUser(){
-  if(localStorage.getItem('role') == "AppUser" && this.naCekanju){
+  if(localStorage.getItem('role') == "AppUser" && (this.naCekanju || this.neAktivan)){
     return true;
   }
   return false;
@@ -398,17 +406,11 @@ DeniedUser(){
     return true;
   }
 }
-// nonRegister(){
-//   if(localStorage.getItem('name') == null){
-//     return true;
-//   }
-//   else{
-//     return false;
-//   }
-// }
+
 
 refreshPage(){
   this.dugmeComplete = true;
+  this.dugmePayPal = false;
   this.accountService.getUserData(localStorage.getItem('name')).subscribe(dd=>{
     this.userPom = dd;
     this.userPom.forEach(element => {
@@ -434,7 +436,8 @@ refreshPage(){
     this.dataFromPaypalService = null;
     this.buyTicketForm1 = null;
    
-
+    this.fd = new FormData();
+    this.fd.append('idd', this.idLoggUser);
     this.buyTicketService.getTicketWithCurrentAppUser(this.fd).subscribe(d=>{
       this.listOfBuyingTicket = d; 
     }) 
