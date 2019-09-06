@@ -89,7 +89,7 @@ label#info2{
 }
 
 button#btnDesign{
-    background-color: #555555; /* Black */
+    /* background-color: #555555; 
     border: none;
     color: white;
     padding: 15px 32px;
@@ -98,8 +98,31 @@ button#btnDesign{
     display: inline-block;
     font-size: 20px;
     margin: 4px 2px;
+    cursor: pointer; */
+
+
+    padding: 15px 45px; 
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 26px;
+    margin: 2px 2px;
     cursor: pointer;
-    /* margin-left: 20% !important; */
+    margin-left: 0%;
+    margin-top: 0% !important;
+    width: 300px !important;
+    margin-bottom: 20% !important;
+
+    background: #555555 linear-gradient(to bottom, transparent, #A9A9A9);
+    border: 1px solid black;
+    border-radius: 5px;
+    color: white;
+    display: inline-block;
+    font-size: 22px;
+    font-family: Tahoma, Geneva, sans-serif;
+    padding: 15px 15px;
+    text-decoration: none;
+    
 }
 
 .marginForBtn{
@@ -123,7 +146,7 @@ button#btnDesign{
 
 
   .marginPom{
-    margin-left: 28% !important;
+    margin-left: 15% !important;
   }
 
   .row1:after {

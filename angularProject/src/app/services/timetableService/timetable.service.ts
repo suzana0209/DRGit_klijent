@@ -9,8 +9,6 @@ import { TimetableModel2, TimetableModel3, TimetableModel4 } from 'src/app/model
 })
 export class TimetableService {
 
-  baseUrl = "http://localhost:52295";
-
   private token: string;
 
 
@@ -36,19 +34,6 @@ export class TimetableService {
    
       //base = this.httpClient.get(`/api/${type}`, { headers: { Authorization: `Bearer ${this.getToken()}` }}); 
     }
- 
-    // const request = base.pipe(
-    //   map((data: TokenResponse) => {
-    //     if (data.token) {
-    //       if( type === 'login')
-    //       {
-    //         this.saveToken(data.token);
-    //       }
-          
-    //     }
-    //     return data;
-    //   })
-    // );
 
     return base;
   }
@@ -73,42 +58,5 @@ export class TimetableService {
   public deleteTimetable(stid:String):Observable<any>{
     return this.request('delete', 'deleteTimetable',null,stid);
   }
-
-
-
-
-
-
-  // addTimeTable(timeTable : TimetableModel2): Observable<any>{
-  //   return this.httpClient.post(this.baseUrl + "/api/Timetable/Add", timeTable);
-  // }
-
-  // deleteTimetable(id:number){
-  //   return this.httpClient.delete(this.baseUrl + "/api/Timetable/Delete?id=" + id);
-  // }
-
-  // getAll(){
-  //   return this.httpClient.get(this.baseUrl + "/api/Timetable/GetAll");
-  // }
-
-    // uradjen Include
-  // getLT(){
-  //     return this.httpClient.get(this.baseUrl + "/api/Timetable/LineInTT");
-  // }
-
-  // editTimetable(id, timetable):Observable<any>{
-  //   return this.httpClient.put(this.baseUrl + "/api/Timetable/Edit?id=" + id, timetable);
-  // }
-
-  // AlredyExistTimetable(timeTable: TimetableModel2){
-  //   return this.httpClient.post(this.baseUrl + "/api/Timetable/AlredyExistTimetable", timeTable);
-  // }
-
-  // AlreadyExistByEdit(tt){
-  //   return this.httpClient.post(this.baseUrl + "/api/Timetable/AlreadyExistByEdit", tt);
-  // }
-
-
-
 
 }

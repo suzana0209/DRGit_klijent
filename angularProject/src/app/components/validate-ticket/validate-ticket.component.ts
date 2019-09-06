@@ -42,9 +42,7 @@ export class ValidateTicketComponent implements OnInit {
   aktivan: boolean = false;
   naCekanju: boolean = false;
 
-  constructor(private ticketServ: ValidateTicketService, 
-    private verifyService: VerificationService,
-    private userService: UsersService, private buyTicketService: BuyTicketService, private accountService:AccountService) { 
+  constructor(private ticketServ: ValidateTicketService, private buyTicketService: BuyTicketService, private accountService:AccountService) { 
       this.ticketMessage = "";
       this.nameOfCustomerMessage = "";  
       this.accountService.getUserData(localStorage.getItem('name')).subscribe(data => {
@@ -70,10 +68,6 @@ export class ValidateTicketComponent implements OnInit {
         //this.emailOfLoggedUser = this.user.Email;
        console.log("Serrrr:", this.user);    
    
-    this.ticketServ.getAllTypeOfTicket().subscribe(data => {
-      this.allTT = data;
-      console.log("ALLLL TTTT: ", this.allTT);
-    })
   })
   }
 

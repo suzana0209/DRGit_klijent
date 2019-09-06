@@ -9,8 +9,7 @@ import { VehicleModel } from 'src/app/models/vehicle.model';
 })
 export class VehicleService {
 
-  baseUrl = "http://localhost:52295"
-  constructor(private http: Http, private httpClient:HttpClient) { }
+ constructor(private http: Http, private httpClient:HttpClient) { }
 
 
   
@@ -34,7 +33,7 @@ export class VehicleService {
     else {
       base = this.httpClient.get(`/api/${type}`, { headers: { Authorization: `Bearer ${this.getToken()}` }});
    
-      //base = this.httpClient.get(`/api/${type}`, { headers: { Authorization: `Bearer ${this.getToken()}` }}); 
+
     }
 
     return base;
@@ -51,36 +50,5 @@ export class VehicleService {
   public deleteVehicle(stid: String):Observable<any>{
     return this.request('delete', 'deleteVehicle', null,stid);
   }
-
-
-
-  // addVehicle(vehicle): Observable<any>{
-  //   return this.httpClient.post(this.baseUrl+"/api/Vehicles/Add",vehicle);
-  // }
-
-  // getAllVehicles(){
-  //   return this.httpClient.get(this.baseUrl + "/api/Vehicles/GetAll");
-  // }
-
-  // getLinesForVehicle(){
-  //   return this.httpClient.get(this.baseUrl + "/api/Vehicles/GetLinesForVehicle"); 
-  // }
-
-  // getTimetablesForVehicle(){
-  //   return this.httpClient.get(this.baseUrl + "/api/Vehicles/TimetablesForVehicle"); 
-  // }
-
-  // deleteVehicle(id){
-  //   return this.httpClient.delete(this.baseUrl + "/api/Vehicles/Delete?id=" + id);
-  // }
-  // //
-
-  // getVehicle(id: number){
-  //   return this.httpClient.get(this.baseUrl + "/api/Vehicles/GetVehicle?id=" + id);
-  // }
-
-  // editVehicle(vehicle):Observable<any>{
-  //   return this.httpClient.post(this.baseUrl + "/api/Vehicles/Edit", vehicle);
-  // }
 
 }

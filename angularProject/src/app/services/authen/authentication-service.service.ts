@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
-import { RegistrationModel } from '../models/registration.model';
+import { RegistrationModel } from '../../models/registration.model';
 
 
 export interface UserDetails {

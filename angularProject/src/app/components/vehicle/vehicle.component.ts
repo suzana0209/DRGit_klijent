@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { LineModel } from 'src/app/models/line.model';
 import { VehicleService } from 'src/app/services/vehicleService/vehicle.service';
 import { LineService } from 'src/app/services/lineService/line.service';
 import { VehicleModel } from 'src/app/models/vehicle.model';

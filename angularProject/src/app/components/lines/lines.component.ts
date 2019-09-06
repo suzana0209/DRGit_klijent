@@ -10,7 +10,6 @@ import { LineModel } from 'src/app/models/line.model';
 import { NgForm } from '@angular/forms';
 import { IconSequence } from '@agm/core/services/google-maps-types';
 import { LineStationModel } from 'src/app/models/lineStation.model';
-import { LineStationService } from 'src/app/services/lineStationService/line-station.service';
 import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { PomLineModel } from 'src/app/models/pomLineModel.model';
 import { ValidForLineModel, ValidForEditLineModel } from 'src/app/models/modelsForValidation/validForLineModel.model';
@@ -103,7 +102,6 @@ export class LinesComponent implements OnInit {
   constructor(private ngZone: NgZone, private mapsApiLoader : MapsAPILoader , 
     private stationService: StationService, 
     private lineService: LineService, 
-    private lineStationService: LineStationService,
     private accountService: AccountService, private userService: UsersService) { 
 
       this.sakrijDugmice = true;

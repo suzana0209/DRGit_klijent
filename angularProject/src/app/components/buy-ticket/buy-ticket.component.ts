@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AuthenticationService } from 'src/app/services/authentication-service.service';
+import { AuthenticationService } from 'src/app/services/authen/authentication-service.service';
 import { UsersService } from 'src/app/services/users/users.service';
 import { BuyTicketService } from 'src/app/services/buyTicketService/buy-ticket.service';
 import { PomModelForBuyTicket, PomModelForAddTicketPayPal } from 'src/app/models/pomModelForBuyTicket.model';

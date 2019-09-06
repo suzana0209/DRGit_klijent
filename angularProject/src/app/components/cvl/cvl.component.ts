@@ -5,8 +5,6 @@ import { MarkerInfo } from '../map/modelsForMap/marker-info.model';
 import { GeoLocation } from '../map/modelsForMap/geolocation';
 import { MapsAPILoader } from '@agm/core';
 import { LineService } from 'src/app/services/lineService/line.service';
-import { NotificationForCvlService } from 'src/app/services/notificationForCvlService/notification-for-cvl.service';
-import { ForCvlService } from 'src/app/services/forCvlService/for-cvl.service';
 import { StationService } from 'src/app/services/stationService/station.service';
 import { CvlService } from 'src/app/services/cvlService/cvl.service';
 import { Subscription } from 'rxjs';
@@ -55,10 +53,10 @@ export class CvlComponent implements OnInit, OnDestroy {
 
 //iconPath : any = { url:"assets/busicon.png", scaledSize: {width: 50, height: 50}};
   constructor(private mapsApiLoader : MapsAPILoader,
-    private  cvlService: CvlService, notifForBL : NotificationForCvlService,
+    private  cvlService: CvlService,
     private ngZone: NgZone,
     private lineService : LineService,
-    private clickService : ForCvlService, private stationsService: StationService) {
+    private stationsService: StationService) {
 
     this.isConnected = false;
     this.notificationBus = [];
@@ -79,15 +77,11 @@ export class CvlComponent implements OnInit, OnDestroy {
         this.options1 = data;
 
         this.options1.forEach(element => {
-          this.options.push(element.regularNumber);
+          this.options.push(element.regularNumber); 
         });
       });
     //inicijalizacija polyline
     this.polyline = new Polyline([], 'blue', { url:"assets/busicon.png", scaledSize: {width: 50, height: 50}});
-
-    //za hub
-    //this.subscribeForTime();
-    //this.checkConnection();
 
     //novo
     this.stations = [];
@@ -111,22 +105,19 @@ export class CvlComponent implements OnInit, OnDestroy {
     this.options1.forEach(element => {
       if(element.regularNumber == regularNumber)
       {
-        // this.stationsService.getOrderedStations(element.Id).subscribe(aaa=> {
-         // this.pomm = aaa;
-         // console.log("POooomm station", this.pomm);
-
-          //this.stations = this.pomm;
         this.stations = this.findStations(element.stations);
         console.log("Stanice iz linije: ", this.stations);
         for(var i=0; i<this.stations.length; ++i){
           this.polyline.addLocation(new GeoLocation(this.stations[i].latitude, this.stations[i].longitude));
         }
+        console.log("Prije slanja: ", this.stations);
 
         this.cvlService.sendStations(this.stations);
         this.cvlService.readyToReceive();
 
         this.sub = this.cvlService.getMessages().subscribe(aa=>{
           this.ngZone.run(() => {
+            console.log("Current number: ", aa);
             this.currentNumber = aa;
             this.currNmr = aa;
 
@@ -136,14 +127,6 @@ export class CvlComponent implements OnInit, OnDestroy {
             console.log("Lat, lng: ", this.latitude, this.longitude);
           })
         })
-
-        // console.log(this.stations);
-        // this.clickService.click(this.stations).subscribe(d=>{
-        //   console.log("dataaa for location: ", d);
-
-        //   this.startTimer();
-        // });
-        //})
       }
     });
 
@@ -159,56 +142,13 @@ export class CvlComponent implements OnInit, OnDestroy {
       this.stations = [];
       this.polyline.path = [];
 
-      //this.stopTimer();
     }
     else{
-     // this.stopTimer();
 
       this.getStationsByLineNumber(event.target.value);
     }
 
   }
-
-  // private checkConnection(){
-  //   this.notifForBL.startConnection().subscribe(e => {
-  //     this.isConnected = e;
-  //     if(e){
-
-  //     }
-
-  //   });
-  // }
-
-//  public subscribeForTime() {
-//     this.notifForBL.registerForTimerEvents().subscribe(e => {
-//       this.onTimeEvent(e)
-//     });
-
-//   }
-
-
-
-  // public onTimeEvent(pos: number[]){
-  //   this.ngZone.run(() => {
-  //      this.time = pos;
-  //      if(this.isChanged){
-  //        this.latitude = pos[0];
-  //         this.longitude = pos[1];
-  //      }else{
-  //         this.latitude = 0;
-  //         this.longitude = 0;
-  //      }
-  //   });
-  // }
-
-  // public startTimer() {
-  //   this.notifForBL.StartTimer();
-  // }
-
-  // public stopTimer() {
-  //   this.notifForBL.StopTimer();
-  //   this.time = null;
-  // }
 
   ngOnDestroy(){
     this.sub.unsubscribe();

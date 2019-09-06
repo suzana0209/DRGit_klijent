@@ -9,7 +9,7 @@ import { MapComponent } from '../map/map.component';
 import { Router } from '@angular/router';
 import { ValidForAddStationModel } from 'src/app/models/modelsForValidation/validForStation.model';
 import { UsersService } from 'src/app/services/users/users.service';
-import { AuthenticationService } from 'src/app/services/authentication-service.service';
+import { AuthenticationService } from 'src/app/services/authen/authentication-service.service';
 import { RegistrationModel } from 'src/app/models/registration.model';
 import { AccountService } from 'src/app/services/account/account.service';
 

@@ -8,8 +8,6 @@ import { PayPalModel } from 'src/app/models/payPal.model';
 })
 export class PayPalModelService {
 
-  base_url = "http://localhost:52295";
-
 
   constructor(private http: Http, private httpClient:HttpClient) { }
 

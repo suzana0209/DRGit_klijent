@@ -7,9 +7,9 @@
      <h2 id="info">Currently active pricelist</h2>   <!--Poruka ako ne postoji cjenovnik! --><br>
      <!-- <h2 *ngIf="!showPriceInInput" id="notExistPL">{{messageNoExistPricelist}}</h2> -->
 
-    <h4 *ngIf="priceList" id="designWithHover">
-      {{priceList.FromTime.split('T')[0].split('-')[2]}}/{{priceList.FromTime.split('T')[0].split('-')[1]}}/{{priceList.FromTime.split('T')[0].split('-')[0]}}
-      - {{priceList.ToTime.split('T')[0].split('-')[2]}}/{{priceList.ToTime.split('T')[0].split('-')[1]}}/{{priceList.ToTime.split('T')[0].split('-')[0]}}
+    <h4 *ngIf="pomPricelist" id="designWithHover">
+      {{pomPricelist.fromTime.split('T')[0].split('-')[2]}}/{{pomPricelist.fromTime.split('T')[0].split('-')[1]}}/{{pomPricelist.fromTime.split('T')[0].split('-')[0]}}
+      - {{pomPricelist.toTime.split('T')[0].split('-')[2]}}/{{pomPricelist.toTime.split('T')[0].split('-')[1]}}/{{pomPricelist.toTime.split('T')[0].split('-')[0]}}
     </h4>  
     <!-- <h4 *ngIf="priceList">To: {{priceList.ToTime.split('T')[0]}}</h4><br/>  -->
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from 'src/app/services/authentication-service.service';
+import { AuthenticationService } from 'src/app/services/authen/authentication-service.service';
 import { RegistrationModel } from 'src/app/models/registration.model';
 import { NgForm } from '@angular/forms';
 import { LogInValidations } from 'src/app/models/modelsForValidation/validForLogin.model';

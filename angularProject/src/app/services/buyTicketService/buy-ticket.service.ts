@@ -10,8 +10,6 @@ import { PomModelForAuthorization } from 'src/app/models/pomModelForAuth.model';
 })
 export class BuyTicketService {
 
-  baseUrl = "http://localhost:52295"
-
     constructor(private http: Http, private httpClient: HttpClient) { }
 
     private token: string;
@@ -45,14 +43,9 @@ export class BuyTicketService {
         if(type === 'priceForPaypal'){
           base = this.httpClient.get(`/api/${type}`,{ headers: { Authorization: `Bearer ${this.getToken()}` }, params: {parami : stId, par:  noviPar, par1: noviPar1}});
         }
-        // else if(type === 'getTicketWithCurrentAppUser'){
-        //   base = this.httpClient.get(`/api/${type}`,{ headers: { Authorization: `Bearer ${this.getToken()}` }, params: {parami : stId1}});
-        // }
         else{
           base = this.httpClient.get(`/api/${type}`, { headers: { Authorization: `Bearer ${this.getToken()}` }});
         }
-        
-        //base = this.httpClient.get(`/api/${type}`, { headers: { Authorization: `Bearer ${this.getToken()}` }}); 
       }
     
       return base;
@@ -83,51 +76,4 @@ export class BuyTicketService {
     public getAllTicket(): Observable<any>{
       return this.request('get', 'getAllTicket');
     }
-   
-  
-    // public getAllStations(): Observable<any> {
-    //   return this.request('get', 'getAllStations');
-    // }
-  
-    // public getAllStations(): Observable<any> {
-    //   return this.request('get', 'getAllStations');
-    // }
-  
-    // public changeStation(stat:StationModel): Observable<any>{
-    //   return this.request('post', 'changeStation', stat);
-    // }
-  
-    // public deleteStation(stid:String):Observable<any>{
-    //   return this.request('delete', 'deleteStation',null,stid);
-    // }
-
-
-    
-    buyTicket(buyTicketForm: PomModelForAddTicketPayPal) {
-     return this.httpClient.post(this.baseUrl + "/api/Tickets/Add", buyTicketForm);
-     
-    //return this.httpClient.put(this.baseUrl + "/Tickets/Add", {email, typeOfTicket})
-    }
-
-    buyTicketViaEmail(ticket): Observable<any>{
-
-      return this.httpClient.post(this.baseUrl + "/api/Tickets/SendMail",ticket);
-   }
-
-  //  validateTicket(idTicket){
-  //    return this.httpClient.post(this.baseUrl + "/api/Tickets/ValidateTicket", idTicket); //idTicket -> pomModelForAuthorization
-  //  }
-
-   GetTicketWithCurrentAppUser(idUser:string) {
-     return this.httpClient.get(this.baseUrl + "/api/Tickets/GetTicketWithCurrentAppUser?pom="+ idUser);
-   }
-
-   GetNameOfCustomer(idTicket){
-     return this.httpClient.get(this.baseUrl + "/api/Tickets/GetNameOfCustomer?idTicket=" + idTicket);
-   }
-
-  //  PriceForPayPal(ticket){
-  //    return this.httpClient.post(this.baseUrl + "/api/Tickets/PriceForPayPal", ticket);
-  //  }
-
 }

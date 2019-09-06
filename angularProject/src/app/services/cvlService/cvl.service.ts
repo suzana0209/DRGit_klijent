@@ -13,10 +13,7 @@ export class CvlService {
 
 
   public sendStations(s : any) {
-    //let s = [];
-    //s.push(new StationModel("stanica1","adresa1",43.23, 28.13,1));
-    //s.push(new StationModel("stanica2","adresa2",43.23, 29.13,2));
-   // s.push(new StationModel("stanica3","adresa3",43.23, 26.13,3));
+    
     this.socket = io.connect(this.url);
     this.socket.emit('recive', s);
   }
@@ -25,8 +22,6 @@ export class CvlService {
   }
 
   getMessages(): Observable<number> {
-
-
 
     this.socket.on('data',
       (res) => {

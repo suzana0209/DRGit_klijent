@@ -72,12 +72,12 @@ export class TimeTableComponent implements OnInit {
    fd: FormData = new FormData()
    sviPolasciIzBaze: string = ""
 
-   validations: ValidTimetableModel = new ValidTimetableModel();
-   validationsForAdd: ValidForTimetableModel = new ValidForTimetableModel();
-   validationsForDelete: ValidForTimetableDeleteModel = new ValidForTimetableDeleteModel();
-   validationsForEdit :ValidForTimetableEditModel = new ValidForTimetableEditModel();
+  //  validations: ValidTimetableModel = new ValidTimetableModel();
+  //  validationsForAdd: ValidForTimetableModel = new ValidForTimetableModel();
+  //  validationsForDelete: ValidForTimetableDeleteModel = new ValidForTimetableDeleteModel();
+  //  validationsForEdit :ValidForTimetableEditModel = new ValidForTimetableEditModel();
 
-   validForNewD: ValidForNewDepModel = new ValidForNewDepModel();
+  //  validForNewD: ValidForNewDepModel = new ValidForNewDepModel();
 
 
   boolBezvezeZaPoruku: boolean = false;
@@ -118,16 +118,6 @@ export class TimeTableComponent implements OnInit {
                   });
                 })    
 
-    // this.accountService.getUserData(localStorage.getItem('name')).subscribe(a=>{
-      
-    //   if(a != null && a != undefined){
-        
-    //     this.userPom = a;
-    //     //this.boolBezvezeZaPoruku = this.userPom.Activated;
-    //     //this.boolBezvezeZaPorukuDenied = this.userPom.Deny; 
-    //   }
-      
-    // })
                 
     this.lineService.getAllLines().subscribe(d=>{
       this.allLinesFromDb = d;
@@ -142,15 +132,6 @@ export class TimeTableComponent implements OnInit {
       this.allVehicleFromDb = dd;
       console.log("Vehicle: ", this.allVehicleFromDb);
     })
-
-    // this.timetableService.getAll().subscribe(e =>{
-    //   this.allTimetablesFromDb = e; 
-      
-    // })
-
-    // this.daysService.getAll().subscribe(d1=>{
-    //     this.allDaysFromDb = d1;
-    // }) 
 
     this.clickedDeleteTime = false;
     

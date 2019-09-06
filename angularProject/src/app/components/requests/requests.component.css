@@ -67,17 +67,42 @@ div#info:hover{
 }
 
 button#designButton{
-    background-color: #555555; /* Black */
+    background-color: #555555;
     border: none;
     color: white;
-    /* padding: 5px 22px; */
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
     margin: 4px 16px;
+    cursor: pointer; 
+
+    background: #555555 linear-gradient(to bottom, transparent, #A9A9A9);
+    border: 1px solid black;
+    border-radius: 5px;
+    color: white;
+
+
+    /* padding: 15px 45px; 
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    
     cursor: pointer;
-    /* width: 40px; */ 
+    margin: 4px 16px;
+    width: 300px !important;
+    margin-bottom: 20% !important;
+
+    background: #555555 linear-gradient(to bottom, transparent, #A9A9A9);
+    border: 1px solid black;
+    border-radius: 5px;
+    color: white;
+    display: inline-block;
+    font-size: 22px;
+    font-family: Tahoma, Geneva, sans-serif;
+    padding: 15px 15px;
+    text-decoration: none; */
 }
 
 .list-group{
@@ -89,10 +114,12 @@ button#designButton{
 .list-group-item{
   background: #F5F5F5;
   border: lightgray 5px solid;
+  
 }
 
 div#forImage{
   margin-left: 0% !important; 
+  border: #555555 1px solid;
 }
 
 

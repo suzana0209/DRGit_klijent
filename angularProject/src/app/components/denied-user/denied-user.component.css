@@ -29,17 +29,20 @@ div#info:hover{
 }
 
 button#designButton{
-    background-color: #555555; /* Black */
-    border: none;
-    color: white;
-    /* padding: 5px 22px; */
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 16px;
-    cursor: pointer;
-    /* width: 40px; */ 
+  background-color: #555555;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 16px;
+  cursor: pointer; 
+
+  background: #555555 linear-gradient(to bottom, transparent, #A9A9A9);
+  border: 1px solid black;
+  border-radius: 5px;
+  color: white;
 }
 
 .list-group{

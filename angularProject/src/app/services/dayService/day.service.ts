@@ -8,8 +8,6 @@ import { Observable } from 'rxjs';
 })
 export class DayService {
 
-  baseUrl = "http://localhost:52295";
-
   
   constructor(private http:Http, private httpClient:HttpClient) { }
 
@@ -35,16 +33,4 @@ export class DayService {
     return this.request('get', 'getAllDayTypes');
   }
  
-
-
-
-  getAll(){
-    return this.httpClient.get(this.baseUrl + "/api/Days/GetAll");
-  }
-
-  getIdDay(name: string): Observable<any>{
-    return this.httpClient.get(this.baseUrl + "/api/Days/GetIdDay" + name);
-  }
-
-
 }

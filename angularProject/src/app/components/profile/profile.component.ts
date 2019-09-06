@@ -5,7 +5,7 @@ import { NgForm } from '@angular/forms';
 import { PomModelForPassword } from 'src/app/models/PomModelForPassword.model';
 import { Router } from '@angular/router';
 import { AccountService } from 'src/app/services/account/account.service';
-import { AuthenticationService } from 'src/app/services/authentication-service.service';
+import { AuthenticationService } from 'src/app/services/authen/authentication-service.service';
 
 @Component({
   selector: 'app-profile',
